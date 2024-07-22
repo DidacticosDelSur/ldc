@@ -1,0 +1,27 @@
+@import '~bootstrap/scss/bootstrap';
+@import url('https://fonts.cdnfonts.com/css/omnes-2');
+
+
+body {
+  margin: 0;
+  font-family: 'Omnes', sans-serif;
+  background: #f5f5f5;
+  * {
+    //display: block;
+    box-sizing: content-box;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+h1 {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  font-size: 12px;
+}

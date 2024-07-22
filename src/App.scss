@@ -1,0 +1,29 @@
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  font-size: 22px;
+  &--small{
+    font-size: 15px;
+    margin-right: 5px;
+  }
+}
+.content {
+  margin: 0 auto;
+  max-width: 1122px;
+  width: 96%;
+}
+
+.row > * {
+  padding-left: 0;
+  padding-right: 0;
+}
+button, a {
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: none;
+
+}
