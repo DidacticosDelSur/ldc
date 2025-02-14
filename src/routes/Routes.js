@@ -6,7 +6,10 @@ import App from "../App";
 import Home from "../pages/Home";
 //import Pdf from "../pages/Pdf";
 import ErrorPage from "../pages/ErrorPage";
-import ProductosView from "../pages/ProductosView";
+//import ProductoList from "../components/ProductList";
+import ProductoAmpliado from "../pages/ProductoAmpliado";
+import BrandView from "../pages/BrandView";
+import CategoryView from "../pages/CategoryView";
 /*import CoockiePolicy from "../pages/CookiePolicy";
 import Groups from "../pages/administration/Groups";
 import Users from "../pages/administration/Users";
@@ -34,9 +37,25 @@ const RouteObject = [
         element: <Home />,
       },
       {
-        path: "/productos",
-        element: <ProductosView />,
+        path: "/categoria/:id",
+        element: <CategoryView />
       },
+      {
+        path: "/categoria/:id/:marca",
+        element: <CategoryView />
+      },
+      {
+        path: "/marca/:id",
+        element: <BrandView />,
+      },
+      {
+        path: "/marca/:id/:catid",
+        element: <BrandView />,
+      },
+      {
+        path: "/producto/:id",
+        element: <ProductoAmpliado />
+      }
       /*{
         path: "/faqs",
         element: <Faqs />,

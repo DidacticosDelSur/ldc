@@ -18,7 +18,7 @@ class Header extends Component {
             <div className="header-item">
               {!isMobile && <span className="mobile-hide"> Email: </span>}
 
-              <a href="mailto:tienda.libdelcol@gmail.com" target="_blank">
+              <a href="mailto:tienda.libdelcol@gmail.com" target="_blank" rel="noreferrer">
                 {!isMobile && <span>tienda.libdelcol@gmail.com</span>}
                 {isMobile && (
                   <span className="icon">
@@ -28,7 +28,7 @@ class Header extends Component {
               </a>
             </div>
             <div className="header-item">
-              {!isMobile && <a href="{base_url}login">Iniciar sesión</a>}
+              {!isMobile && <a href="/">Iniciar sesión</a>}
 
               {/*<div {logeado_cart} className="header-dropdown mobile-hide">
               <a href="{base_url}anuncios">
@@ -76,7 +76,7 @@ class Header extends Component {
         </div>
         <div className="header-search header-content content">
           <h1 className="header-item brand">
-            <Link /* as={Link} to="/"  */ className="no-hover">
+            <Link className="no-hover">
               <Image src={logo} />
             </Link>
           </h1>

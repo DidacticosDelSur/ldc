@@ -1,8 +1,9 @@
 import { Component } from "react";
 
-import "./ProductoMini.scss";
+import "./ProductoList.scss";
+import { Link } from "react-router-dom";
 
-class ProductoMini extends Component {
+class ProductoList extends Component {
   constructor(props) {
     super(props);
     console.log(props);
@@ -10,8 +11,9 @@ class ProductoMini extends Component {
   render() {
     return (
       <>
-        <div className="card">
-          <a href={`/producto/${this.props.producto.id}`} className="producto">
+        <div className="list">
+          <Link to={`/producto/${this.props.producto.id}`} className="producto">
+          {/*<a href={`/producto/${this.props.producto.id}`} className="producto">*/}
             <div className="image">
               <img
                 loading="lazy"
@@ -20,8 +22,10 @@ class ProductoMini extends Component {
               />
             </div>
             <div className="description ">
-              <div className="categ">{this.props.producto.marca}</div>
-              <div className="name">{this.props.producto.nombre}</div>
+              <div>
+                <div className="categ">{this.props.producto.marca}</div>
+                <div className="name">{this.props.producto.nombre}</div>
+              </div>
               <div className="price price-wrapper Escolar">
                 <div>
                   <span className="price price-discount-0 price-discount-Escolar">
@@ -40,7 +44,8 @@ class ProductoMini extends Component {
                 </div>
               </div>
             </div>
-          </a>
+          {/*</a>*/}
+          </Link>
         </div>
         {/* 
           <a href={`/producto/${this.props.producto.id}`} className="producto">
@@ -78,4 +83,4 @@ class ProductoMini extends Component {
     );
   }
 }
-export default ProductoMini;
+export default ProductoList;

@@ -1,17 +1,28 @@
 import { Component } from "react";
 
-import "./ProductoList.scss";
+import "./ProductoMini.scss";
+import { Link } from "react-router-dom";
 
-class ProductoList extends Component {
+class ProductoMini extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
+    this.formatNumber = this.formatNumber.bind(this);
+  }
+  formatNumber(q) {
+    let currency = '';
+    if (q) {
+      currency = q.toLocaleString('es-AR', {
+        style: 'currency',
+        currency: 'ARS'
+      })
+    }
+    return currency;
   }
   render() {
     return (
       <>
-        <div className="list">
-          <a href={`/producto/${this.props.producto.id}`} className="producto">
+        <div className="card">
+        <Link to={`/producto/${this.props.producto.id}`} className="producto">
             <div className="image">
               <img
                 loading="lazy"
@@ -20,16 +31,14 @@ class ProductoList extends Component {
               />
             </div>
             <div className="description ">
-              <div>
-                <div className="categ">{this.props.producto.marca}</div>
-                <div className="name">{this.props.producto.nombre}</div>
-              </div>
+              <div className="categ">{this.props.producto.marca}</div>
+              <div className="name">{this.props.producto.nombre}</div>
               <div className="price price-wrapper Escolar">
                 <div>
                   <span className="price price-discount-0 price-discount-Escolar">
                     <span className="tipo tipo-Libro">PVP </span>
                     <span className="original-price tipo-Libro">
-                      $ {this.props.producto.pvp}
+                      {this.formatNumber(this.props.producto.pvp)}
                     </span>
                     <span className="discount">
                       {this.props.producto.descuento}% off
@@ -37,12 +46,11 @@ class ProductoList extends Component {
                   </span>
                 </div>
                 <div>
-                  <span className="price-symbol">$</span>
-                  {this.props.producto.precio}
+                  {this.formatNumber(this.props.producto.precio)}
                 </div>
               </div>
             </div>
-          </a>
+          </Link>
         </div>
         {/* 
           <a href={`/producto/${this.props.producto.id}`} className="producto">
@@ -80,4 +88,4 @@ class ProductoList extends Component {
     );
   }
 }
-export default ProductoList;
+export default ProductoMini;

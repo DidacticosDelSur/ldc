@@ -1,44 +1,45 @@
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import {
-  productData,
-  responsive,
-  responsiveSmall,
-} from "../assets/dataCarousel";
+import React from "react";
+import Slider from "react-slick";
+import { productData } from "../assets/dataCarousel";
+import ProductoMini from "./productos/ProductoMini";
 
-import "./CarouselProducto.scss";
-import ProductoMini from "./ProductoMini";
-
-export default function CarouselProducto(props) {
-  const CustomRightArrow = ({ onClick, ...rest }) => {
-    const {
-      onMove,
-      carouselState: { currentSlide, deviceType },
-    } = rest;
-    // onMove means if dragging or swiping in progress.
-    return (
-      <button className="slick-next slick-arrow" onClick={() => onClick()} />
-    );
+function CarouselProducto(props) {
+  const cantidad = parseInt(props.cant);
+  const break920 = parseInt(props.cant) > 3 ? 3 : parseInt(props.cant);
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: cantidad,
+    slidesToScroll: cantidad,
+    responsive: [
+      {
+        breakpoint: 930,
+        settings: {
+          className: "rows_"+break920,
+          slidesToShow: break920,
+          slidesToScroll: break920,
+          infinite: true
+        }
+      },
+      {
+        breakpoint: 520,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true
+        }
+      }
+    ]
   };
-  const CustomLeftArrow = ({ onClick, ...rest }) => {
-    const {
-      onMove,
-      carouselState: { currentSlide, deviceType },
-    } = rest;
-    // onMove means if dragging or swiping in progress.
-    return (
-      <button className="slick-prev slick-arrow" onClick={() => onClick()} />
-    );
-  };
-  const product = productData.map((item) => <ProductoMini producto={item} />);
   return (
-    <Carousel
-      responsive={props.size === "small" ? responsiveSmall : responsive}
-      /* itemClass="carousel-item-padding-10-px"*/
-      customRightArrow={<CustomRightArrow />}
-      customLeftArrow={<CustomLeftArrow />}
-    >
-      {product}
-    </Carousel>
+    <div className="slider-container product-slide">
+      <Slider {...settings}>
+        {
+          productData.map((item) => { return (<div key={`carouselProd_${item.id}`}><ProductoMini producto={item}/></div>)})
+        }
+      </Slider>
+    </div>
   );
 }
+
+export default CarouselProducto;

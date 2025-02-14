@@ -1,20 +1,20 @@
 export const data = [
   {
     id: 1,
-    imgUrl: "/assets/images/banners/1/banner-1-desk.png",
-    imgUrlMobile: "/assets/images/banners/1/banner-1-mobile.png",
+    imgUrl: "./assets/images/banners/1/banner-1-desk.png",
+    imgUrlMobile: "./assets/images/banners/1/banner-1-mobile.png",
     alt: "",
   },
   {
     id: 2,
-    imgUrl: "/assets/images/banners/2/banner-2-desk.png",
-    imgUrlMobile: "/assets/images/banners/2/banner-2-mobile.png",
+    imgUrl: "./assets/images/banners/2/banner-2-desk.png",
+    imgUrlMobile: "./assets/images/banners/2/banner-2-mobile.png",
     alt: "",
   },
   {
     id: 3,
-    imgUrl: "/assets/images/banners/3/banner-3-desk.png",
-    imgUrlMobile: "/assets/images/banners/3/banner-3-mobile.png",
+    imgUrl: "./assets/images/banners/3/banner-3-desk.png",
+    imgUrlMobile: "./assets/images/banners/3/banner-3-mobile.png",
     alt: "",
   },
   /*{

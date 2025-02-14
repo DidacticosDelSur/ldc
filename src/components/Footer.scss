@@ -39,6 +39,13 @@ footer {
               width: 100%;
               justify-content: end;
               align-items: center;
+              @media (max-width: 720px){
+                justify-content: center;
+              }
+            }
+            @media (max-width: 720px){
+              flex-direction: column;
+              margin-bottom: 20px;
             }
           }
           .icon {

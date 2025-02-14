@@ -15,7 +15,11 @@
   max-width: 1122px;
   width: 96%;
 }
-
+.container {
+  @media(min-width:1400px) {
+    max-width: 100%;
+  }
+}
 .row > * {
   padding-left: 0;
   padding-right: 0;
@@ -25,5 +29,4 @@ button, a {
   background: none;
   border: none;
   text-decoration: none;
-
 }

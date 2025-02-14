@@ -1,10 +1,9 @@
 import CarouselComp from "../components/Carousel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterCategories from "../components/FilterCategories";
 
 import "./Home.scss";
 import "./Themes.scss";
-import ProductoMini from "../components/ProductoMini";
 import CarouselProducto from "../components/CarouselProducto";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import ProdAnio from "../assets/images/products-of-the-year.svg";
@@ -15,6 +14,9 @@ import Atencion from "../assets/images/atencion.svg";
 import Seguro from "../assets/images/seguro.svg";
 import Precio from "../assets/images/precio.svg";
 import Envios from "../assets/images/envios.svg";
+import { fetchBrandListData } from "../services/BrandServices";
+import BrandBox from "../components/BrandBox";
+//import { fetchProductByTag } from "../services/ProductServices";
 
 export default function Home() {
   const [carousel, setCarousel] = useState([
@@ -22,24 +24,69 @@ export default function Home() {
     { id: 2, src: "/assets/images/banners/2/banner-2-desk.png", alt: "" },
     { id: 3, src: "/assets/images/banners/3/banner-3-desk.png", alt: "" },
   ]);
+  const [ultimos, setUltimos] = useState([]);
+  const [destacados, setDestacados] = useState([]);
+  const [deAnio, setDeAnio] = useState([]);
+  const [marcas, setMarcas] = useState([]);
+
+  useEffect(()=>{
+    fetchBrandListData()
+      .then(data => {
+        setMarcas(data.marcas);
+      })
+    /* fetchProductByTag(2)
+      .then(data => {
+        setUltimos(data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    fetchProductByTag(3)
+      .then(data => {
+        setDeAnio(data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    fetchProductByTag(3)
+      .then(data => {
+        setDestacados(data);
+      })
+      .catch(err => {
+        console.log(err);
+      })*/
+  }, []) 
 
   return (
     <>
       <div className="home">
-        {/*<CarouselComp list={carousel} /> */}
+        <CarouselComp list={carousel} />
         <div className="theme-background"></div>
       </div>
       <div className="content">
         <FilterCategories />
         <div className="content-carousels">
           <div className="header">
+            <h4>Marcas</h4>
+          </div>
+          <Container>
+            <Row>
+            {marcas.length > 0 && 
+              marcas.map((item) => {
+                return <BrandBox key={`marca_${item.id}`} item={item} />
+              })}
+            </Row>
+          </Container>
+        </div>
+        <div className="content-carousels">
+          <div className="header">
             <h4>Últimos ingresos</h4>
           </div>
           <div className="sliders">
-            <CarouselProducto /> {/*<ProductoMini /> */}
+            <CarouselProducto productos={ultimos} cant="4"/>
           </div>
         </div>
-        <Container>
+        <Container className="carousel-products">
           <Row>
             <Col lg={6}>
               <div className="content-carousels">
@@ -54,14 +101,13 @@ export default function Home() {
                 </div>
                 <div className="sliders">
                   <div className="confetti"></div>
-                  <CarouselProducto size="small" /> {/*<ProductoMini /> */}
+                  <CarouselProducto size="small" cant="2" productos={deAnio}/>
                 </div>
               </div>
             </Col>
             <Col lg={6}>
               <div className="content-carousels">
                 <div className="header">
-                  {/* <ProdMes /> */}
                   <Image
                     className="d-block"
                     loading="lazy"
@@ -71,7 +117,7 @@ export default function Home() {
                   <h4>Destacados del Mes</h4>
                 </div>
                 <div className="sliders">
-                  <CarouselProducto size="small" /> {/*<ProductoMini /> */}
+                  <CarouselProducto productos={destacados} size="small"  cant="2"/>
                 </div>
               </div>
             </Col>
@@ -82,6 +128,7 @@ export default function Home() {
             className="follow-wrapper complementary"
             href="https://instagram.com/libdelcolegio"
             target="_blank"
+            rel="noreferrer"
           >
             <div className="hashtag">#instagram</div>
             <div className="text">Entérate de todo en nuestras redes!</div>

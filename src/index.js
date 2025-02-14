@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.scss";
 import reportWebVitals from "./reportWebVitals";
 import Router from "./routes/Routes";
+import './assets/scss/icons.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -8,7 +8,6 @@
   border: 1px solid #DFDFDF;
   position: relative;
   box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-  margin-bottom: 6px;
   text-decoration: none;
   .image {
     align-items: center;
@@ -83,7 +82,7 @@
           position: absolute;
           bottom: 10px;
           right: 0px;
-          background: url(../assets/images/svg/discount_new.svg) top right no-repeat;
+          background: url(../../assets/images/svg/discount_new.svg) top right no-repeat;
           background-size: 100% 100%x;
           padding: 0 4px 0 0;
           text-align: right;
@@ -126,7 +125,7 @@
       &::after{
         display: block;
         content: "";
-        background: url(../assets/images/svg/icon-new.svg) center center no-repeat;
+        background: url(../../assets/images/svg/icon-new.svg) center center no-repeat;
         background-size: 100% 100%;
         position: absolute;
         top: 22px;
@@ -140,7 +139,7 @@
       &::before{
         display: block;
         content: "";
-        background: url(../assets/images/svg/tv-icon.svg) center center no-repeat;
+        background: url(../../assets/images/svg/tv-icon.svg) center center no-repeat;
         background-size: 100% 100%;
         position: absolute;
         top: 15px;
@@ -160,26 +159,7 @@
   max-width: 320px;
   margin: auto 0.5rem;
   border: none;
-}
-
-.list-view {
-  .card {
-  max-width: none;
-  margin: auto;
-  .producto {
-      display: flex;
-      padding-bottom: 0;
-      .image {
-        height: 100px;
-        width: 100px;
-      }
-      .description {
-        height: auto;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-      }
-    }
-  }  
+  @media (max-width: 520px){
+    margin: 0 auto;
+  }
 }

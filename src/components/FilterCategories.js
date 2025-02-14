@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import "./FilterCategories.scss";
 import peluche from "../assets/images/peluche.png";
-import diaDelN from "../assets/images/DiaDelNiño.png";
+import diaDelN from "../assets/images/DiaDelNino.png";
 import { Image } from "react-bootstrap";
 
 class FilterCategories extends Component {
