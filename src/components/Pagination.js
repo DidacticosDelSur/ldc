@@ -39,7 +39,7 @@ const CustomPagination = ({ currentPage, totalPages, goToPage }) => {
     return (
       <>
         {totalPages > 1 && (
-          <Pagination className="justify-content-center">
+          <Pagination className="justify-content-center mt-4">
             <Pagination.Item onClick={() => goToPage(1)} disabled={currentPage === 1}>
               {/* <span aria-hidden="true">&laquo;</span> */}
               <ChevronDoubleLeft />

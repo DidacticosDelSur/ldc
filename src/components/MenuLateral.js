@@ -40,7 +40,7 @@ class MenuLateral extends Component {
                               <button>{c.nombre} ({c.cantidad})</button>
                             </Link>
                           ) : (
-                            <Link to={`/categoria/${c.id}`} key={`categoria_${i}`}>
+                            <Link to={`/categoria/${c.id}-${c.nombre}`} key={`categoria_${i}`}>
                               <button>{c.nombre} ({c.cantidad})</button>
                             </Link>
                           )
@@ -59,7 +59,7 @@ class MenuLateral extends Component {
                       <Link to={`/marca/${m.id}`} key={`marca_${i}`}>
                         <button>{m.nombre} ({m.cantidad})</button>
                       </Link> :
-                      <Link to={`/categoria/${this.props.cat_id}/${m.id}`} key={`marca_${i}`}>
+                      <Link to={`/categoria/${this.props.cat_id}/${m.id}-${m.nombre}`} key={`marca_${i}`}>
                         <button>{m.nombre} ({m.cantidad})</button>
                       </Link>
                     ))}

@@ -74,6 +74,10 @@
       .card {
         margin: 0;
         max-width: 222px;
+        &.in-cart{
+          border-color: green;
+          border-style: solid;
+        }
         @media (max-width: 720px){
           max-width: calc(50% - 18px);
         }
@@ -87,6 +91,10 @@
       .card {
         max-width: none;
         margin: auto;
+        &.in-cart{
+          border-color: green;
+          border-style: solid;
+        }
         .producto {
           display: flex;
           padding-bottom: 0;

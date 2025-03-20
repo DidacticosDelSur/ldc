@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Image } from "react-bootstrap";
-import { Search, List, Envelope } from "react-bootstrap-icons";
+import { Button, Container, Form, Image, InputGroup, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Search, List, Envelope, Cart } from "react-bootstrap-icons";
 import { isMobile } from "react-device-detect";
 
 import { Link } from "react-router-dom";
@@ -8,9 +8,41 @@ import { Link } from "react-router-dom";
 import "./Header.scss";
 import logo from "../assets/Logo.png";
 import Menu from "./Menu";
+import { AuthContext } from "../services/AuthContext";
 
 class Header extends Component {
+  static contextType = AuthContext;
+  constructor(props) {
+    super(props);
+    this.state = {
+      searhInput: ''
+    }
+  }
+
+  handleChange = (event) => {
+    this.setState({ searhInput: event.target.value }); // Actualizamos el estado con el nuevo valor del input
+  };
+
+  handleClick = () => {
+    window.location.href = '#/buscar/'+this.state.searhInput; // Accedemos al valor del input a través del estado
+  };
+
+  handleCart = () => {
+    window.location.href = '#/carrito'; // Accedemos al valor del input a través del estado
+  };
+
+  handleLogOut = () => {
+    const { logout } = this.context;
+    logout();
+    window.location.href = '#/';
+  }
+
+  handleProfile = () => {
+    window.location.href = '#/perfil_usuario';
+  }
+
   render() {
+    const { user, cantProdCart } = this.context;
     return (
       <header>
         <div className="header-top">
@@ -28,7 +60,12 @@ class Header extends Component {
               </a>
             </div>
             <div className="header-item">
-              {!isMobile && <a href="/">Iniciar sesión</a>}
+              {!isMobile && !this.props.authenticated && <Link to={`/login`}>Iniciar Sesión</Link>}
+              {!isMobile && this.props.authenticated && 
+                <>
+                  <div className="link-button" onClick={this.handleProfile}>Hola {user.name}{user.clientName ? user.clientName != '' ? `(${user.clientName})` : '' : ''}!</div>
+                  <div className="link-button" onClick={this.handleLogOut}>Cerrar Sesión</div>
+                </>}
 
               {/*<div {logeado_cart} className="header-dropdown mobile-hide">
               <a href="{base_url}anuncios">
@@ -81,21 +118,23 @@ class Header extends Component {
             </Link>
           </h1>
           <div className="header-item fieldSearch">
-            {/*<InputGroup>
-              <Form.Control placeholder="Buscar productos, marcas y más..." />
-              <Button variant="outline-secondary" id="button-addon1">
+            <InputGroup>
+              <Form.Control
+                placeholder="Buscar productos, marcas y más..." 
+                value={this.state.inputValue}  // Vinculamos el valor del input al estado
+                onChange={this.handleChange}
+              />
+              <Button variant="outline-secondary" id="button-addon1" onClick={this.handleClick}>
                 <Search />
               </Button>
-            </InputGroup>*/}
-            <input
-              type="search"
-              id="busqueda_prod"
-              placeholder="Buscar productos, marcas y más..."
-            />
-            <button id="submit_">
-              <Search />
-            </button>
+            </InputGroup>
           </div>
+          {this.props.authenticated &&
+            <Button variant="outline" onClick={this.handleCart}>
+              <Cart />
+              <span>({cantProdCart})</span>
+            </Button>
+          }
 
           {/* <div className="header-item shopping-cart">
             <a

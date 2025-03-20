@@ -10,6 +10,12 @@ import ErrorPage from "../pages/ErrorPage";
 import ProductoAmpliado from "../pages/ProductoAmpliado";
 import BrandView from "../pages/BrandView";
 import CategoryView from "../pages/CategoryView";
+import Register from "../pages/register/Register";
+import RegisterConfirmPage from "../pages/register/RegisterConfirm";
+import LogUser from "../pages/login/Login";
+import SearchView from "../pages/SearchView";
+import Cart from "../pages/CartView";
+import UserProfile from "../pages/UserProfile";
 /*import CoockiePolicy from "../pages/CookiePolicy";
 import Groups from "../pages/administration/Groups";
 import Users from "../pages/administration/Users";
@@ -37,11 +43,11 @@ const RouteObject = [
         element: <Home />,
       },
       {
-        path: "/categoria/:id",
+        path: "/categoria/:categoryInfo",//categoryInfo
         element: <CategoryView />
       },
       {
-        path: "/categoria/:id/:marca",
+        path: "/categoria/:categoryInfo/:brandInfo",
         element: <CategoryView />
       },
       {
@@ -53,30 +59,34 @@ const RouteObject = [
         element: <BrandView />,
       },
       {
-        path: "/producto/:id",
+        path: "/producto/:productInfo",
         element: <ProductoAmpliado />
+      },
+      {
+        path: "/registro",
+        element: <Register />,
+      },
+      {
+        path: "/registro_confirmado",
+        element: <RegisterConfirmPage />,
+      },
+      {
+        path: "/login",
+        element: <LogUser />,
+      },
+      {
+        path: "/buscar/:searchTerm",
+        element: <SearchView />,
+      },
+      {
+        path: "/carrito",
+        element: <Cart />,
+      },
+      {
+        path: "/perfil_usuario",
+        element: <UserProfile />
       }
-      /*{
-        path: "/faqs",
-        element: <Faqs />,
-      },
-      {
-        path: "/cookie-policy",
-        element: <CoockiePolicy />,
-      },
-      {
-        path: "/help-desk",
-        element: <HelpDesk />,
-      },
-      {
-        path: "/faqs",
-        //element: <Faqs />,
-      },
-      {
-        path: "/contentProvider",
-        element: <ContentProvider />,
-      },
-      {
+       /*{
         path: "/groups",
         element: <Groups />,
         children: [

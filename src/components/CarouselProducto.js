@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Slider from "react-slick";
 import { productData } from "../assets/dataCarousel";
 import ProductoMini from "./productos/ProductoMini";
+import { AuthContext } from "../services/AuthContext";
 
 function CarouselProducto(props) {
+  const { isAuthenticated } = useContext(AuthContext);
+  
   const cantidad = parseInt(props.cant);
   const break920 = parseInt(props.cant) > 3 ? 3 : parseInt(props.cant);
   const settings = {
@@ -35,7 +38,7 @@ function CarouselProducto(props) {
     <div className="slider-container product-slide">
       <Slider {...settings}>
         {
-          productData.map((item) => { return (<div key={`carouselProd_${item.id}`}><ProductoMini producto={item}/></div>)})
+          productData.map((item) => { return (<div key={`carouselProd_${item.id}`}><ProductoMini producto={item} authenticated={isAuthenticated}/></div>)})
         }
       </Slider>
     </div>

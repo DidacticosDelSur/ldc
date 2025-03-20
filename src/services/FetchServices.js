@@ -25,10 +25,16 @@ export async function fetchData(endpoint, params = null) {
   }
 }
 
-export async function createData(endpoint, datos) {
+export async function createData(endpoint, datos, params) {
   const baseUrl = process.env.REACT_APP_WEB_SERVICES;
+  let urlComplete = baseUrl + endpoint;
   try {
-    const response = await axios.post(baseUrl + endpoint, datos)
+    if (params) {
+      const queryString = new URLSearchParams(params).toString();
+      urlComplete = urlComplete + `?${queryString}`;
+    }
+
+    const response = await axios.post(urlComplete, datos)
     const data = await response;
     return data;
   } catch (error) {

@@ -4,11 +4,14 @@ import "./index.scss";
 import reportWebVitals from "./reportWebVitals";
 import Router from "./routes/Routes";
 import './assets/scss/icons.css';
+import { AuthProvider } from "./services/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Router />
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
   </React.StrictMode>
 );
 
