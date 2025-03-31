@@ -16,6 +16,8 @@ import LogUser from "../pages/login/Login";
 import SearchView from "../pages/SearchView";
 import Cart from "../pages/CartView";
 import UserProfile from "../pages/UserProfile";
+import Checkout from "../pages/order/Checkout";
+import OrderConfirmed from "../pages/order/OrderConfirmed";
 /*import CoockiePolicy from "../pages/CookiePolicy";
 import Groups from "../pages/administration/Groups";
 import Users from "../pages/administration/Users";
@@ -85,6 +87,14 @@ const RouteObject = [
       {
         path: "/perfil_usuario",
         element: <UserProfile />
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />
+      },
+      {
+        path: "/pedido_confirmado",
+        element: <OrderConfirmed />
       }
        /*{
         path: "/groups",

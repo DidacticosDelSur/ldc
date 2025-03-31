@@ -63,7 +63,7 @@ class Header extends Component {
               {!isMobile && !this.props.authenticated && <Link to={`/login`}>Iniciar Sesión</Link>}
               {!isMobile && this.props.authenticated && 
                 <>
-                  <div className="link-button" onClick={this.handleProfile}>Hola {user.name}{user.clientName ? user.clientName != '' ? `(${user.clientName})` : '' : ''}!</div>
+                  <div className="link-button" onClick={this.handleProfile}>Hola {user.name}{user.clientName ? user.clientName != '' ? ` (${user.clientName})` : '' : ''}!</div>
                   <div className="link-button" onClick={this.handleLogOut}>Cerrar Sesión</div>
                 </>}
 

@@ -1,0 +1,106 @@
+.head-confirmation {
+  padding: 0;
+  margin: 30px auto 60px;
+  .conf {
+    font-weight: 700;
+    font-size: 24px;
+    height: 120px;
+    background: #6fd06c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin: 0 auto 35px;
+    span {
+      font-size: 24px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+  }
+  p {
+    margin: 15px auto;
+    font-size: 16px;
+    color: #707070;
+    &.small {
+      margin: 0 auto;
+      font-size: 16px;
+      color: #3390ff;
+    }
+    &.green {
+      font-weight: bold;
+      color: #1f9b37;
+    }
+    &.red {
+      font-weight: bold;
+      color: red;
+    }
+  }
+}
+.confirmation-block{
+  .detail-buy {
+    align-items: flex-start;
+    width: 100%;
+    margin: 0 auto;
+    .blocks {
+      width: 49%;
+      border: 1px solid #dfdfdf;
+      h3 {
+        width: 100%;
+        padding: 15px 0;
+        background: #f7f7f7;
+        text-align: center;
+        font-size: 14px;
+        color: #707070;
+        font-weight: 500;
+      }
+      .intern {
+        padding: 15px 25px;
+        align-items: flex-start;
+        .flexBlock {
+          align-items: flex-end;
+          padding-bottom: 20px;
+          border-bottom: 1px solid #dedede;
+          margin-bottom: 20px;
+          .block {
+            width: 50%;
+          }
+        }
+        .intern-content {
+          padding-bottom: 20px;
+          border-bottom: 1px solid #dedede;
+          margin-bottom: 20px;
+          .flex {
+            display: flex;
+            justify-content: space-between;
+            * {
+              width: 50%;
+            }
+          }
+        }
+        .title {
+          margin: 25px 0 10px;
+          color: #464646;
+          font-size: 14px;
+          font-weight: 600;
+          color: #242424;
+          position: relative;
+          &:first-of-type {
+            margin-top: 0;
+          }
+        }
+        p {
+          font-size: 12px;
+        }
+        .note {
+          font-size:12px; 
+          font-style: italic;
+        }
+      }
+      &.sec {
+        span {
+          float: right;
+        }
+      }
+    }
+  }
+}

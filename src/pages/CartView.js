@@ -1,62 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { removeItem, updateCartData } from '../services/CartServices';
 import "./CartView.scss";
 import { Alert, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
 import { AuthContext } from '../services/AuthContext';
+import CartResume from '../components/cart/CartResume';
+import { GlobalFunctionsContext } from '../services/GlobalFunctionsContext';
+
 
 function Cart() {
-  const [subtotal, setSubtotal] = useState(0);
-  const [iva, setIva] = useState(0);
-  const [descuento, setDescuento]= useState(0);
-  const [total, setTotal] = useState(0);
   const { user, cart, updateCart, cantProdCart } = useContext(AuthContext);
   
   const [visibleError, setVisibleError] = useState(false)
   const [message, setMessage] = useState('')
-
-  useEffect(() => {
-    setTotal((prev) => prev + subtotal)
-  },[subtotal]);
-
-  useEffect(() => {
-    setTotal((prev) => prev + iva)
-  },[iva]);
-
-  useEffect(() => {
-    setTotal((prev) => prev - descuento)
-  },[descuento]);
-
-  useEffect(() => {
-    setTotal(0);
-    setSubtotal(
-      cart.reduce((acumulado, producto) => 
-        producto.variaciones.length == 0 ?
-        acumulado + (producto.cantidad * producto.precio)
-        : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.cantidad * vari.precio) , 0)
-        ,
-      0)
-    );
-
-    setIva(
-      cart.reduce((acumulado, producto) => 
-        producto.variaciones.length == 0 ?
-        acumulado + (producto.subtotal - (producto.subtotal/producto.alicuota))
-        : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.subtotal - (vari.subtotal/producto.alicuota)), 0)
-        ,
-      0)
-    );
-
-    setDescuento(
-      cart.reduce((acumulado, producto) => 
-        producto.variaciones.length == 0 ?
-        acumulado + ((producto.cantidad * producto.precio) * (producto.descuento/100))
-        : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.cantidad * vari.precio) * (vari.descuento/100), 0)
-        ,
-      0)
-    );
-
-  }, [cart]);
+  const { formatCurrency } = useContext(GlobalFunctionsContext);
 
   const removeItemFromCart = async (itemId, idx, i = null) => {
     const variacionId = i ? cart[idx].variaciones[i].variacion_id : cart[idx].variacion_id;
@@ -150,89 +107,76 @@ function Cart() {
     console.log('updating', item);
   }
 
-  const formatNumber = (q) => {
-    let currency = '';
-    if (q || q == 0) {
-      currency = q.toLocaleString('es-AR', {
-        style: 'currency',
-        currency: 'ARS'
-      })
-    }
-    return currency;
+  const newOrder = () => {
+    window.location.href = '#/checkout'
   }
 
   return (
-    <div className='cart-container'>
+    <div className='content cart-container'>
       <Alert variant="danger" dismissible show={visibleError} onClose={() => setVisibleError(false)}>
         {message}
       </Alert>
-      <div className='cart-details'>
-        <div className='number-items'>Carrito ({cantProdCart})</div>
-        <ListGroup>
-        {cart.map((item,idx) => (
-          item.variaciones.length > 0 ?
-          <ListGroupItem key={`producto_${item.producto_id}`}
-          >
-            {item.nombre} 
-              <ListGroup>
-                {item.variaciones.map((v,i) => 
-                  <ListGroupItem key={`variacion_${v.id}`} className="d-flex justify-content-between align-items-start">
-                    {v.nombre} 
-                    <div className="input-container">
-                      <button className="control-btn" disabled={v.cantidad === item.minimo_compra} onClick={() => {handleDecrementVariation(v,idx,i)}}>-</button>
-                      <input
-                        type="number"
-                        className="input-number"
-                        value={v.cantidad}
-                        onChange={(e) => handleUpdateValue(parseInt(e.target.value))}
-                      />
-                      <button className="control-btn" onClick={()=>{handleIncrementVariation(v, idx,i)}}>+</button>
-                    </div>
-                    {formatNumber(v.subtotal)}
-                    <button onClick={() => removeItemFromCart(item.producto_id,idx,i)}>
-                      <Trash />
-                    </button>
-                  </ListGroupItem>
-                )}
-              </ListGroup>
-          </ListGroupItem>
-        : <ListGroupItem  key={item.id} className="d-flex justify-content-between align-items-start">
-          {item.nombre}
-          <div className="input-container">
-            <button className="control-btn" disabled={item.cantidad === item.minimo_compra} onClick={() => {handleDecrementVariation(item,idx)}}>-</button>
-            <input
-              type="number"
-              className="input-number"
-              value={item.cantidad}
-              onChange={(e) => handleUpdateValue(parseInt(e.target.value))}
-            />
-            <button className="control-btn" onClick={()=>{handleIncrementVariation(item,idx)}}>+</button>
-          </div>
-          {formatNumber(item.subtotal)}
-          <button onClick={() => removeItemFromCart(item.producto_id, idx)}>
-            <Trash />
-          </button>
-        </ListGroupItem>
-        ))}
-        </ListGroup>
-      </div>
-      <div className='resumen'>
-        <div>Resumen de compra</div>
-        <ListGroup>
-          <ListGroupItem>
-            Subtotal: <span>{formatNumber(subtotal)}</span>
-          </ListGroupItem>
-          <ListGroupItem>
-            Descuento: <span>{formatNumber(descuento)}</span>
-          </ListGroupItem>
-          <ListGroupItem>
-            Iva: <span>{formatNumber(iva)}</span>
-          </ListGroupItem>
-          <ListGroupItem>
-            Total: <span>{formatNumber(total)}</span>
-          </ListGroupItem>
-        </ListGroup>
-      </div>
+      {cantProdCart > 0 && 
+        <>
+        <div className='cart-details'>
+          <div className='number-items'>Carrito ({cantProdCart})</div>
+            <ListGroup>
+            {cart.map((item,idx) => (
+              item.variaciones.length > 0 ?
+              <ListGroupItem key={`producto_${item.producto_id}`}
+              >
+                {item.nombre} 
+                  <ListGroup>
+                    {item.variaciones.map((v,i) => 
+                      <ListGroupItem key={`variacion_${v.id}`} className="d-flex justify-content-between align-items-start">
+                        {v.nombre} 
+                        <div className="input-container">
+                          <button className="control-btn" disabled={v.cantidad === item.minimo_compra} onClick={() => {handleDecrementVariation(v,idx,i)}}>-</button>
+                          <input
+                            type="number"
+                            className="input-number"
+                            value={v.cantidad}
+                            onChange={(e) => handleUpdateValue(parseInt(e.target.value))}
+                          />
+                          <button className="control-btn" onClick={()=>{handleIncrementVariation(v, idx,i)}}>+</button>
+                        </div>
+                        {formatCurrency(v.subtotal)}
+                        <button onClick={() => removeItemFromCart(item.producto_id,idx,i)}>
+                          <Trash />
+                        </button>
+                      </ListGroupItem>
+                    )}
+                  </ListGroup>
+              </ListGroupItem>
+            : <ListGroupItem  key={item.id} className="d-flex justify-content-between align-items-start">
+              {item.nombre}
+              <div className="input-container">
+                <button className="control-btn" disabled={item.cantidad === item.minimo_compra} onClick={() => {handleDecrementVariation(item,idx)}}>-</button>
+                <input
+                  type="number"
+                  className="input-number"
+                  value={item.cantidad}
+                  onChange={(e) => handleUpdateValue(parseInt(e.target.value))}
+                />
+                <button className="control-btn" onClick={()=>{handleIncrementVariation(item,idx)}}>+</button>
+              </div>
+              {formatCurrency(item.subtotal)}
+              <button onClick={() => removeItemFromCart(item.producto_id, idx)}>
+                <Trash />
+              </button>
+            </ListGroupItem>
+            ))}
+            </ListGroup>
+        </div>
+        <CartResume handleFinish={newOrder}/>
+        </>
+      } 
+      {cantProdCart === 0 &&
+        <div className='cart-details'>
+          <div className='number-items'>Carrito ({cantProdCart})</div>
+          <p>No hay productos agregados. Agregue productos para verlos en esta sección.</p>
+        </div>
+      }
     </div>
   );
 }

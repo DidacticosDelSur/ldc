@@ -59,12 +59,12 @@ export default function UserProfile() {
       </Alert>
       <div className="content">
         Hola {user.name}
-        <Form.Select onChange={(e)=> selectUser(e.target.value)} value={user.clientSelected}>
+        {user.isSeller && <Form.Select onChange={(e)=> selectUser(e.target.value)} value={user.clientSelected}>
           <option value='0'>Elige un cliente...</option>
           {clientes.map((item) => {
             return <option key={`cliente_${item.id}`} value={item.id}>{item.nombre} {item.apellido}</option>
           })}
-        </Form.Select>
+        </Form.Select>}
       </div>
     </>
   )

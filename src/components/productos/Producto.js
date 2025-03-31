@@ -6,6 +6,7 @@ import { Alert, Button, Form, FormSelect, ListGroup, ListGroupItem, Table } from
 import { Valentine } from "react-bootstrap-icons";
 import CustomRadioButton from "../CustomRadioButton";
 import { addProduct } from "../../services/ProductServices";
+import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
 
 const settings = {
   /* customPaging: function(i) {
@@ -24,6 +25,7 @@ const settings = {
   slidesToScroll: 1
 };
 class Producto extends Component {
+  static contextType = GlobalFunctionsContext;
   constructor(props){
     super(props);
     this.state = {
@@ -32,7 +34,6 @@ class Producto extends Component {
       subtotal: 0,
       canAddtoChart: false
     }
-    this.formatNumber = this.formatNumber.bind(this);
     this.handleIncrement = this.handleIncrement.bind(this);
     this.handleDecrement = this.handleDecrement.bind(this);
     this.handleUpdateValue = this.handleUpdateValue.bind(this);
@@ -124,17 +125,6 @@ class Producto extends Component {
     }
   }
 
-  formatNumber(q) {
-    let currency = '';
-    if (q || q == 0) {
-      currency = q.toLocaleString('es-AR', {
-        style: 'currency',
-        currency: 'ARS'
-      })
-    }
-    return currency;
-  }
-
   handleIncrementVariation(i) {
     const { onMessage, onVisible, user } = this.props;
     const nuevosVar = [...this.state.variaciones];
@@ -211,6 +201,7 @@ class Producto extends Component {
   }
 
   render(){
+    const { formatCurrency } = this.context;
     return (
       <div className="content-product">
         <div className="box">
@@ -229,8 +220,12 @@ class Producto extends Component {
         </div>
         <div className="box description">
           <h2>{this.props.p.nombre}</h2>
+          {this.props.p.variaciones.length === 0 && this.props.p.stock === 0 &&
+            <p className="no-stock">Sin Stock</p>
+          }
           <Link to="/marca/prueba"><h3 className="marca">{this.props.p.marca_nombre}</h3></Link>
           <div className="tags-group"></div>
+         
           <div className="contenido">
             <p>
               {this.props.p.descripcion}
@@ -240,7 +235,7 @@ class Producto extends Component {
                 <div className="price-wrapper">
                   <div>
                     <div className="final-price">PRECIO ORIGINAL</div>
-                    <span className="discount">{this.formatNumber(this.props.p.precio)}</span>
+                    <span className="discount">{formatCurrency(this.props.p.precio)}</span>
                   </div>
                 </div>
                 <div className="lh-1">
@@ -253,7 +248,7 @@ class Producto extends Component {
                 <div className="final-price">
                   <span>PRECIO</span><br />
                   <span className="price">{
-                    this.props.p.descuento > 0 ? this.formatNumber(this.props.p.precio * (1-this.props.p.descuento/100)) : this.formatNumber(this.props.p.precio)
+                    this.props.p.descuento > 0 ? formatCurrency(this.props.p.precio * (1-this.props.p.descuento/100)) : formatCurrency(this.props.p.precio)
                   }</span>
                   <div className="iva">+IVA</div>
                 </div>
@@ -283,7 +278,7 @@ class Producto extends Component {
                         return (
                           <tr key={`variacion_${i}`}>
                             <td>{item.nombre}</td>
-                            <td>{this.formatNumber(item.precio)}</td>
+                            <td>{formatCurrency(item.precio)}</td>
                             <td>{item.descuento}%</td>
                             <td>
                               <div className="input-container">
@@ -297,7 +292,7 @@ class Producto extends Component {
                                 <button className="control-btn" onClick={()=>{this.handleIncrementVariation(i)}}>+</button>
                               </div>
                             </td>
-                            <td>{this.formatNumber(item.subtotal)}</td>
+                            <td>{formatCurrency(item.subtotal)}</td>
                             <td>{item.inCart}</td>
                           </tr>
                         )
@@ -325,7 +320,7 @@ class Producto extends Component {
             : null
           }
           {this.props.authenticated &&
-            <div>Subtotal: <strong>{this.formatNumber(this.state.subtotal)}</strong>{this.state.subtotal > 0 ? <i> (iva incluido)</i> : ``}</div>
+            <div>Subtotal: <strong>{formatCurrency(this.state.subtotal)}</strong>{this.state.subtotal > 0 ? <i> (iva incluido)</i> : ``}</div>
           }
           <div>
             <div className="contenido">

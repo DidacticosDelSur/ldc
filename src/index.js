@@ -5,12 +5,15 @@ import reportWebVitals from "./reportWebVitals";
 import Router from "./routes/Routes";
 import './assets/scss/icons.css';
 import { AuthProvider } from "./services/AuthContext";
+import { GlobalFunctionsProvider } from "./services/GlobalFunctionsContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <Router />
+      <GlobalFunctionsProvider>
+        <Router />
+      </GlobalFunctionsProvider>
     </AuthProvider>
   </React.StrictMode>
 );

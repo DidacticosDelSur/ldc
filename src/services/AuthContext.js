@@ -11,13 +11,22 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);  // Estado de carga
   const [cart, setCart] = useState([]);
   const [cantProdCart, setCantProdCart] = useState(0);
+  const [order, setOrder] = useState([]);
 
+  const [subtotal, setSubtotal] = useState(0);
+  const [iva, setIva] = useState(0);
+  const [descuento, setDescuento]= useState(0);
+  const [total, setTotal] = useState(0);
+
+
+  const isEmpty = (obj) => Object.keys(obj).length === 0;
 
   // Check if there's an auth token in sessionStorage (or another form of persistent storage)
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
     const storedUser = JSON.parse(sessionStorage.getItem('user'));
     const storedCart = JSON.parse(localStorage.getItem('cart'));
+    const storedOrder = JSON.parse(localStorage.getItem('order'));
 
     if (token && storedUser) {
       const decodedToken = jwtDecode(token);
@@ -28,6 +37,8 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true); // Assume token is valid
         setUser(storedUser); // Si hay un usuario en sessionStorage, establecerlo en el estado
         setCart(storedCart);
+        setOrder(storedOrder);
+        //updateCart(storedCart);
       }
     }
     setLoading(false);  // Terminar la carga
@@ -48,6 +59,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     updateCart([]);
+    updateOrder({});
   };
   
   const updateCart = (newCart) => {
@@ -70,12 +82,75 @@ export const AuthProvider = ({ children }) => {
     setCart(newCart);
   }
 
+  const updateOrder = (newOrder) => {
+    if (isEmpty(newOrder)){
+      localStorage.removeItem('order');
+    } else {
+      newOrder = {
+        ...newOrder,
+        subtotal: subtotal,
+        descuento: descuento,
+        iva: iva,
+        total: total
+      }
+      localStorage.setItem('order', JSON.stringify(newOrder));
+    }
+    setOrder(newOrder);
+  }
+
+  useEffect(() => {
+    setTotal((prev) => prev + subtotal)
+  },[subtotal]);
+
+  useEffect(() => {
+    setTotal((prev) => prev + iva)
+  },[iva]);
+
+  useEffect(() => {
+    setTotal((prev) => prev - descuento)
+  },[descuento]);
+  
+  useEffect(() => {
+    if (cart) {
+      setTotal(0);
+      setSubtotal(
+        cart.reduce((acumulado, producto) => 
+          producto.variaciones.length == 0 ?
+          acumulado + (producto.cantidad * producto.precio)
+          : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.cantidad * vari.precio) , 0)
+          ,
+        0)
+      );
+  
+      setIva(
+        cart.reduce((acumulado, producto) => 
+          producto.variaciones.length == 0 ?
+          acumulado + (producto.subtotal - (producto.subtotal/producto.alicuota))
+          : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.subtotal - (vari.subtotal/producto.alicuota)), 0)
+          ,
+        0)
+      );
+  
+      setDescuento(
+        cart.reduce((acumulado, producto) => 
+          producto.variaciones.length == 0 ?
+          acumulado + ((producto.cantidad * producto.precio) * (producto.descuento/100))
+          : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.cantidad * vari.precio) * (vari.descuento/100), 0)
+          ,
+        0)
+      );
+    }
+    
+  }, [cart]);
+
+  const valores = { isAuthenticated, login, logout, user, setUser, cart, updateCart, cantProdCart, order, updateOrder, subtotal, iva, total, descuento, isEmpty };
+
   if (loading) {
     return <div>Loading...</div>; // Mostrar un mensaje de carga mientras verificamos el estado de autenticación
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, setUser, cart, updateCart, cantProdCart }}>
+    <AuthContext.Provider value={ valores }>
       {children}
     </AuthContext.Provider>
   );

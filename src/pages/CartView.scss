@@ -24,10 +24,14 @@
     .container-shop {
       width: auto;
       margin-bottom: 15px;
-      padding: 20px 30px 30px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
       -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
       -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+      .minumum-msg {
+        font-size: 12px;
+        font-style: italic;
+        margin-bottom: 10px;
+    }
       &:first-of-type {
         justify-content: flex-start;
         align-items: flex-end;
@@ -39,6 +43,10 @@
         }
         span {
           font-size: 14px;
+          font-weight: 600;
+        }
+        .card-title {
+          font-size: 18px;
           font-weight: 600;
         }
       }
@@ -58,6 +66,10 @@
             &:first-of-type {
               font-size: 18px;
               font-weight: 600;
+              &.total-precio {
+                font-size: 14px;
+                font-weight: 600;
+              }
             }
           }
         }

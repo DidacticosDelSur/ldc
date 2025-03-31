@@ -2,23 +2,16 @@ import { Component } from "react";
 
 import "./ProductoMini.scss";
 import { Link } from "react-router-dom";
+import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
 
 class ProductoMini extends Component {
+  static contextType = GlobalFunctionsContext;
   constructor(props) {
     super(props);
-    this.formatNumber = this.formatNumber.bind(this);
   }
-  formatNumber(q) {
-    let currency = '';
-    if (q) {
-      currency = q.toLocaleString('es-AR', {
-        style: 'currency',
-        currency: 'ARS'
-      })
-    }
-    return currency;
-  }
+  
   render() {
+    const { formatCurrency } = this.context;
     const lastChar =this.props.producto.nombre[this.props.producto.nombre.length - 1];
     let nombre = '';
     if (lastChar == ' ') {
@@ -46,7 +39,7 @@ class ProductoMini extends Component {
                     <span className="price price-discount-0 price-discount-Escolar">
                       <span className="tipo tipo-Libro">PVP </span>
                       <span className="original-price tipo-Libro">
-                        {this.formatNumber(this.props.producto.pvp)}
+                        {formatCurrency(this.props.producto.pvp)}
                       </span>
                       <span className="discount">
                         {this.props.producto.descuento}% off
@@ -54,7 +47,7 @@ class ProductoMini extends Component {
                     </span>
                   </div>
                   <div>
-                    {this.formatNumber(this.props.producto.precio)}
+                    {formatCurrency(this.props.producto.precio)}
                   </div>
                 </div>
               }
