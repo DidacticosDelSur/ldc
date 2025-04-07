@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../services/AuthContext";
-import { Alert, Button, Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
+import { Alert, Button, Col, Container, FloatingLabel, Form, Row, Spinner } from "react-bootstrap";
 import CartResume from "../../components/cart/CartResume";
 import { fetchCityListData, fetchProvinceListData } from "../../services/GeoServices";
 import { createOrder } from "../../services/OrderServices";
@@ -62,7 +62,6 @@ export default function Checkout() {
         setProvinces(data);
       })
       .catch(err => console.log(err))
-      .finally(() => {setLoading(false)});
   }, []);
 
   const newOrder = async () => {
@@ -91,116 +90,124 @@ export default function Checkout() {
 
   return (
     <Container className="px-3">
-      <Alert variant="danger" dismissible show={visible} onClose={() => setVisible(false)}>
-        {message}
-      </Alert>
-      <Row>
-        <Col>
-          Datos del envio
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="formGridState">
-                <FloatingLabel
-                  controlId="floatingState"
-                  label="Provincia"
-                  className="mb-3"
-                >
-                  <Form.Select
-                    required
-                    value={shippingData.province_id}
-                    onChange={(e) => {
-                      setShippingData({
-                        ...shippingData, 
-                        province_id: Number(e.target.value),
-                        city_id: 0
-                      })
-                    }}>
-                    <option></option>
-                    {provinces.length > 0 && 
-                      provinces.map((item) => {
-                        return <option key={`prov_${item.id}`} value={item.id}>{item.nombre}</option>
-                      })
-                    }
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    Debe elegir una provincia.
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-              </Form.Group>
+      {loading ?
+        <div className='content-loading'>
+          <Spinner variant="success" />
+        </div>
+        :
+        <>
+          <Alert variant="danger" dismissible show={visible} onClose={() => setVisible(false)}>
+            {message}
+          </Alert>
+          <Row>
+            <Col>
+              Datos del envio
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formGridState">
+                    <FloatingLabel
+                      controlId="floatingState"
+                      label="Provincia"
+                      className="mb-3"
+                    >
+                      <Form.Select
+                        required
+                        value={shippingData.province_id}
+                        onChange={(e) => {
+                          setShippingData({
+                            ...shippingData, 
+                            province_id: Number(e.target.value),
+                            city_id: 0
+                          })
+                        }}>
+                        <option></option>
+                        {provinces.length > 0 && 
+                          provinces.map((item) => {
+                            return <option key={`prov_${item.id}`} value={item.id}>{item.nombre}</option>
+                          })
+                        }
+                      </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        Debe elegir una provincia.
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridCity">
-                <FloatingLabel controlId="floatingCity" label="Ciudad">
-                <Form.Select
-                  required
-                  value={shippingData.city_id}
-                  onChange={(e) => {
-                    setShippingData({
-                      ...shippingData, 
-                      city_id: Number(e.target.value)
-                    })
-                  }}
-                  disabled={shippingData.province_id == 0}>
-                    <option></option>
-                    {cities.length > 0 && 
-                      cities.map((item) => {
-                        return <option key={`city_${item.id}`} value={item.id}>{item.nombre}</option>
-                      })
-                    }
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    Debe elegir una ciudad.
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="formGridName">
-                <FloatingLabel
-                  controlId="floatingName"
-                  label="Dirección de Envío"
-                  className="mb-3"
-                >
-                  <Form.Control
-                    type="text"
-                    placeholder='Dirección de envío'
-                    onChange={(e) => {
-                      setShippingData({
-                        ...shippingData,
-                        address: e.target.value,
-                      });
-                    }}
-                    required/>
-                  <Form.Control.Feedback type="invalid">
-                    Ingresa una dirección.
-                  </Form.Control.Feedback>
-                </FloatingLabel>
-                
-              </Form.Group>
-            </Row>
-            <Row className="mb-5">
-              <Form.Group as={Col} controlId="formGridObservations">
-                <FloatingLabel controlId="floatingObservations" label="Observaciones del Pedido">
-                  <Form.Control
-                    type="text"
-                    as="textarea"
-                    placeholder="Observaciones"
-                    onChange={(e) => {
-                      setShippingData({
-                        ...shippingData,
-                        observations: e.target.value,
-                      });
-                    }}
-                  />
-                </FloatingLabel>
-              </Form.Group>
-            </Row>
-            <Button type='submit' color="success">Confirmar Compra</Button>
-          </Form>
-        </Col>
-        <Col>
-          <CartResume shippingMode={true}/>
-        </Col>
-      </Row>
+                  <Form.Group as={Col} controlId="formGridCity">
+                    <FloatingLabel controlId="floatingCity" label="Ciudad">
+                    <Form.Select
+                      required
+                      value={shippingData.city_id}
+                      onChange={(e) => {
+                        setShippingData({
+                          ...shippingData, 
+                          city_id: Number(e.target.value)
+                        })
+                      }}
+                      disabled={shippingData.province_id == 0}>
+                        <option></option>
+                        {cities.length > 0 && 
+                          cities.map((item) => {
+                            return <option key={`city_${item.id}`} value={item.id}>{item.nombre}</option>
+                          })
+                        }
+                      </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        Debe elegir una ciudad.
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                </Row>
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formGridName">
+                    <FloatingLabel
+                      controlId="floatingName"
+                      label="Dirección de Envío"
+                      className="mb-3"
+                    >
+                      <Form.Control
+                        type="text"
+                        placeholder='Dirección de envío'
+                        onChange={(e) => {
+                          setShippingData({
+                            ...shippingData,
+                            address: e.target.value,
+                          });
+                        }}
+                        required/>
+                      <Form.Control.Feedback type="invalid">
+                        Ingresa una dirección.
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                    
+                  </Form.Group>
+                </Row>
+                <Row className="mb-5">
+                  <Form.Group as={Col} controlId="formGridObservations">
+                    <FloatingLabel controlId="floatingObservations" label="Observaciones del Pedido">
+                      <Form.Control
+                        type="text"
+                        as="textarea"
+                        placeholder="Observaciones"
+                        onChange={(e) => {
+                          setShippingData({
+                            ...shippingData,
+                            observations: e.target.value,
+                          });
+                        }}
+                      />
+                    </FloatingLabel>
+                  </Form.Group>
+                </Row>
+                <Button type='submit' color="success">Confirmar Compra</Button>
+              </Form>
+            </Col>
+            <Col>
+              <CartResume shippingMode={true}/>
+            </Col>
+          </Row>
+        </>
+      }
     </Container>
   )
 }

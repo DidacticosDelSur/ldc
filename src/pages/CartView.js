@@ -1,15 +1,17 @@
 import React, { useState, useContext } from 'react';
 import { removeItem, updateCartData } from '../services/CartServices';
 import "./CartView.scss";
-import { Alert, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Alert, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Trash } from 'react-bootstrap-icons';
 import { AuthContext } from '../services/AuthContext';
 import CartResume from '../components/cart/CartResume';
 import { GlobalFunctionsContext } from '../services/GlobalFunctionsContext';
+import { useNavigate } from 'react-router-dom';
 
 
-function Cart() {
+export default function Cart() {
   const { user, cart, updateCart, cantProdCart } = useContext(AuthContext);
+  const navigate = useNavigate();
   
   const [visibleError, setVisibleError] = useState(false)
   const [message, setMessage] = useState('')
@@ -76,6 +78,7 @@ function Cart() {
       })
       .catch(err => console.log(err))
   }
+
   const handleIncrementVariation = (item, idx, i = null) => {
     const updatedItems = [...cart];
     let prevCant = 0;
@@ -102,13 +105,18 @@ function Cart() {
     updateItem(item, cantidad, idx, i);
   }
 
+  const handleProductLink = (id, name) => {
+    const nombre = name.replace(/ /g, "-");
+    navigate(`/producto/${id}-${nombre}`);
+  }
 
   const handleUpdateValue = (item) => {
     console.log('updating', item);
   }
 
   const newOrder = () => {
-    window.location.href = '#/checkout'
+    navigate('/checkout');
+   // window.location.href = '#/checkout'
   }
 
   return (
@@ -125,7 +133,9 @@ function Cart() {
               item.variaciones.length > 0 ?
               <ListGroupItem key={`producto_${item.producto_id}`}
               >
-                {item.nombre} 
+                <Button variant='link' onClick={()=>{handleProductLink(item.producto_id, item.nombre)}}>
+                  {item.nombre} 
+                </Button>
                   <ListGroup>
                     {item.variaciones.map((v,i) => 
                       <ListGroupItem key={`variacion_${v.id}`} className="d-flex justify-content-between align-items-start">
@@ -149,7 +159,9 @@ function Cart() {
                   </ListGroup>
               </ListGroupItem>
             : <ListGroupItem  key={item.id} className="d-flex justify-content-between align-items-start">
-              {item.nombre}
+              <Button variant='link' onClick={()=>{handleProductLink(item.producto_id,item.nombre)}}>
+                {item.nombre}
+              </Button>
               <div className="input-container">
                 <button className="control-btn" disabled={item.cantidad === item.minimo_compra} onClick={() => {handleDecrementVariation(item,idx)}}>-</button>
                 <input
@@ -180,5 +192,3 @@ function Cart() {
     </div>
   );
 }
-
-export default Cart;

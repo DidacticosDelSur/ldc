@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
     const storedUser = JSON.parse(sessionStorage.getItem('user'));
     const storedCart = JSON.parse(localStorage.getItem('cart'));
     const storedOrder = JSON.parse(localStorage.getItem('order'));
+    const storedCant = JSON.parse(localStorage.getItem('cantProd'));
 
     if (token && storedUser) {
       const decodedToken = jwtDecode(token);
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }) => {
         setUser(storedUser); // Si hay un usuario en sessionStorage, establecerlo en el estado
         setCart(storedCart);
         setOrder(storedOrder);
+        setCantProdCart(storedCant);
         //updateCart(storedCart);
       }
     }
@@ -65,19 +67,20 @@ export const AuthProvider = ({ children }) => {
   const updateCart = (newCart) => {
     if (newCart.length == 0) {
       localStorage.removeItem('cart');
+      localStorage.setItem('cantProd',0);
       setCantProdCart(0);
     } else {
       localStorage.setItem('cart', JSON.stringify(newCart));
-      setCantProdCart(
-        newCart ? 
-        newCart.reduce((acumulado, producto) =>
-          producto.variaciones.length == 0 ?
-          acumulado + 1
-          : acumulado + producto.variaciones.length
-          ,
-        0)
-        : 0
-      )
+      const cantidad = newCart ? 
+      newCart.reduce((acumulado, producto) =>
+        producto.variaciones.length == 0 ?
+        acumulado + 1
+        : acumulado + producto.variaciones.length
+        ,
+      0)
+      : 0;
+      setCantProdCart(cantidad);
+      localStorage.setItem('cantProd', cantidad);
     }
     setCart(newCart);
   }

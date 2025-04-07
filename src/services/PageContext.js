@@ -20,8 +20,12 @@ export const PageProvider = ({ children }) => {
     setCurrentPage(1); // Resetear a la primera página cuando se cambia el límite
   };
 
+  const resetPages = () => {
+    setCurrentPage(1);
+  }
+
   return (
-    <PageContext.Provider value={{ currentPage, totalPages, itemsPerPage, pageGroup, paginate, setTotalPages, handleLimitChange }}>
+    <PageContext.Provider value={{ currentPage, totalPages, itemsPerPage, pageGroup, paginate, setTotalPages, handleLimitChange, resetPages }}>
       {children}
     </PageContext.Provider>
   );

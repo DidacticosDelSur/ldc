@@ -7,9 +7,11 @@ import MenuLateral from "../components/MenuLateral";
 import { fetchBrandListData } from "../services/BrandServices";
 import { fetchCategoryListData } from "../services/CategoryServices";
 import ProductosComponent from "../components/productos/ProductosComponent";
-import { Col, FloatingLabel, FormSelect, Row } from "react-bootstrap";
+import { Col, FloatingLabel, FormSelect, Row, Spinner } from "react-bootstrap";
 import CustomPagination from "../components/Pagination";
 import { AuthContext } from "../services/AuthContext";
+import ProductoAgregado from "../components/productos/ProductoAgregado";
+import { PageContext } from "../services/PageContext";
 
 export default function CategoryView() {
   const { categoryInfo, brandInfo } = useParams();
@@ -26,19 +28,8 @@ export default function CategoryView() {
   const [subCategorias, setSubCategorias] = useState([]);
   const { isAuthenticated, user } = useContext(AuthContext);
 
-  //Paginado
-  const [currentPage, setCurrentPage] = useState(1); // Página actual
-  const [totalPages, setTotalPages] = useState(1);  // Total de páginas
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Elementos por página (10)
- 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber); // Cambia la página
-  };
-
-  const handleLimitChange = (e) => {
-    setItemsPerPage(Number(e.target.value)); // Actualizar el límite
-    setCurrentPage(1); // Resetear a la primera página cuando se cambia el límite
-  };
+  const { currentPage, totalPages, itemsPerPage, paginate, handleLimitChange, setTotalPages, pageGroup } = useContext(PageContext);
+  const [ loading, setLoading ] = useState(false);
 
   const handleViewChange = (view) => {
     setViewType(view);
@@ -65,6 +56,7 @@ export default function CategoryView() {
         }
       }
     }
+    setLoading(true);
     fetchProductListData(params)
       .then(data => {
         setProductos(data.productos);
@@ -74,6 +66,8 @@ export default function CategoryView() {
       .catch(err => {
         console.log(err);
       })
+      .finally(()=>{setLoading(false)});
+      
     fetchCategoryListData({type: 'subcat', cat: categoryId})
       .then(data => {
         setSubCategorias(data);
@@ -81,6 +75,8 @@ export default function CategoryView() {
       .catch(err=>{
         console.log(err);
       })
+      .finally(()=>{setLoading(false)});
+
     fetchBrandListData({cat: categoryId})
       .then(data => {
         setMarcas(data);
@@ -88,64 +84,74 @@ export default function CategoryView() {
       .catch(err => {
         console.log(err);
       })
+      .finally(()=>{setLoading(false)});
+
   },[categoryId, brandId, currentPage, itemsPerPage]);
 
   return (
     <>
-      <div className="category-content">
-        <MenuLateral cat_id={categoryInfo} categorias={subCategorias} marcas={marcas} />
-        <div className="category-list">
-          <div className="category-title">
-            <div className="breadcrumb">
-              <Link to={`/categoria/${categoryInfo}`}>{categoryName}</Link>
-              {brandName && 
-                <>
-                  <span>&nbsp;{' >' }&nbsp;</span>
-                  <a>{brandName}</a> 
-                </>
-              }
-            </div>
-            <h2 className="title">{categoryName}</h2>
-            <div className="resultados">
-              <div>{cantProd} productos encontrados</div>
-              <div className="view-type-content">
-                <div
-                  className={viewType === "grid" ? "icon  active" : "icon"}
-                  onClick={() => handleViewChange("grid")}
-                >
-                  <GridFill />
+      {loading ?
+        <div className="content-loading">
+          <Spinner variant="success" />
+        </div>
+        :
+        <>
+          <ProductoAgregado />
+          <div className="category-content">
+            <MenuLateral cat_id={categoryInfo} categorias={subCategorias} marcas={marcas} />
+            <div className="category-list">
+              <div className="category-title">
+                <div className="breadcrumb">
+                  <Link to={`/categoria/${categoryInfo}`}>{categoryName}</Link>
+                  {brandName && 
+                    <>
+                      <span>&nbsp;{' >' }&nbsp;</span>
+                      <a>{brandName}</a> 
+                    </>
+                  }
                 </div>
-                <div
-                  className={viewType === "listTask" ? "icon  active" : "icon"}
-                  onClick={() => handleViewChange("listTask")}
-                >
-                  <ListTask />
-                </div>
-                <div
-                  className={viewType === "list" ? "icon  active" : "icon"}
-                  onClick={() => handleViewChange("list")}
-                >
-                  <List />
+                <h2 className="title">{categoryName}</h2>
+                <div className="resultados">
+                  <div>{cantProd} productos encontrados</div>
+                  <div className="view-type-content">
+                    <div
+                      className={viewType === "grid" ? "icon  active" : "icon"}
+                      onClick={() => handleViewChange("grid")}
+                    >
+                      <GridFill />
+                    </div>
+                    <div
+                      className={viewType === "listTask" ? "icon  active" : "icon"}
+                      onClick={() => handleViewChange("listTask")}
+                    >
+                      <ListTask />
+                    </div>
+                    <div
+                      className={viewType === "list" ? "icon  active" : "icon"}
+                      onClick={() => handleViewChange("list")}
+                    >
+                      <List />
+                    </div>
+                  </div>
                 </div>
               </div>
+              <Row>
+                <Col md={2} className='mb-2'>
+                  <FloatingLabel controlId="flotingSelect" label="Cant. por pag.">
+                    <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
+                      {pageGroup.map((item)=> {
+                        return <option value={item}>{item}</option>
+                      })}
+                    </FormSelect>
+                  </FloatingLabel>
+                </Col>
+              </Row>
+              <ProductosComponent viewType={viewType} productos={productos} authenticated={isAuthenticated}/>
+              <CustomPagination currentPage={currentPage} goToPage={paginate} totalPages={totalPages} />
             </div>
           </div>
-          <Row>
-            <Col md={2} className='mb-2'>
-              <FloatingLabel controlId="flotingSelect" label="Cant. por pag.">
-                <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
-                  <option value={1}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                </FormSelect>
-              </FloatingLabel>
-            </Col>
-          </Row>
-          <ProductosComponent viewType={viewType} productos={productos} authenticated={isAuthenticated}/>
-          <CustomPagination currentPage={currentPage} goToPage={paginate} totalPages={totalPages} />
-        </div>
-      </div>
+        </>
+      }
     </>
   );
 }

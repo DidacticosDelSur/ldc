@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Alert, Button, Card, CardBody, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap'
-import "./Login.scss"
 import { AuthContext } from '../../services/AuthContext'
 import { userLogin } from '../../services/UserServices'
 import useValidation from '../../services/useValidation'
@@ -56,7 +55,7 @@ const Login = () => {
   }
 
   return (
-    <div className="login bg-body-tertiary d-flex flex-row align-items-center">
+    <div className="contact-form bg-body-tertiary d-flex flex-row align-items-center">
       <Container>
       <Alert variant="danger" dismissible show={visibleError} onClose={() => setVisibleError(false)}>
         {message}

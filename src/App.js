@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import WhatsApp from "./components/WhatsApp";
 import { AuthContext } from "./services/AuthContext";
 import { useContext, useEffect } from "react";
-import RouteChangeTracker from "./routes/RouteChangeTracker";
 
 function App() {
   const { isAuthenticated, user, updateOrder } = useContext(AuthContext);
@@ -16,12 +15,22 @@ function App() {
   useEffect(() => {
     // Guardar la URL actual en sessionStorage cada vez que cambie la URL
     const currentState = location.pathname;
-    const prevState = sessionStorage.getItem('currentState');
-    if (currentState != prevState) {
-      sessionStorage.setItem('prevState', prevState);
-      sessionStorage.setItem('currentState', currentState);
-      if (prevState == '/pedido_confirmado') {
-        updateOrder({});
+    let prevState = sessionStorage.getItem('currentState');
+    const prev = sessionStorage.getItem('prevState');
+    if (currentState != '/registro') {
+      if (currentState != prevState) {
+        //resetPages();
+        if (prevState == '/login') {
+          prevState = sessionStorage.getItem('prevLogin');
+        }
+        sessionStorage.setItem('prevState', prevState);
+        sessionStorage.setItem('currentState', currentState);
+        if (currentState == '/login') {
+          sessionStorage.setItem('prevLogin', prev)
+        }
+        if (prevState == '/pedido_confirmado') {
+          updateOrder({});
+        }
       }
     }
     
@@ -29,7 +38,6 @@ function App() {
 
   return (
     <>
-      <RouteChangeTracker />
       <div className="App">
         <Header authenticated={isAuthenticated} user={user ? user.name: ''}/>
         <div className="App-content">
@@ -37,7 +45,7 @@ function App() {
         </div>
         <WhatsApp />
         <Footer />
-      </div>  
+      </div>
     </>
   );
 }

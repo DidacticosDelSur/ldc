@@ -10,6 +10,17 @@
       border: none;
       padding: 20px 40px;
     }
+    .list-group {
+      .list-group-item{
+        button {
+          color: #454545;
+          text-decoration: none;
+          &:hover{
+            text-decoration: underline;
+          }
+        }
+      }
+    }
     @media screen and (max-width: 921px) {
       width: calc(100% - 230px);
     }
@@ -31,7 +42,7 @@
         font-size: 12px;
         font-style: italic;
         margin-bottom: 10px;
-    }
+      }
       &:first-of-type {
         justify-content: flex-start;
         align-items: flex-end;

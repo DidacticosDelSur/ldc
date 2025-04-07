@@ -6,13 +6,16 @@ import Router from "./routes/Routes";
 import './assets/scss/icons.css';
 import { AuthProvider } from "./services/AuthContext";
 import { GlobalFunctionsProvider } from "./services/GlobalFunctionsContext";
+import { PageProvider } from "./services/PageContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
       <GlobalFunctionsProvider>
-        <Router />
+        <PageProvider>
+          <Router />
+        </PageProvider>
       </GlobalFunctionsProvider>
     </AuthProvider>
   </React.StrictMode>

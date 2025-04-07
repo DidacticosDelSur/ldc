@@ -19,3 +19,14 @@ h1 {
 a {
   font-size: 12px;
 }
+.content-loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  .spinner-grow,
+  .spinner-border{
+    width: 6rem;
+    height: 6rem;
+  }
+}

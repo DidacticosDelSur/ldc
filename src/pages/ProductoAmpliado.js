@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { addProductToCart, fetchProductData } from '../services/ProductServices';
 import { AuthContext } from '../services/AuthContext';
 import ErrorPage from './ErrorPage';
-import { Alert } from 'react-bootstrap';
+import { Alert, Spinner } from 'react-bootstrap';
 
 export default function ProductoAmpliado(){
   const { productInfo } = useParams();
@@ -16,7 +16,7 @@ export default function ProductoAmpliado(){
   const [productoData, setProductoData] = useState({variaciones: []})
   const { isAuthenticated, user, cart, updateCart } = useContext(AuthContext);
   const [visibleError, setVisibleError] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   // Función para actualizar el mensaje
@@ -29,6 +29,7 @@ export default function ProductoAmpliado(){
   }
 
   useEffect(()=>{
+    setLoading(true);
     fetchProductData(productId)
       .then(data => {
         setProductoData(data);
@@ -60,6 +61,7 @@ export default function ProductoAmpliado(){
       .catch(err => {
         console.log(err);
       })
+      .finally(()=>{setLoading(false)})
   }, [productId, cart])
 
   const addItemToCart = async (item) => {
@@ -74,30 +76,46 @@ export default function ProductoAmpliado(){
     if (user.isSeller && user.clientSelected) {
       f.append("cliente_id", user.clientSelected);
     }
+    setLoading(true);
     addProductToCart(f, item.userId)
       .then((data) => {
         updateCart(data.data);
-        navigate(sessionStorage.getItem('prevState'));// Redirect to dashboard
+        localStorage.setItem('productoAgregado', JSON.stringify({nombre: productName, img: productoData.media[0].preview}))
+        navigate(sessionStorage.getItem('prevState'));
       })
       .catch((err)=>{console.log(err)})
+      .finally(()=>{setLoading(false)})
   };
+
+  const keepShopping = () => {
+    localStorage.removeItem('productoAgregado');
+    navigate(sessionStorage.getItem('prevState'));
+  }
 
   return (
     <div className='content-wrap'>
-      {/*Producto Ampliado*/}
-      <Alert variant="danger" dismissible show={visibleError} onClose={() => setVisibleError(false)}>
-        {message}
-      </Alert>
-      {productoData.id ? 
-       <Producto 
-          p={productoData}
-          user={user}
-          authenticated={isAuthenticated} 
-          onMessage={handleMessage} 
-          onVisible={handleVisible} 
-          onAddItemToCart={addItemToCart} 
-        /> 
-       : <ErrorPage errorMessage={`No existe un producto con ese id`}/>
+      {loading ?
+        <div className='content-loading'>
+          <Spinner variant='success' />
+        </div>
+        :
+        <>
+          <Alert variant="danger" dismissible show={visibleError} onClose={() => setVisibleError(false)}>
+            {message}
+          </Alert>
+          {productoData.id ? 
+            <Producto 
+                p={productoData}
+                user={user}
+                authenticated={isAuthenticated} 
+                onMessage={handleMessage} 
+                onVisible={handleVisible} 
+                onAddItemToCart={addItemToCart} 
+                onKeepShopping={keepShopping}
+              /> 
+            : <ErrorPage errorMessage={`No existe un producto con ese id`}/>
+          }
+        </>
       }
     </div>
   );

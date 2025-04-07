@@ -28,18 +28,17 @@
     }
     .list-content {
       padding-bottom: 30px;
-      a {
+      .btn-link {
+        width: 100%;
+        border-radius: 0;
         padding: 6px 30px;
-        button {
-          font-size: 13px;
-          color: #87A2E0;
-          text-align: left;
-        }
+        font-size: 13px;
+        color: #87A2E0;
+        text-align: left;
+        text-decoration: none;
         &:hover {
           background-color: #688BE9;
-          button {
-            color: #FFFFFF;
-          }
+          color: #FFFFFF;
         }
       }
     }

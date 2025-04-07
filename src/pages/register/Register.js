@@ -45,7 +45,7 @@ const Register = () => {
     setLoading(true);
     createUser(f,'c')
       .then(data => {
-        window.location.href = "#/registro-confirmado";
+        window.location.href = "#/registroConfirmado";
       })
       .catch(err => {
         setVisible(true);
@@ -56,10 +56,9 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    } else {
+    event.preventDefault();
+    event.stopPropagation();
+    if (form.checkValidity()) {
       create();
     }
 
@@ -98,7 +97,7 @@ const Register = () => {
   }, []);
 
   return (
-    <div className="bg-body-tertiary d-flex flex-row align-items-center">
+    <div className="contact-form bg-body-tertiary d-flex flex-row align-items-center">
       <Container> 
         <Alert variant="danger" dismissible show={visible} onClose={() => setVisible(false)}>
           {message}

@@ -1,29 +1,11 @@
 import { Component } from "react";
 import './Producto.scss';
-import Slider from "react-slick";
 import { Link } from "react-router-dom";
-import { Alert, Button, Form, FormSelect, ListGroup, ListGroupItem, Table } from "react-bootstrap";
-import { Valentine } from "react-bootstrap-icons";
-import CustomRadioButton from "../CustomRadioButton";
-import { addProduct } from "../../services/ProductServices";
+import { Button, Table } from "react-bootstrap";
 import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
+import SliderComponent from "../SliderComponent";
+import { ArrowLeft } from "react-bootstrap-icons";
 
-const settings = {
-  /* customPaging: function(i) {
-    return (
-      <a>
-        <img src={`${baseUrl}/abstract0${i + 1}.jpg`}/>
-      </a>
-    );
-  }, */
-  dots: true,
-  className: "carousel-prod-amp",
-  /*dotsClass: "slick-dots slick-thumb",  */
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1
-};
 class Producto extends Component {
   static contextType = GlobalFunctionsContext;
   constructor(props){
@@ -38,6 +20,7 @@ class Producto extends Component {
     this.handleDecrement = this.handleDecrement.bind(this);
     this.handleUpdateValue = this.handleUpdateValue.bind(this);
     this.handleAddProducto = this.handleAddProducto.bind(this);
+    this.handleKeepShopping = this.handleKeepShopping.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -71,7 +54,7 @@ class Producto extends Component {
         cantidad: variations.length > 0 ? 0 : this.props.p.stock >= this.props.p.minimo_compra ? this.props.p.minimo_compra : 0,
         variaciones: variations,
         subtotal: variations.length > 0 ? 0 : this.props.p.stock >= this.props.p.minimo_compra ? this.props.p.minimo_compra * (this.props.p.precio * (1 - this.props.p.descuento/100) * prevState.alicuota): 0,
-        canAddtoChart: ((user.isSeller && user.clientSelected > 0) || !user.isSeller) ? variations.length > 0 ? !variations.every((variation) => variation.cantidad == 0) : true : false
+        canAddtoChart: user ? ((user.isSeller && user.clientSelected > 0) || !user.isSeller) ? variations.length > 0 ? !variations.every((variation) => variation.cantidad == 0) : true : false : false
       }))
     }
     if (this.props.p.variaciones.length === 0) {
@@ -113,7 +96,7 @@ class Producto extends Component {
         cantidad: variations.length > 0 ? 0 : this.props.p.stock >= this.props.p.minimo_compra ? this.props.p.minimo_compra : 0,
         variaciones: variations,
         subtotal: variations.length > 0 ? 0 : this.props.p.stock >= this.props.p.minimo_compra ? this.props.p.minimo_compra * (this.props.p.precio * (1 - this.props.p.descuento/100) * prevState.alicuota): 0,
-        canAddtoChart: ((user.isSeller && user.clientSelected > 0) || !user.isSeller) ? variations.length > 0 ? !variations.every((variation) => variation.cantidad == 0) : true : false,
+        canAddtoChart: user ? ((user.isSeller && user.clientSelected > 0) || !user.isSeller) ? variations.length > 0 ? !variations.every((variation) => variation.cantidad == 0) : true : false : false,
         
       }))
       if (this.props.p.variaciones.length === 0) {
@@ -200,23 +183,17 @@ class Producto extends Component {
     onAddItemToCart(this.state);
   }
 
+  handleKeepShopping() {
+    const { onKeepShopping } = this.props;
+    onKeepShopping();
+  }
+
   render(){
     const { formatCurrency } = this.context;
     return (
       <div className="content-product">
         <div className="box">
-          <div className="slider-container">
-            <Slider {...settings}>
-              {this.props.p.media && 
-                this.props.p.media.map((item) => {
-                  return (
-                    <div key={`media_${item.id}`}>
-                      <img src={item.preview} alt={item.alt} />
-                    </div>
-                  )
-                })
-              }
-            </Slider></div>
+          <SliderComponent images={this.props.p.media}></SliderComponent>
         </div>
         <div className="box description">
           <h2>{this.props.p.nombre}</h2>
@@ -225,7 +202,6 @@ class Producto extends Component {
           }
           <Link to="/marca/prueba"><h3 className="marca">{this.props.p.marca_nombre}</h3></Link>
           <div className="tags-group"></div>
-         
           <div className="contenido">
             <p>
               {this.props.p.descripcion}
@@ -347,6 +323,12 @@ class Producto extends Component {
               </>
             }
           </div>
+          {this.props.authenticated && 
+            <Button variant="link" onClick={this.handleKeepShopping} className="follow">
+              <ArrowLeft />
+              <span>Seguir comprando</span>
+            </Button>
+          }
           <div className="updated type-">
             <span className="icon-schedule"></span>
             Actualizado el {this.props.p.actualizado}

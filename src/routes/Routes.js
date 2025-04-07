@@ -69,7 +69,7 @@ const RouteObject = [
         element: <Register />,
       },
       {
-        path: "/registro_confirmado",
+        path: "/registroConfirmado",
         element: <RegisterConfirmPage />,
       },
       {
