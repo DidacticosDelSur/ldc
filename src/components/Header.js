@@ -38,7 +38,7 @@ class Header extends Component {
   }
 
   handleProfile = () => {
-    window.location.href = '#/perfil_usuario';
+    window.location.href = '#/perfil-usuario';
   }
 
   render() {

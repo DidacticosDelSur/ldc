@@ -28,7 +28,7 @@ function App() {
         if (currentState == '/login') {
           sessionStorage.setItem('prevLogin', prev)
         }
-        if (prevState == '/pedido_confirmado') {
+        if (prevState == '/pedido-confirmado') {
           updateOrder({});
         }
       }

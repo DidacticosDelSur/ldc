@@ -10,11 +10,11 @@ import { Alert, Spinner } from 'react-bootstrap';
 export default function ProductoAmpliado(){
   const { productInfo } = useParams();
   const [productId, ...productNameParts] = productInfo.split('-');
-  const productName = productNameParts.join(' ').replace(/_/g, " "); // Unir de nuevo el nombre del producto (en caso de que tenga más de una palabra)
+  const productName = productNameParts.join(' '); // Unir de nuevo el nombre del producto (en caso de que tenga más de una palabra)
   const navigate = useNavigate();
 
   const [productoData, setProductoData] = useState({variaciones: []})
-  const { isAuthenticated, user, cart, updateCart } = useContext(AuthContext);
+  const { user, cart, updateCart } = useContext(AuthContext);
   const [visibleError, setVisibleError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -105,9 +105,7 @@ export default function ProductoAmpliado(){
           </Alert>
           {productoData.id ? 
             <Producto 
-                p={productoData}
-                user={user}
-                authenticated={isAuthenticated} 
+                prod={productoData}
                 onMessage={handleMessage} 
                 onVisible={handleVisible} 
                 onAddItemToCart={addItemToCart} 

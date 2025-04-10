@@ -38,7 +38,7 @@ const Login = () => {
       .then(data => {
         login(data.data); // Save data and set the login state
         if (data.data.isSeller) {
-          navigate('/perfil_usuario');
+          navigate('/perfil-usuario');
         } else {
           navigate(sessionStorage.getItem('prevState')); // Redirect to dashboard
         }

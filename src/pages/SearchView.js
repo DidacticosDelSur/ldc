@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import MenuLateral from "../components/MenuLateral";
 import { fetchBrandData, fetchBrandListData } from "../services/BrandServices";
 import { fetchCategoryData, fetchCategoryListData } from "../services/CategoryServices";
-import ProductosComponent from "../components/productos/ProductosComponent";
+import ProductosComponent from "../components/productos/ProductsComponent";
 import { Col, FloatingLabel, FormSelect, Row, Spinner } from "react-bootstrap";
 import CustomPagination from "../components/Pagination";
 import { AuthContext } from "../services/AuthContext";

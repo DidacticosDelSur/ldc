@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Slider from "react-slick";
 import { productData } from "../assets/dataCarousel";
-import ProductoMini from "./productos/ProductoMini";
+import ProductSmall from "./productos/ProductSmall";
 import { AuthContext } from "../services/AuthContext";
 
 function CarouselProducto(props) {
@@ -38,7 +38,7 @@ function CarouselProducto(props) {
     <div className="slider-container product-slide">
       <Slider {...settings}>
         {
-          productData.map((item) => { return (<div key={`carouselProd_${item.id}`}><ProductoMini producto={item} authenticated={isAuthenticated}/></div>)})
+          productData.map((item) => { return (<div key={`carouselProd_${item.id}`}><ProductSmall product={item}/></div>)})
         }
       </Slider>
     </div>

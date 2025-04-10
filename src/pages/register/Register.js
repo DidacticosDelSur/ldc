@@ -45,7 +45,7 @@ const Register = () => {
     setLoading(true);
     createUser(f,'c')
       .then(data => {
-        window.location.href = "#/registroConfirmado";
+        window.location.href = "#/registro-confirmado";
       })
       .catch(err => {
         setVisible(true);

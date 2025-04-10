@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import "./Menu.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchCategoryListData } from "../services/CategoryServices";
 import { Button } from "react-bootstrap";
 import { PageContext } from "../services/PageContext";
+import { GlobalFunctionsContext } from "../services/GlobalFunctionsContext";
 
 export default function Menu() {
   const [categorias, setCategorias] = useState([]);
   const navigate = useNavigate();
 
   const { resetPages } = useContext(PageContext);
+  const { convertStringToLink } = useContext(GlobalFunctionsContext);
   
   const handleClickLink = (link) => {
     localStorage.removeItem('productoAgregado');
@@ -37,33 +39,21 @@ export default function Menu() {
 
             {categorias &&
               categorias.map((item) => {
-                const lastChar = item.nombre[item.nombre.length - 1];
-                let nombre = '';
-                if (lastChar == ' ') {
-                  nombre = item.nombre[item.nombre.length -1].replace(/ /g, "_")
-                } else {
-                  nombre = item.nombre.replace(/ /g, "_")
-                }
+                let nombre = convertStringToLink(item.nombre);
                 return (
                   <div key={`menu_${item.id}`} className="header-item">
                     {item.submenu.length === 0 && (
                       <Button variant="link" onClick={() => {handleClickLink(`/categoria/${item.id}-${nombre}`)}}>{item.nombre}</Button>
                     )}
                     {item.submenu.length > 0 && (
-                      <div className="header-dropdown">
+                      <div className="header-dropdown" key={`menuDrop_${item.id}`}>
                         <Button variant="link" onClick={() => {handleClickLink(`/categoria/${item.id}-${nombre}`)}}>{nombre}</Button>
                         <div className="header-dropdown-content">
                           {item.submenu.map((sub) => {
-                            const lastChar = sub.nombre[sub.nombre.length - 1];
-                            let nom = '';
-                            if (lastChar == ' ') {
-                              nom = sub.nombre[sub.nombre.length -1].replace(/ /g, "_")
-                            } else {
-                              nom = sub.nombre.replace(/ /g, "_")
-                            }
+                            let name = convertStringToLink(sub.nombre);
                             return (
                               <>
-                              <Button variant="link"  className="menu"  onClick={() => {handleClickLink(`/categoria/${sub.id}-${nom}`)}}>
+                              <Button key={`button_${sub.id}`} variant="link"  className="menu"  onClick={() => {handleClickLink(`/categoria/${sub.id}-${name}`)}}>
                                 <div>{sub.nombre}</div>
                               </Button>
                               </>

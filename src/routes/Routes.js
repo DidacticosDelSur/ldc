@@ -8,8 +8,8 @@ import Home from "../pages/Home";
 import ErrorPage from "../pages/ErrorPage";
 //import ProductoList from "../components/ProductList";
 import ProductoAmpliado from "../pages/ProductoAmpliado";
-import BrandView from "../pages/BrandView";
-import CategoryView from "../pages/CategoryView";
+//import BrandView from "../pages/BrandView";
+//import CategoryView from "../pages/CategoryView";
 import Register from "../pages/register/Register";
 import RegisterConfirmPage from "../pages/register/RegisterConfirm";
 import LogUser from "../pages/login/Login";
@@ -18,6 +18,7 @@ import Cart from "../pages/CartView";
 import UserProfile from "../pages/UserProfile";
 import Checkout from "../pages/order/Checkout";
 import OrderConfirmed from "../pages/order/OrderConfirmed";
+import CatalogView from "../pages/CatalogView";
 /*import CoockiePolicy from "../pages/CookiePolicy";
 import Groups from "../pages/administration/Groups";
 import Users from "../pages/administration/Users";
@@ -46,19 +47,23 @@ const RouteObject = [
       },
       {
         path: "/categoria/:categoryInfo",//categoryInfo
-        element: <CategoryView />
+        element: <CatalogView />
+        //element: <CategoryView />
       },
       {
         path: "/categoria/:categoryInfo/:brandInfo",
-        element: <CategoryView />
+        element: <CatalogView />
+       // element: <CategoryView />
       },
       {
-        path: "/marca/:id",
-        element: <BrandView />,
+        path: "/marca/:brandInfo",
+        element: <CatalogView />,
+       // element: <BrandView />,
       },
       {
-        path: "/marca/:id/:catid",
-        element: <BrandView />,
+        path: "/marca/:brandInfo/:categoryInfo",
+        element: <CatalogView />,
+       // element: <BrandView />,
       },
       {
         path: "/producto/:productInfo",
@@ -69,7 +74,7 @@ const RouteObject = [
         element: <Register />,
       },
       {
-        path: "/registroConfirmado",
+        path: "/registro-confirmado",
         element: <RegisterConfirmPage />,
       },
       {
@@ -85,7 +90,7 @@ const RouteObject = [
         element: <Cart />,
       },
       {
-        path: "/perfil_usuario",
+        path: "/perfil-usuario",
         element: <UserProfile />
       },
       {
@@ -93,7 +98,7 @@ const RouteObject = [
         element: <Checkout />
       },
       {
-        path: "/pedido_confirmado",
+        path: "/pedido-confirmado",
         element: <OrderConfirmed />
       }
        /*{
