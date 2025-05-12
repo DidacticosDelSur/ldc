@@ -6,12 +6,13 @@ import { Link, useParams } from "react-router-dom";
 import MenuLateral from "../components/MenuLateral";
 import { fetchBrandListData } from "../services/BrandServices";
 import { fetchCategoryListData } from "../services/CategoryServices";
-import ProductosComponent from "../components/productos/ProductosComponent";
+import ProductosComponent from "../components/productos/ProductsComponent";
 import { Col, FloatingLabel, FormSelect, Row, Spinner } from "react-bootstrap";
 import CustomPagination from "../components/Pagination";
 import { AuthContext } from "../services/AuthContext";
 import ProductoAgregado from "../components/productos/ProductoAgregado";
 import { PageContext } from "../services/PageContext";
+import CatalogView from "./CatalogView";
 
 export default function CategoryView() {
   const { categoryInfo, brandInfo } = useParams();
@@ -40,7 +41,7 @@ export default function CategoryView() {
     let params = {
       page: currentPage,
       itemsPerPage: itemsPerPage,
-      categoria: categoryId,
+      categoria: categoryId ? categoryId : 0,
       marca: brandId ? brandId : 0,
     }
     if (user) {
@@ -89,6 +90,13 @@ export default function CategoryView() {
   },[categoryId, brandId, currentPage, itemsPerPage]);
 
   return (
+    <CatalogView
+      categoryId={categoryId}
+      brandInfo={brandInfo}
+      categoryInfo={categoryInfo}
+    ></CatalogView>)
+
+  /* return (
     <>
       {loading ?
         <div className="content-loading">
@@ -153,5 +161,5 @@ export default function CategoryView() {
         </>
       }
     </>
-  );
+  ); */
 }

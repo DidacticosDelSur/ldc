@@ -1,0 +1,163 @@
+.producto {
+  transition: 0.5s;
+  -moz-transition: 0.5s;
+  -webkit-transition: 0.5s;
+  border-radius: 8px;
+  padding-bottom: 30px;
+  background: #fff;
+  border: 1px solid #DFDFDF;
+  position: relative;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  text-decoration: none;
+}
+.producto .image {
+  align-items: center;
+  display: flex;
+  height: 274px;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid rgb(229, 229, 229);
+}
+.producto .image img {
+  width: 80%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 80%;
+}
+.producto .image::after {
+  display: none;
+}
+.producto .description {
+  padding: 20px 29px;
+  height: 140px;
+  padding: 20px;
+}
+.producto .description .categ {
+  background: #FFE7AE;
+  border-radius: 8px;
+  color: #242424;
+  font-size: 11px;
+  padding: 6px 14px 5px;
+  font-weight: 600;
+  display: inline-block;
+  transition: 0.2s;
+}
+.producto .description .categ:hover {
+  background: #ffd061;
+}
+.producto .description .name {
+  color: #242424;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 13px 0 15px 0;
+}
+.producto .description .price {
+  color: #242424;
+  font-size: 24px;
+  font-weight: 500;
+  display: block;
+}
+.producto .description .price .price {
+  display: inline-block;
+  margin-left: 0px;
+  font-weight: 400;
+  text-decoration: line-through;
+  color: #aeaeae;
+  font-size: 16px;
+}
+.producto .description .price span {
+  display: inline-block;
+  /*margin-left: 0px;
+  font-weight: 400;
+  text-decoration: line-through;
+  color: #aeaeae;
+  font-size: 16px; */
+}
+.producto .description .price span.tipo {
+  display: none;
+}
+.producto .description .price span.tipo-Libro {
+  text-decoration: none;
+  margin-right: 5px;
+  margin-left: 0;
+  display: inline-block;
+}
+.producto .description .price span.discount {
+  position: absolute;
+  bottom: 10px;
+  right: 0px;
+  background: url(../../assets/images/svg/discount_new.svg) top right no-repeat;
+  background-size: 100% 100% x;
+  padding: 0 4px 0 0;
+  text-align: right;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #fff;
+  width: 86px;
+  height: 33px;
+  line-height: 30px;
+}
+.producto .description .price .price-symbol.hidden-prices {
+  display: none;
+}
+.producto .description .price .price-discount-0 {
+  display: none;
+  /**/
+}
+.producto .description .price .price-discount-0 .discount {
+  display: none;
+}
+.producto .description .price .price-discount-Libro {
+  display: block;
+}
+.producto .description .price.hidden-prices {
+  display: inline-block;
+  font-weight: 400;
+  color: #aeaeae;
+  font-size: 12px;
+}
+.producto .description .price-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.producto .description.new::after {
+  display: block;
+  content: "";
+  background: url(../../assets/images/svg/icon-new.svg) center center no-repeat;
+  background-size: 100% 100%;
+  position: absolute;
+  top: 22px;
+  left: -3px;
+  width: 88px;
+  height: 33px;
+  z-index: 1;
+}
+.producto .description.en_tv::before {
+  display: block;
+  content: "";
+  background: url(../../assets/images/svg/tv-icon.svg) center center no-repeat;
+  background-size: 100% 100%;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  width: 54px;
+  height: 54px;
+  z-index: 1;
+}
+.producto:hover {
+  box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.3);
+}
+
+.card {
+  max-width: 320px;
+  margin: auto 0.5rem;
+  border: none;
+}
+@media (max-width: 520px) {
+  .card {
+    margin: 0 auto;
+  }
+}/*# sourceMappingURL=ProductSmall.css.map */

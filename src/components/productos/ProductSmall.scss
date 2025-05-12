@@ -1,24 +1,20 @@
 .producto {
-  transition: .5s;
-  -moz-transition: .5s;
-  -webkit-transition: .5s;
-  border-radius: 8px;
-  padding-bottom: 30px;
-  background: #fff;
-  border: 1px solid #DFDFDF;
-  position: relative;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  padding: 15px;
+  background: #FFFFFF;
+  border-radius: 30px;
+  min-height: 330px;
   .image {
-    align-items: center;
     display: flex;
-    height: 274px;
+    height: 159px;
+    border-radius: 30px;
+    background-color: #F4F4F0;
+    align-items: center;
     justify-content: center;
-    padding: 0;
-    margin: 0;
-    border-bottom: 1px solid rgba(229,229,229);
     img {
-      width: 80%;
+      width: 100%;
       object-fit: contain;
       height: 80%;
     }
@@ -27,99 +23,86 @@
     }
   }
   .description {
-    padding: 20px 29px;
-    height: 140px;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    align-self: stretch;
     .categ {
-      background: #FFE7AE;
-      border-radius: 8px;
-      color: #242424;
-      font-size: 11px;
-      padding: 6px 14px 5px;
-      font-weight: 600;
-      display: inline-block;
-      transition: 0.2s;
-      &:hover{
-        background: #ffd061;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      align-self: stretch;
+      .brand{
+        display: flex;
+        padding: 7px 8px;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid #344154;
+        border-radius: 3px;
+        color: #344154;
+        text-transform: uppercase;
+        font-size: 8px;
+        font-weight: 700;
       }
+      .sku{
+        display: flex;
+        padding: 7px 8px;
+        align-items: center;
+        gap: 1px;
+        color: #9C9B94;
+        border-radius: 3px;
+        text-transform: uppercase;
+        font-size: 8px;
+        font-weight: 700;
+        background-color: #F4F4F0;
+      }
+    }
+    .descrition-data{
+      min-height: 145px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
     }
     .name {
-      color: #242424;
-      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      align-self: stretch;
+      color: #212124;
+      font-size: 19px;
       font-weight: 600;
-      margin: 13px 0 15px 0;
     }
     .price {
-      color: #242424;
-      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      color: #344154;
+      font-size: 28px;
       font-weight: 500;
-      display: block;
-      .price {
-        display: inline-block;
-        margin-left: 0px;
-        font-weight: 400;
-        text-decoration: line-through;
-        color: #aeaeae;
-        font-size: 16px;
-      }
       span {
-        display: inline-block;
-        /*margin-left: 0px;
-        font-weight: 400;
-        text-decoration: line-through;
-        color: #aeaeae;
-        font-size: 16px; */
-        &.tipo {
-          display: none;
-        }
-        &.tipo-Libro {
-          text-decoration: none;
-          margin-right: 5px;
-          margin-left: 0;
-          display: inline-block;
-        }
-        &.discount {
-          position: absolute;
-          bottom: 10px;
-          right: 0px;
-          background: url(../../assets/images/svg/discount_new.svg) top right no-repeat;
-          background-size: 100% 100%x;
-          padding: 0 4px 0 0;
-          text-align: right;
-          font-weight: 500;
-          font-size: 12px;
-          text-transform: uppercase;
-          color: #fff;
-          width: 86px;
-          height: 33px;
-          line-height: 30px;
-        }
-      }
-      .price-symbol{
-        &.hidden-prices {
-          display: none;
-        }
-      }
-      .price-discount-0{
-        display: none;
-         .discount{
-          display: none;
-        } /**/
-      }
-      .price-discount-Libro{
-        display: block;
-      }
-      &.hidden-prices {
-        display: inline-block;
-        font-weight: 400;
-        color: #aeaeae;
+        color: #9C9B94;
         font-size: 12px;
+        &.descuento {
+          text-decoration: line-through;
+        }
       }
     }
     .price-wrapper {
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+    .btn-content {
+      margin: 0 auto;
+      .btn {
+        padding: 15px 20px;
+        font-size: 14px;
+        border: none;
+      }
     }
     &.new{
       &::after{

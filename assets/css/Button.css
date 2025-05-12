@@ -1,0 +1,25 @@
+.btn-content {
+  display: flex;
+  justify-content: center;
+}
+.btn-content .btn {
+  display: flex;
+  padding: 25px 45px;
+  gap: 10px;
+  border-radius: 1000px;
+  font-size: 22px;
+  font-weight: 400;
+}
+.btn-content .btn.btn-primary {
+  background: #A4DAC2;
+  color: #1F2351;
+}
+.btn-content .btn.btn-secondary {
+  color: #5C5C5E;
+  background: transparent;
+  border: 1.5px solid #5C5C5E;
+}
+.btn-content .btn.btn-third {
+  color: #EBEBEB;
+  background: #593BAC;
+}/*# sourceMappingURL=Button.css.map */

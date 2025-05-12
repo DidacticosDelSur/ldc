@@ -15,8 +15,7 @@ import Seguro from "../assets/images/seguro.svg";
 import Precio from "../assets/images/precio.svg";
 import Envios from "../assets/images/envios.svg";
 import { fetchBrandListData } from "../services/BrandServices";
-import BrandBox from "../components/BrandBox";
-//import { fetchProductByTag } from "../services/ProductServices";
+import Microsites from "../components/Microsites";
 
 export default function Home() {
   const [carousel, setCarousel] = useState([
@@ -33,6 +32,9 @@ export default function Home() {
     fetchBrandListData()
       .then(data => {
         setMarcas(data.marcas);
+      })
+      .catch(err => {
+        console.log(err);
       })
     /* fetchProductByTag(2)
       .then(data => {
@@ -65,19 +67,12 @@ export default function Home() {
       </div>
       <div className="content">
         <FilterCategories />
+      </div>
         <div className="content-carousels">
-          <div className="header">
-            <h4>Marcas</h4>
-          </div>
-          <Container>
-            <Row>
-            {marcas.length > 0 && 
-              marcas.map((item) => {
-                return <BrandBox key={`marca_${item.id}`} item={item} />
-              })}
-            </Row>
-          </Container>
+          <Microsites items={marcas} />
         </div>
+      <div className="content">
+
         <div className="content-carousels">
           <div className="header">
             <h4>Últimos ingresos</h4>

@@ -1,0 +1,179 @@
+header {
+  height: auto;
+  background: #fff;
+  border-bottom: 1px solid #bbb;
+  padding: 0;
+  /* position: fixed; */
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  top: 0;
+}
+header .header-top {
+  background-color: #072476;
+  color: #fff;
+  font-size: 12px;
+}
+header .header-top .header-content {
+  height: 40px;
+}
+header .header-content {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+}
+header .header-content .header-item {
+  align-items: center;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+header .header-content .header-item a {
+  color: #fff;
+  text-decoration: none;
+}
+header .header-content .header-item a:hover {
+  color: #fff;
+  transition: all 0.5s ease;
+  text-decoration: underline;
+}
+header .header-content .header-item span {
+  display: flex;
+}
+header .header-content .header-item .user-logged {
+  background-color: #FBE8B5;
+  border-radius: 31px;
+  width: 31px;
+  height: 29px;
+  float: left;
+  text-align: center;
+  margin-right: 5px;
+}
+header .header-content .header-item .user-logged .icon {
+  float: none;
+  line-height: 27px;
+}
+header .header-content .header-item .header-dropdown {
+  line-height: 32px;
+}
+header .header-content .header-item .header-dropdown .header-dropdown-content-acc {
+  top: 42px;
+  display: none;
+  position: absolute;
+  width: 40%;
+  z-index: 10;
+  max-width: 200px;
+}
+header .header-content .header-item .header-dropdown .header-dropdown-content-acc .header-dropdown-column a {
+  padding-left: 10px;
+  margin-right: 0;
+  transition: 0.2s;
+}
+header .header-content .header-item .header-dropdown .header-dropdown-content-acc .header-dropdown-column a:hover {
+  transition: background-color 2s ease;
+  background: #ecba3c;
+  text-decoration: none;
+}
+header .header-content .header-item .header-dropdown:hover .header-dropdown-content-acc {
+  display: block;
+  transition: display 2s ease;
+}
+header .header-content .header-item.brand a img {
+  width: 90px;
+}
+header .header-content .header-item.fieldSearch {
+  width: 65%;
+  justify-content: flex-start;
+  border: 1px solid #072476;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  padding: 5px 0 5px 10px;
+  margin: 0;
+}
+@media (max-width: 1121px) {
+  header .header-content .header-item.fieldSearch {
+    /* display: none; */
+    width: 50%;
+  }
+}
+header .header-content .header-item.fieldSearch input, header .header-content .header-item.fieldSearch button {
+  height: 25px;
+  border: none;
+}
+header .header-content .header-item.fieldSearch input {
+  width: calc(100% - 50px);
+  color: #072476;
+  margin: 0;
+  display: block;
+  outline: none;
+  color: #454545;
+  font-family: "Omnes", sans-serif;
+  border: none;
+  padding: 0;
+}
+header .header-content .header-item.fieldSearch button {
+  width: 48px;
+  border-left: 1px solid #072476;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: none;
+}
+header .header-content .header-item.fieldSearch button svg {
+  color: #072476;
+  font-size: 22px;
+}
+header .header-content .header-item.fieldSearch button img {
+  width: 19px;
+}
+header .header-content .header-item.shopping-cart {
+  border: 1px solid #072476;
+  border-radius: 31px;
+  width: 70px;
+  justify-content: center;
+  height: 38px;
+}
+header .header-content .header-item.shopping-cart img {
+  width: 26px;
+  float: left;
+  margin-right: 5px;
+}
+header .header-content .header-item.shopping-cart .shopping-cant {
+  color: #072476;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 25px;
+}
+header .header-search {
+  margin: 10px auto;
+}
+header .header-search.header-content {
+  justify-content: space-evenly;
+}
+header .header-search.header-content.is_logged {
+  justify-content: space-between;
+}
+header .header-search button:hover, header .header-search a:hover {
+  transition: scale 0.5s ease;
+  transform: scale(1.1);
+}
+
+.hamburguer-content {
+  height: auto;
+  width: 40px;
+  cursor: pointer;
+}
+.hamburguer-content .icon {
+  margin: 0 auto;
+}
+.hamburguer-content .icon-close {
+  display: none;
+}
+
+.link-button {
+  cursor: pointer;
+}/*# sourceMappingURL=Header.css.map */

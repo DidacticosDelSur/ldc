@@ -1,9 +1,9 @@
 import { fetchData } from "./FetchServices";
 
 export async function fetchBrandListData(params = null) {
-  return fetchData('getMarca.php', params);
+  return fetchData('brand/getBrand.php', params);
 }
 
 export async function fetchBrandData(id) {
-  return fetchData('getMarca.php?id=' + id);
+  return fetchData('brand/getBrand.php?id=' + id);
 }

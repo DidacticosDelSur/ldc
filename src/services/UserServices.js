@@ -22,6 +22,13 @@ export async function createUser(data,type) {
   return createData('createCliente.php',data);
 }
 
+export async function editUserProfile(id,data) {
+  return editData('editUserProfile.php', id, data);
+}
+
+export function fetchSellerData(client) {
+  return fetchData('getSellerByClient.php?client='+client);
+}
 /* export async function editUserData(id, data,type) {
   switch (type) {
     case 'c': return editData('editCliente.php' , id, data);

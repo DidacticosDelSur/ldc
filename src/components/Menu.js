@@ -52,11 +52,9 @@ export default function Menu() {
                           {item.submenu.map((sub) => {
                             let name = convertStringToLink(sub.nombre);
                             return (
-                              <>
                               <Button key={`button_${sub.id}`} variant="link"  className="menu"  onClick={() => {handleClickLink(`/categoria/${sub.id}-${name}`)}}>
                                 <div>{sub.nombre}</div>
                               </Button>
-                              </>
                             );
                           })}
                         </div>

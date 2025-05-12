@@ -1,0 +1,95 @@
+.list-group-item {
+  color: #131118;
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  padding: 11px 16px;
+}
+.list-group-item .label {
+  font-size: 20px;
+}
+.list-group-item.active {
+  background-color: #593BAC;
+  color: #EBEBEB;
+  font-weight: 700;
+  border: none;
+}
+.list-group-item + .list-group-item {
+  border-width: 0;
+}
+.list-group-item:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.profile-menu {
+  width: 30%;
+}
+
+.profile {
+  height: 260vh;
+  position: absolute;
+  z-index: -2;
+  width: 100%;
+  background-color: #F4F4F0;
+}
+
+aside .lateral-menu,
+aside .seller-data {
+  width: 287px;
+  background: #ffffff;
+  border-radius: 30px;
+}
+aside .lateral-menu {
+  padding: 30px 20px;
+  gap: 14px;
+  display: flex;
+  flex-direction: column;
+}
+aside .lateral-menu .small-text {
+  font-size: 16px;
+  color: #5C5C5E;
+  font-weight: 300;
+}
+aside .lateral-menu h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #131118;
+}
+aside .seller-data {
+  background-color: #593BAC;
+  padding: 30px 9px;
+  display: flex;
+  gap: 16px;
+  color: #EBEBEB;
+}
+aside .seller-data .avatar {
+  display: flex;
+  width: 59px;
+  height: 59px;
+  border-radius: 100%;
+  background-color: #1F2351;
+  justify-content: center;
+  align-items: center;
+}
+aside .seller-data .avatar img {
+  width: 35px;
+  height: 35px;
+}
+aside .seller-data .data-card .big-data {
+  font-size: 20px;
+}
+aside .seller-data .data-card .small-data {
+  font-size: 13px;
+}
+aside .seller-data .client-card {
+  width: 100%;
+}
+
+.header {
+  color: #EBEBEB;
+}
+.header h3 {
+  font-size: 64px;
+  font-weight: 700;
+}/*# sourceMappingURL=UserProfile.css.map */

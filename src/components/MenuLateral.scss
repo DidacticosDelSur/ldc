@@ -4,6 +4,7 @@
       display: none;
     }
   }
+  
   aside {
     background-color: #FFFFFF;
     padding-top: 60px;
@@ -17,15 +18,7 @@
       color: #1841B1;
       padding-left: 30px;
     }
-    .divider {
-      border: 1px solid #1841B1;
-      /* width: 290px; */
-      width: 240px;
-      margin: 20px 0;
-      @media screen and (max-width: 1120px) {
-        width: 190px;
-      }
-    }
+    
     .list-content {
       padding-bottom: 30px;
       .btn-link {

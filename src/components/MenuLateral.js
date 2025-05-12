@@ -20,7 +20,7 @@ export default function MenuLateral({categorias, catId, brandId, marcas}) {
   }
 
   return (
-    <aside>
+    <>
       {isMobile &&
         <>
           <input
@@ -36,49 +36,47 @@ export default function MenuLateral({categorias, catId, brandId, marcas}) {
         </>
       }
 
-      <div id="sidebar" className="sidebar">
-        <div className="menu">
-          {categorias.length > 0 &&
-            (<>
-              <h3>Categoría</h3>
-              <div className="divider"></div>
-                <div className="list-content">
-                  {categorias.map((c, i) => {
-                    let categoria = convertStringToLink(c.nombre);
-                    return brandId ?
-                        (<Button variant="link"  onClick={() => {handleClickLink(`/marca/${brandId}/${c.id}-${categoria}`)}} key={`categoria_${i}`}>
-                          {c.nombre} ({c.cantidad})
-                        </Button>)
-                        :
-                        ( <Button variant="link" onClick={() => {handleClickLink(`/categoria/${c.id}-${categoria}`)}} key={`categoria_${i}`}>
-                          {c.nombre} ({c.cantidad})
-                        </Button>)
-                    }
-                  )}
-                </div>
-            </>)
-          }
-          {marcas.length > 0 &&
-          (<>
-            <h3>Marcas</h3>
+      <div className="menu">
+        {categorias.length > 0 &&
+          (<div className="category-group">
+            <h5>Categoría</h5>
+              <div className="list-content">
+                {categorias.map((c, i) => {
+                  let categoria = convertStringToLink(c.nombre);
+                  return brandId ?
+                      (<Button variant="link"  onClick={() => {handleClickLink(`/marca/${brandId}/${c.id}-${categoria}`)}} key={`categoria_${i}`}>
+                        {c.nombre} ({c.cantidad})
+                      </Button>)
+                      :
+                      ( <Button variant="link" onClick={() => {handleClickLink(`/categoria/${c.id}-${categoria}`)}} key={`categoria_${i}`}>
+                        {c.nombre} ({c.cantidad})
+                      </Button>)
+                  }
+                )}
+              </div>
+          </div>)
+        }
+        {marcas.length > 0 &&
+        (<>
             <div className="divider"></div>
-            <div className="list-content">
-                {marcas.map((m, i) => {
-                  let brand = convertStringToLink(m.nombre);
-                  return brandId ? 
-                    (<Button variant="link" onClick={() => {handleClickLink(`/marca/${brandId}`)}} key={`marca_${i}`}>
-                      {m.nombre} ({m.cantidad})
-                    </Button>)
-                    :
-                    (<Button variant="link" onClick={() => {handleClickLink(`/categoria/${catId}/${m.id}-${brand}`)}} key={`marca_${i}`}>
-                      {m.nombre} ({m.cantidad})
-                    </Button>)
-                })}
-            </div>
-          </>)
-          }
-        </div>
+            <div className="category-group">
+          <h5>Marcas</h5>
+          <div className="list-content">
+              {marcas.map((m, i) => {
+                let brand = convertStringToLink(m.nombre);
+                return brandId ? 
+                  (<Button variant="link" onClick={() => {handleClickLink(`/marca/${brandId}`)}} key={`marca_${i}`}>
+                    {m.nombre} ({m.cantidad})
+                  </Button>)
+                  :
+                  (<Button variant="link" onClick={() => {handleClickLink(`/categoria/${catId}/${m.id}-${brand}`)}} key={`marca_${i}`}>
+                    {m.nombre} ({m.cantidad})
+                  </Button>)
+              })}
+          </div>
+        </div></>)
+        }
       </div>
-    </aside>
+    </>
   )
 }

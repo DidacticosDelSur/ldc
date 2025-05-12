@@ -3,6 +3,7 @@ import React from 'react';
 //import { cilArrowThickLeft, cilArrowThickRight, cilArrowThickToLeft, cilArrowThickToRight } from '@coreui/icons';
 import { Pagination } from 'react-bootstrap';
 import { ChevronDoubleLeft, ChevronDoubleRight, ChevronLeft, ChevronRight } from 'react-bootstrap-icons';
+import './Pagination.scss'
 
 const CustomPagination = ({ currentPage, totalPages, goToPage }) => {
   const generatePaginationRange = () => {
@@ -39,17 +40,20 @@ const CustomPagination = ({ currentPage, totalPages, goToPage }) => {
     return (
       <>
         {totalPages > 1 && (
-          <Pagination className="justify-content-center mt-4">
-            <Pagination.Item onClick={() => goToPage(1)} disabled={currentPage === 1}>
-              {/* <span aria-hidden="true">&laquo;</span> */}
-              <ChevronDoubleLeft />
-              {/* <CIcon icon={cilArrowThickToLeft}/> */}
-            </Pagination.Item>
-            <Pagination.Item onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1}>
-              <ChevronLeft />
-               {/*<CIcon icon={cilArrowThickLeft}/>
-              <span aria-hidden="true">&lt;</span> */}
-            </Pagination.Item>
+          <Pagination>
+            <div className='pagination-buttons'>
+              <Pagination.Item onClick={() => goToPage(1)} disabled={currentPage === 1}>
+                {/* <span aria-hidden="true">&laquo;</span> */}
+                <ChevronDoubleLeft /> Primera
+                {/* <CIcon icon={cilArrowThickToLeft}/> */}
+              </Pagination.Item>
+              <Pagination.Item onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1}>
+                <ChevronLeft /> Anterior
+                {/*<CIcon icon={cilArrowThickLeft}/>
+                <span aria-hidden="true">&lt;</span> */}
+              </Pagination.Item>
+            </div>
+            <div className='pageContent'>
 
             {pageNumbers.map((page) => (
               <Pagination.Item
@@ -60,17 +64,19 @@ const CustomPagination = ({ currentPage, totalPages, goToPage }) => {
                 {page}
               </Pagination.Item>
             ))}
-
-            <Pagination.Item onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages}>
-              <ChevronRight />
-              {/* <span aria-hidden="true">&gt;</span> 
-              <CIcon icon={cilArrowThickRight} />*/}
-            </Pagination.Item>
-            <Pagination.Item onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
-              <ChevronDoubleRight />
-              {/* <span aria-hidden="true">&raquo;</span> 
-              <CIcon icon={cilArrowThickToRight} />*/}
-            </Pagination.Item>
+            </div>
+            <div className='pagination-buttons'>
+              <Pagination.Item onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages}>
+              Siguiente<ChevronRight />
+                {/* <span aria-hidden="true">&gt;</span> 
+                <CIcon icon={cilArrowThickRight} />*/}
+              </Pagination.Item>
+              <Pagination.Item onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
+              Última<ChevronDoubleRight />
+                {/* <span aria-hidden="true">&raquo;</span> 
+                <CIcon icon={cilArrowThickToRight} />*/}
+              </Pagination.Item>
+            </div>
           </Pagination>
         )}
       </>

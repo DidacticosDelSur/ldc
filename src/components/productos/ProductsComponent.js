@@ -12,7 +12,7 @@ export default function ProductsComponent ({viewType, products}) {
   const { convertStringToLink } = useContext(GlobalFunctionsContext);
 
   return (
-    <section className="productsItems">
+    <>
       {viewType !== "list" && (
         <div className={viewType === "grid" ? "grid-view" : "list-view"}>
           {products &&
@@ -50,6 +50,6 @@ export default function ProductsComponent ({viewType, products}) {
           </Table>
         </div>
       )}
-    </section>
+    </>
   )
 }

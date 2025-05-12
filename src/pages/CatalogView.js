@@ -3,7 +3,7 @@ import { AuthContext } from "../services/AuthContext";
 import { PageContext } from "../services/PageContext";
 import { fetchProductListData } from "../services/ProductServices";
 import { fetchCategoryListData } from "../services/CategoryServices";
-import { fetchBrandListData } from "../services/BrandServices";
+import { fetchBrandData, fetchBrandListData } from "../services/BrandServices";
 import MenuLateral from "../components/MenuLateral";
 import { GridFill, List, ListTask } from "react-bootstrap-icons";
 import { Col, FloatingLabel, FormSelect, Row, Spinner } from "react-bootstrap";
@@ -11,6 +11,7 @@ import ProductoAgregado from "../components/productos/ProductoAgregado";
 import ProductsComponent from "../components/productos/ProductsComponent";
 import CustomPagination from "../components/Pagination";
 import { Link, useParams } from "react-router-dom";
+import './CatalogView.scss';
 
 export default function CatalogView() {
   const { brandInfo, categoryInfo } = useParams();
@@ -21,6 +22,9 @@ export default function CatalogView() {
 
   const [brandId, ...brandNameParts] = brandInfo ? brandInfo.split('-') : [null, []];
   const brandName = brandNameParts.join(' ');
+
+  const catalogName = categoryInfo ? categoryName : brandName;
+  const [catalogData, setCatalogData] = useState({backgroundUrl: 'https://via.placeholder.com/800x300'});
 
   const [productos, setProductos] = useState([]);
   const [cantProd, setCantProd] = useState(0);
@@ -95,6 +99,10 @@ export default function CatalogView() {
         ...brandParams,
         marca: brandId
       }
+      fetchBrandData(brandId)
+      .then(data=> {
+        setCatalogData(data);
+      })
     }
     fetchCategoryListData(catParams)
       .then(data => {
@@ -125,23 +133,53 @@ export default function CatalogView() {
         :
         <>
           <ProductoAgregado />
-          <div className="category-content">
-            <MenuLateral catId={categoryInfo} categorias={subCategorias} marcas={marcas} brandId={brandInfo}/>
-            <div className="category-list">
-              <div className="category-title">
-                <div className="breadcrumb">
-                  <Link to={`/categoria/${categoryInfo}`}>{categoryName}</Link>
-                  {brandName && 
-                    <>
+          <div className="catalog-header"
+                style={{backgroundImage: catalogData.showBackground ? `url("${catalogData.backgroundUrl}")` : ''}}>
+            <div className="breadcrumb">
+              {categoryInfo
+                ?<>
+                    <Link to={`/categoria/${categoryInfo}`}>{catalogName}</Link>
+                    {brandName && <>
                       <span>&nbsp;{' >' }&nbsp;</span>
-                      <a>{brandName}</a> 
+                      <a>{brandName}</a>
                     </>
-                  }
+                    }
+                  </>
+                : <Link to={`/marca/${brandInfo}`}>{catalogName}</Link>
+              }
+            </div>
+            <div className="header-content">
+              <div className="header-title">
+                <div className="title">
+                  {catalogName}
                 </div>
-                <h2 className="title">{categoryName}</h2>
-                <div className="resultados">
-                  <div>{cantProd} productos encontrados</div>
+                <div className="subtitle">
+                  {catalogData.descripcion}
+                </div>
+              </div>
+              <div className="header-subcategories"></div>
+            </div>
+          </div>
+          <div className="catalog-content">
+            <div className="catalog-filter">
+              <MenuLateral catId={categoryInfo} categorias={subCategorias} marcas={marcas} brandId={brandInfo}/>
+            </div>
+            <div className="catalog-list">
+              <div className="category-list-header">
+                <div className="category-list-header-title"> 
+                  <h4 className="title">{catalogName}</h4>
+                  <div className="subtitle">({cantProd} productos encontrados)</div>
+                </div>
+                <div className="category-list-header-data">
+                  <FloatingLabel controlId="flotingSelect" label="Cant. por pag.">
+                    <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
+                      {pageGroup.map((item)=> {
+                        return <option value={item} key={`limit_${item}`}>{item}</option>
+                      })}
+                    </FormSelect>
+                  </FloatingLabel>
                   <div className="view-type-content">
+                    Vista:
                     <div
                       className={viewType === "grid" ? "icon  active" : "icon"}
                       onClick={() => handleViewChange("grid")}
@@ -163,18 +201,9 @@ export default function CatalogView() {
                   </div>
                 </div>
               </div>
-              <Row>
-                <Col md={2} className='mb-2'>
-                  <FloatingLabel controlId="flotingSelect" label="Cant. por pag.">
-                    <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
-                      {pageGroup.map((item)=> {
-                        return <option value={item} key={`limit_${item}`}>{item}</option>
-                      })}
-                    </FormSelect>
-                  </FloatingLabel>
-                </Col>
-              </Row>
-              <ProductsComponent viewType={viewType} products={productos}/>
+              <div className="catalog-content-items">
+                <ProductsComponent viewType={viewType} products={productos}/>
+              </div>
               <CustomPagination currentPage={currentPage} goToPage={paginate} totalPages={totalPages} />
             </div>
           </div>

@@ -1,0 +1,15 @@
+.list .producto {
+  display: flex;
+  padding-bottom: 0;
+}
+.list .producto .image {
+  height: 100px;
+  width: 100px;
+}
+.list .producto .description {
+  height: auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}/*# sourceMappingURL=ProductoListOld.css.map */

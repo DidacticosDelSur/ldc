@@ -4,6 +4,8 @@ import "./ProductSmall.scss";
 import { Link } from "react-router-dom";
 import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
 import { AuthContext } from "../../services/AuthContext";
+import { Button } from "react-bootstrap";
+import { Cart } from "react-bootstrap-icons";
 
 export default function ProductSmall ({product}) {
   const { formatCurrency, convertStringToLink } = useContext(GlobalFunctionsContext);
@@ -26,27 +28,30 @@ export default function ProductSmall ({product}) {
             />
           </div>
           <div className="description ">
-            <div className="categ">{product.marca}</div>
+            <div className="categ">
+              <div className="brand">{product.marca}</div>
+              <div className="sku">sku: {product.sku}</div>
+            </div>
+            <div className="descrition-data">
             <div className="name">{product.nombre}</div>
-            {isAuthenticated &&
-              <div className="price price-wrapper Escolar">
-                <div>
-                  <span className="price price-discount-0 price-discount-Escolar">
-                    <span className="tipo tipo-Libro">PVP </span>
-                    <span className="original-price tipo-Libro">
-                      {formatCurrency(product.pvp)}
-                    </span>
-                    <span className="discount">
-                      {product.descuento}% off
-                    </span>
-                  </span>
+              {isAuthenticated &&
+                <div className="price">
+                  {product.descuento > 0 
+                    ? formatCurrency(product.precio*(1-product.descuento/100))
+                    :<>{formatCurrency(product.precio)}<span>+ iva</span></>
+                  }
+                  {product.descuento > 0 &&
+                  <span className="descuento">{formatCurrency(product.precio)}</span>
+                }
                 </div>
-                <div>
-                  {formatCurrency(product.precio)}
+              }
+            </div>
+            {!isAuthenticated 
+              ? <div>Ingrese para ver los precios</div>
+              : <div className="btn-content">
+                <Button variant="primary">Agregar al carrito <Cart /></Button>
                 </div>
-              </div>
             }
-            {!isAuthenticated && <div>Ingrese para ver los precios</div>}
           </div>
         </Link>
       </div>
