@@ -2,11 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../services/AuthContext";
 import { PageContext } from "../services/PageContext";
 import { fetchProductListData } from "../services/ProductServices";
-import { fetchCategoryListData } from "../services/CategoryServices";
+import { fetchCategoryData, fetchCategoryListData } from "../services/CategoryServices";
 import { fetchBrandData, fetchBrandListData } from "../services/BrandServices";
 import MenuLateral from "../components/MenuLateral";
 import { GridFill, List, ListTask } from "react-bootstrap-icons";
-import { Col, FloatingLabel, FormSelect, Row, Spinner } from "react-bootstrap";
+import { FloatingLabel, FormSelect, Spinner } from "react-bootstrap";
 import ProductoAgregado from "../components/productos/ProductoAgregado";
 import ProductsComponent from "../components/productos/ProductsComponent";
 import CustomPagination from "../components/Pagination";
@@ -24,14 +24,14 @@ export default function CatalogView() {
   const brandName = brandNameParts.join(' ');
 
   const catalogName = categoryInfo ? categoryName : brandName;
-  const [catalogData, setCatalogData] = useState({backgroundUrl: 'https://via.placeholder.com/800x300'});
+  const [catalogData, setCatalogData] = useState({backgroundUrl: ''});
 
   const [productos, setProductos] = useState([]);
   const [cantProd, setCantProd] = useState(0);
   const [marcas, setMarcas ] = useState([]) ;
 
   const [subCategorias, setSubCategorias] = useState([]);
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const { currentPage, totalPages, itemsPerPage, paginate, handleLimitChange, setTotalPages, pageGroup } = useContext(PageContext);
   const [ loading, setLoading ] = useState(false);
@@ -89,6 +89,10 @@ export default function CatalogView() {
         ...brandParams,
         cat: categoryId
       }
+      fetchCategoryData(categoryId)
+      .then(data=> {
+        setCatalogData(data);
+      })
     }
     if (brandId) {
       catParams = {

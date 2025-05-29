@@ -1,21 +1,32 @@
 .btn-content {
   display: flex;
   justify-content: center;
+  gap: 60px;
   .btn {
     display: flex;
     padding: 25px 45px;
+    align-items: center;
     gap: 10px;
     border-radius: 1000px;
+    font-size: 14px;
+    border: none;
     font-size: 22px;
-    font-weight: 400;
+    font-weight: 400; 
     &.btn-primary {
       background: #A4DAC2;
-      color: #1F2351;
+      color: #212124;
+      &:hover {
+        background: #5BE381;
+      }
     }
     &.btn-secondary{
       color: #5C5C5E;
       background: transparent;
       border: 1.5px solid #5C5C5E;
+      &:hover {
+        background-color: #B3B3B3;
+        color: #FFFFFF;
+      }
     }
     &.btn-third {
       color: #EBEBEB;

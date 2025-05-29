@@ -1,0 +1,28 @@
+.dropdown {
+  .btn {
+    background-color: inherit;
+    border: none;
+    color: #212124;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    span {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    &:active,
+    &:hover {
+      background-color: #F4F4F0;
+      color: #212124;
+      &:focus-visible {
+        box-shadow: none;
+      }
+    }
+    &:focus-visible {
+      box-shadow: none;
+    }
+  }
+}

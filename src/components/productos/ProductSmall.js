@@ -36,7 +36,8 @@ export default function ProductSmall ({product}) {
             <div className="name">{product.nombre}</div>
               {isAuthenticated &&
                 <div className="price">
-                  {product.descuento > 0 
+                  <span className="sign">$</span>
+                    {product.descuento > 0 
                     ? formatCurrency(product.precio*(1-product.descuento/100))
                     :<>{formatCurrency(product.precio)}<span>+ iva</span></>
                   }
@@ -49,7 +50,7 @@ export default function ProductSmall ({product}) {
             {!isAuthenticated 
               ? <div>Ingrese para ver los precios</div>
               : <div className="btn-content">
-                <Button variant="primary">Agregar al carrito <Cart /></Button>
+                <Button variant="primary" className="small">Agregar al carrito <Cart /></Button>
                 </div>
             }
           </div>

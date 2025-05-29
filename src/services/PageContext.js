@@ -8,8 +8,8 @@ export const PageProvider = ({ children }) => {
   //Paginado
   const [currentPage, setCurrentPage] = useState(1); // Página actual
   const [totalPages, setTotalPages] = useState(1);  // Total de páginas
-  const [itemsPerPage, setItemsPerPage] = useState(1); // Elementos por página (10)
-  const [pageGroup, setPageGroup] = useState([1,50,100])
+  const [itemsPerPage, setItemsPerPage] = useState(50); // Elementos por página (10)
+  const [pageGroup, setPageGroup] = useState([50,100,150,200])
   
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber); // Cambia la página

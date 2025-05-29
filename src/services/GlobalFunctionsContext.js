@@ -16,10 +16,13 @@ export const GlobalFunctionsProvider = ({ children }) => {
 
   const globalFunctions = {
     formatCurrency: (value) => {
-      return new Intl.NumberFormat('es-AR', { 
-        style: 'currency', 
-        currency: 'ARS' 
+      const formatted = new Intl.NumberFormat('es-AR', { 
+        style: 'currency',
+        currency: 'ARS',
+        currencyDisplay: 'narrowSymbol'
       }).format(value);
+      // Quitar el símbolo "$" del inicio
+      return formatted.replace(/^\D+/, '');
     },
     
     calculatePercentage: (value, total) => {

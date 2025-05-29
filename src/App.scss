@@ -1,7 +1,9 @@
 .App {
   display: flex;
   flex-direction: column;
-  background-color: #F4F4F0;
+}
+.App-content {
+  margin-top: 62px;
 }
 
 .icon {

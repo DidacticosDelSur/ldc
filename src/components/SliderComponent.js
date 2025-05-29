@@ -1,24 +1,32 @@
 import Slider from "react-slick";
 import "./SliderComponent.scss";
+import { useEffect, useState } from "react";
 
-const settings = {
-  /* customPaging: function(i) {
-    return (
-      <a>
-        <img src={`${baseUrl}/abstract0${i + 1}.jpg`}/>
-      </a>
-    );
-  }, */
-  dots: true,
-  className: "carousel-prod-amp",
-  /*dotsClass: "slick-dots slick-thumb",  */
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1
-};
+
 
 export default function SliderComponent ({images}) {
+  const [settings, setSettings] =useState({});
+  useEffect(()=>{
+    setSettings({
+      ...settings,
+      customPaging: function(i) {
+        return (
+          <a>
+            <img src={`${images[i].preview}`}/>
+          </a>
+        );
+      },
+      dots: true,
+      className: "carousel-prod-amp items-content",
+      dotsClass: "slick-thumb",
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false
+    })
+  },[images])
+
   return (
     <>
     {
