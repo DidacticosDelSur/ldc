@@ -30,6 +30,9 @@
       gap: 5px;
       font-size: 12px;
       border-radius: 1000px;
+      &:hover {
+        gap: 0;
+      }
     }
     &.disabled {
       opacity: 0.3;

@@ -1,9 +1,9 @@
 import { fetchData } from "./FetchServices";
 
 export async function fetchCategoryListData(params = null) {
-  return fetchData('getCategoria.php', params);
+  return fetchData('category/getCategory.php', params);
 }
 
 export async function fetchCategoryData(id) {
-  return fetchData('getCategoria.php?id=' + id);
+  return fetchData('category/getCategory.php?id=' + id);
 }

@@ -68,7 +68,7 @@ export default function Microsites({items, speed = 300000}) {
                 {[...items, ...items].map((item, i) => {
                 const brandName = convertStringToLink(item.nombre)
                 return (
-                  <div key={i} className="ms-container-items">
+                  <div className="ms-container-items">
                     <div className="ms-background">
                       <img src={item.bannerUrl} alt={`imgBanner-${i}`} />
                     </div>

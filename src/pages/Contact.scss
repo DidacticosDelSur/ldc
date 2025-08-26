@@ -1,0 +1,45 @@
+.contact {
+  background-image: url('../assets/images/register_bg.png');
+  .contact-form {
+    background-color: #1F2351;
+    max-width: 830px;
+    .title-content {
+      .title {
+        color: #A4DAC2;
+      }
+      .subtitle{
+        color: #ffffff;
+      }
+    }
+    .form-label{
+      color: #A4DAC2;
+    }
+    .contact-body {
+      min-width: 700px;
+      .title {
+        color: #ffffff;
+        border-bottom: 1px solid #ffffff;
+        margin-bottom: 10px;
+      }
+    }
+    .contact-item{
+      display: flex;
+      flex-direction: column;
+      padding: 10px 6px;
+      .title {
+        border-bottom: 0;
+        font-weight: 700;
+      }
+      .data {
+        color: #ffffff;
+        font-size: 12px;
+        a {
+          color: #ffffff;
+        }
+        .icon {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}

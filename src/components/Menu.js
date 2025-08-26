@@ -35,7 +35,7 @@ export default function Menu() {
       const windowHeight = window.innerHeight;
       const midpoint = windowHeight / 2;
 
-      if (currentScroll < 1000) {
+      if (currentScroll < 600) {
         setShowMenu(true);
       } else {
         setShowMenu(false);
@@ -96,12 +96,12 @@ export default function Menu() {
                               {nombre}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
+                            <Dropdown.Menu className={`${!showMenu ? 'display-none' : ''}`}>
                               <div className="menu-dropdown-content">
                                 <div className="menu-title-content">
                                   <Dropdown.ItemText className="title-content">
                                       <div className="title">{nombre}</div>
-                                      <div className="button-dropdown">
+                                      <div className="button-dropdown" >
                                         <Dropdown.Item onClick={() => {handleClickLink(`/categoria/${item.id}-${nombre}`)}}>Ver todos los productos</Dropdown.Item>
                                         <div className="icon">
                                           <ArrowRight />
@@ -133,7 +133,7 @@ export default function Menu() {
                 );
               })}
             <div className="menu-content-item">
-              <Button variant="link" onClick={() => {handleClickLink('/')}}>Contacto</Button>
+              <Button variant="link" onClick={() => {handleClickLink('/contacto')}}>Contacto</Button>
             </div>
           </div>
         </div>

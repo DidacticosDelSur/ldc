@@ -4,6 +4,28 @@ import { Button, CloseButton } from "react-bootstrap";
 
 export default function ProductoAgregado() {
   const [producto, setProducto] = useState({});
+  const [showBanner, setShowBanner] = useState(true);
+
+  useEffect(() => {
+    let lastScroll = 0;
+
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const midpoint = windowHeight / 2;
+
+      if (currentScroll < 600) {
+        setShowBanner(true);
+      } else {
+        setShowBanner(false);
+      }
+
+      lastScroll = currentScroll;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  },[])
 
   useEffect(() => {
     const prod = JSON.parse(localStorage.getItem('productoAgregado'));
@@ -29,7 +51,7 @@ export default function ProductoAgregado() {
     <>
     {
       producto ?
-        <div className="wide-product-back">
+        <div className={`wide-product-back  ${!showBanner ? 'translate-y-full z-0' : ''}`}>
           <CloseButton onClick={handleClose} />
           <div className="product-added">
             <div className="added-div">

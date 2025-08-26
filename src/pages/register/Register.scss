@@ -1,5 +1,40 @@
-.contact-form {
-  .card {
-    max-width: 1120px;
+.register {
+  background-image: url('../../assets/images/register_bg.png');
+  .register-form {
+    background-color: #1F2351;
+    max-width: 830px;
+    .title-content {
+      .title {
+        color: #A4DAC2;
+      }
+      .subtitle{
+        color: #ffffff;
+      }
+    }
+    .register-footer {
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 700;
+      gap: 25px;
+      .note {
+        font-size: 13px;
+        font-weight: 400;
+        padding: 20px 40px;
+        text-align: center;
+      }
+      .form-check-input{
+        &:checked{
+          background-color: #ffffff;
+          border-color: #ffffff;
+          &[type=checkbox] {
+        --bs-form-check-bg-image: url(data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231F2351' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 10l3 3 6-6'/%3E%3C/svg%3E);
+      }}}
+    }
+    .form-label{
+      color: #A4DAC2;
+    }
   }
 }

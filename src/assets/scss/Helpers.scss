@@ -1,9 +1,18 @@
 .translate-y-0 {
   transform: translateY(0);
 }
+.translate-y-full {
+  transform: translateY(-100%);
+}
 .translate-y-full{
   transform: translateY(100%);
 }
 .z-0{
   z-index: 0;
+}
+.background-grey {
+  background-color: #F5F5F5;
+}
+.display-none{
+  display: none !important;
 }

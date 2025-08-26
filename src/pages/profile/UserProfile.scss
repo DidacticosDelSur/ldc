@@ -4,6 +4,7 @@
   display: flex;
   gap: 12px;
   padding: 11px 16px;
+  border-width: 0;
   .label {
     font-size: 20px;
   }
@@ -13,19 +14,34 @@
     font-weight: 700;
     border: none;
   }
-  + .list-group-item {
-    border-width: 0;
-  }
   &:first-child {
     border-top-left-radius: 0;
     border-top-right-radius:0;
   }
 }
+.multiple-data {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #593BAC;
+  border-radius: 100px;
+}
+.message-seller {
+  background-color: #593BAC;
+  color:#EBEBEB;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: fit-content;
+  font-weight: bold;
+}
 .profile-menu {
   width: 30%;
 }
 .profile {
-  height: 260vh;
   position: absolute;
   z-index: -2;
   width: 100%;
@@ -88,9 +104,87 @@ aside {
 }
 .header {
   color: #EBEBEB;
-  h3{
+  min-height: 190px;
+  //margin-bottom: 39px;
+  h3,
+  .title{
     font-size: 64px;
     font-weight: 700;
+    line-height: 95%;
   }
+  .subtitle {
+    font-size: 28px;
+    font-weight: 300;
+  }
+}
+.adver-content {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  .inner-adver {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 30px;
+    padding: 20px 17px 30px;
+    .title {
+      color: #593BAC;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .description {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      p {
+        margin: 0;
+        font-size: 16px;
+      }
+      a {
+        font-size: 16px;
+        color: #1F2351;
+        text-decoration: none;
+      }
+    }
+  }
+}
+.order-conent {
+  border-radius: 30px;
+  background-color: #ffffff;
+  padding: 10px;
+  .table {
+    margin-bottom: 0;
+  }
+}
+.profile-background {
+  background-color: #F4F4F0;
+  width: 100%;
+  min-height: 100vh;
+  position: absolute;
+  top: 375px;
+  z-index: -1;
   
+}
+.fondoPerfil {
+  background-color: #F4F4F0;
+  padding-bottom: 100px;
+  .fondoVioleta{
+    background-color: #593BAC;
+    padding-left: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 50px;
+  }
+  .aside-content {
+    max-width: 380px;
+  }
+  .data-content {
+    max-width: calc(100% - 450px);
+  }
+  aside {
+    position: relative;
+    top: -160px;
+    left: 49px;
+  }
 }

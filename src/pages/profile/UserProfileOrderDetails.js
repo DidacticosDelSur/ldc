@@ -4,9 +4,11 @@ import { Table } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
 import { ArrowLeft } from "react-bootstrap-icons";
+import { AuthContext } from "../../services/AuthContext";
 
 export default function UserProfileOrderDetais() {
   const { id } = useParams()
+  const { user } = useContext(AuthContext);
   const { formatCurrency, formatNumber } = useContext(GlobalFunctionsContext)
   const [order, setOrder] = useState(null);
   
@@ -21,9 +23,6 @@ export default function UserProfileOrderDetais() {
 
   return (
     <>
-      <div className="header mb-5">
-        <h3>Detalle Pedido</h3>
-      </div>
       {order &&
        <>
         <div>
@@ -36,6 +35,10 @@ export default function UserProfileOrderDetais() {
           <div>Cliente: <b>{order.client}</b></div>
           <div>Dirección de Envío: <b>{order.shippingAddress}</b></div>
           <div>Observaciones: <b>{order.observaciones}</b></div>
+          {user.isSeller ?
+            order.seller != "" ? <div className="message-seller">Pedido creado por el vendedor en nombre del cliente</div> : null
+            : null
+          }
         </div>
         {order.items.length > 0 && 
           <Table className="mt-5">

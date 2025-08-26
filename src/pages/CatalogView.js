@@ -6,15 +6,16 @@ import { fetchCategoryData, fetchCategoryListData } from "../services/CategorySe
 import { fetchBrandData, fetchBrandListData } from "../services/BrandServices";
 import MenuLateral from "../components/MenuLateral";
 import { GridFill, List, ListTask } from "react-bootstrap-icons";
-import { FloatingLabel, FormSelect, Spinner } from "react-bootstrap";
+import { FloatingLabel, FormLabel, FormSelect, Spinner } from "react-bootstrap";
 import ProductoAgregado from "../components/productos/ProductoAgregado";
 import ProductsComponent from "../components/productos/ProductsComponent";
 import CustomPagination from "../components/Pagination";
 import { Link, useParams } from "react-router-dom";
 import './CatalogView.scss';
+import { fetchTagData } from "../services/TagServices";
 
 export default function CatalogView() {
-  const { brandInfo, categoryInfo } = useParams();
+  const { brandInfo, categoryInfo, tagInfo } = useParams();
 
   const [viewType, setViewType] = useState(sessionStorage.getItem("viewType") ? sessionStorage.getItem("viewType") : "grid");
   const [categoryId, ...categoryNameParts] = categoryInfo ? categoryInfo.split('-')  : [null, []];
@@ -23,7 +24,10 @@ export default function CatalogView() {
   const [brandId, ...brandNameParts] = brandInfo ? brandInfo.split('-') : [null, []];
   const brandName = brandNameParts.join(' ');
 
-  const catalogName = categoryInfo ? categoryName : brandName;
+  const [tagId, ...tagNameParts] = tagInfo ? tagInfo.split('-') : [null, []];
+  const tagName = tagNameParts.join(' ');
+
+  const catalogName = categoryInfo ? categoryName : brandInfo ? brandName : tagName;
   const [catalogData, setCatalogData] = useState({backgroundUrl: ''});
 
   const [productos, setProductos] = useState([]);
@@ -35,6 +39,7 @@ export default function CatalogView() {
 
   const { currentPage, totalPages, itemsPerPage, paginate, handleLimitChange, setTotalPages, pageGroup } = useContext(PageContext);
   const [ loading, setLoading ] = useState(false);
+  const [showLateral, setShowLateral] = useState(true);
 
   const handleViewChange = (view) => {
     setViewType(view);
@@ -42,11 +47,13 @@ export default function CatalogView() {
   }
 
   useEffect(()=>{
+    setShowLateral(true);
     let params = {
       page: currentPage,
       itemsPerPage: itemsPerPage,
       categoria: categoryId ? categoryId : 0,
       marca: brandId ? brandId : 0,
+      tag: tagId ? tagId : 0,
     }
     if (user) {
       params = {
@@ -108,6 +115,13 @@ export default function CatalogView() {
         setCatalogData(data);
       })
     }
+    if (tagId) {
+      setShowLateral(false);
+      fetchTagData(tagId)
+      .then((data) => {
+        setCatalogData(data);
+      })
+    }
     fetchCategoryListData(catParams)
       .then(data => {
         setSubCategorias(data);
@@ -126,7 +140,7 @@ export default function CatalogView() {
       })
       .finally(()=>{setLoading(false)});
 
-  },[categoryId, brandId, currentPage, itemsPerPage]);
+  },[categoryId, brandId, tagId, currentPage, itemsPerPage]);
 
   return (
     <>
@@ -149,7 +163,9 @@ export default function CatalogView() {
                     </>
                     }
                   </>
-                : <Link to={`/marca/${brandInfo}`}>{catalogName}</Link>
+                : brandInfo
+                  ? <Link to={`/marca/${brandInfo}`}>{catalogName}</Link>
+                  : <Link to={`/tags/${brandInfo}`}>{catalogName}</Link>
               }
             </div>
             <div className="header-content">
@@ -165,9 +181,11 @@ export default function CatalogView() {
             </div>
           </div>
           <div className="catalog-content">
-            <div className="catalog-filter">
-              <MenuLateral catId={categoryInfo} categorias={subCategorias} marcas={marcas} brandId={brandInfo}/>
-            </div>
+            {showLateral &&
+              <div className="catalog-filter">
+                <MenuLateral catId={categoryInfo} categorias={subCategorias} marcas={marcas} brandId={brandInfo}/>
+              </div>
+            }
             <div className="catalog-list">
               <div className="category-list-header">
                 <div className="category-list-header-title"> 
@@ -175,13 +193,14 @@ export default function CatalogView() {
                   <div className="subtitle">({cantProd} productos encontrados)</div>
                 </div>
                 <div className="category-list-header-data">
-                  <FloatingLabel controlId="flotingSelect" label="Cant. por pag.">
+                  <div>
+                  <label>Cant. por Pag.</label>
                     <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
                       {pageGroup.map((item)=> {
                         return <option value={item} key={`limit_${item}`}>{item}</option>
                       })}
                     </FormSelect>
-                  </FloatingLabel>
+                    </div>
                   <div className="view-type-content">
                     Vista:
                     <div
@@ -190,12 +209,12 @@ export default function CatalogView() {
                     >
                       <GridFill />
                     </div>
-                    <div
+                    {/* <div
                       className={viewType === "listTask" ? "icon  active" : "icon"}
                       onClick={() => handleViewChange("listTask")}
                     >
                       <ListTask />
-                    </div>
+                    </div> */}
                     <div
                       className={viewType === "list" ? "icon  active" : "icon"}
                       onClick={() => handleViewChange("list")}

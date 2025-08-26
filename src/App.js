@@ -4,6 +4,7 @@ import "./App.scss";
 import "./assets/scss/Content.scss";
 import "./assets/scss/Button.scss";
 import "./assets/scss/Helpers.scss";
+import "./assets/scss/Forms.scss";
 //import './assets/icon-fonts.css';
 
 import Footer from "./components/Footer";

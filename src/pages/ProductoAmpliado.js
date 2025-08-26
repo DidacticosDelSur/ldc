@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Producto from '../components/productos/Producto';
-import './ProductoAmpliado.scss';
 import { useContext, useEffect, useState } from 'react';
-import { addProductToCart, fetchProductData } from '../services/ProductServices';
+import { addProductToCart, fetchProductData, fetchProductListData } from '../services/ProductServices';
 import { AuthContext } from '../services/AuthContext';
 import ErrorPage from './ErrorPage';
 import { Alert, Spinner } from 'react-bootstrap';
+import ProductList from '../components/productos/ProductoList';
 
 export default function ProductoAmpliado(){
   const { productInfo } = useParams();
@@ -18,6 +18,8 @@ export default function ProductoAmpliado(){
   const [visibleError, setVisibleError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [category, setCategory] = useState('');
 
   // Función para actualizar el mensaje
   const handleMessage = (message) => {
@@ -33,6 +35,7 @@ export default function ProductoAmpliado(){
     fetchProductData(productId)
       .then(data => {
         setProductoData(data);
+        setCategory(data.categoria_id);
         const index = cart.findIndex(prod => prod.producto_id == productId)
         if (index > -1) {
           setProductoData((prevData) => 
@@ -63,6 +66,17 @@ export default function ProductoAmpliado(){
       })
       .finally(()=>{setLoading(false)})
   }, [productId, cart])
+
+  useEffect(()=>{
+    const param = {
+        categoria: category,
+        max: 4
+      }
+      fetchProductListData(param)
+      .then((data)=>{
+        setRelatedProducts(data.productos);
+      })
+  },[category])
 
   const addItemToCart = async (item) => {
     item.userId = user.id;
@@ -104,13 +118,18 @@ export default function ProductoAmpliado(){
             {message}
           </Alert>
           {productoData.id ? 
-            <Producto 
+            <>
+              <Producto 
                 prod={productoData}
                 onMessage={handleMessage} 
                 onVisible={handleVisible} 
                 onAddItemToCart={addItemToCart} 
                 onKeepShopping={keepShopping}
-              /> 
+              />
+              <div className='catalog-content'>
+                <ProductList title={"Productos Relacionados"} itmes={relatedProducts} />
+              </div>
+            </>
             : <ErrorPage errorMessage={`No existe un producto con ese id`}/>
           }
         </>

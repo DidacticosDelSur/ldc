@@ -1,0 +1,39 @@
+.login {
+  background-image: url('../../assets/images/login_bg.png');
+  .login-form {
+    background-color: #1F2351;
+    .title-content {
+      .title {
+        color: #A4DAC2;
+      }
+      .subtitle{
+        color: #ffffff;
+      }
+    }
+    .form-label{
+      color: #A4DAC2;
+    }
+  }
+  .login-password{
+    background-color: #ffffff;
+    align-items: center;
+    color: #1F2351;
+    font-size: 24px;
+    min-width: 458.74px;
+    .forgot-pass {
+      a {
+        font-size: 24px;
+        font-weight: 300;
+        color: #1F2351;
+        text-decoration: underline;
+      }
+    }
+    .no-account {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      align-items: center;
+      font-weight: 700;
+    }
+  }
+}

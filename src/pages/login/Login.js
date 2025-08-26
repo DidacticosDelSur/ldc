@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { Alert, Button, Card, CardBody, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap'
+import { Alert, Button, Col, Form, Row, Spinner } from 'react-bootstrap'
 import { AuthContext } from '../../services/AuthContext'
 import { userLogin } from '../../services/UserServices'
 import useValidation from '../../services/useValidation'
+import './Login.scss';
 
-const Login = () => {
+export default function Login() {
   const { login } = useContext(AuthContext); // Access login function from context
   const emailValidation = useValidation('','email');
   const [userSelected, setUserSelected] = useState({
@@ -21,11 +22,14 @@ const Login = () => {
   const handleSubmit = (event) => {
     const form = event.currentTarget
     event.preventDefault()
-    if (form.checkValidity() === false) {
-      event.stopPropagation()
-    } else {
+    event.stopPropagation()
+    if (form.checkValidity()) {
       LogUser();
-    }    
+      setVisibleError(false)
+    } else {
+      setMessage('Completa los campos obligatorios')
+      setVisibleError(true);
+    }
     setValidated(true)
   }
 
@@ -45,7 +49,7 @@ const Login = () => {
       })
       .catch(err => {
         setVisibleError(true);
-        setMessage(err.response.data.message);
+        setMessage(err.response.data);
       })
       .finally(() => setLoading(false));
   }
@@ -54,78 +58,79 @@ const Login = () => {
     window.location.href = "#/registro";
   }
 
-  return (
-    <div className="contact-form bg-body-tertiary d-flex flex-row align-items-center">
-      <Container>
-      <Alert variant="danger" dismissible show={visibleError} onClose={() => setVisibleError(false)}>
-        {message}
-      </Alert>
-      <Row className="justify-content-center">
-        <Col md={9} lg={7} xl={6}>
-          <Card className="mx-4">
-            <CardBody className="p-4">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <h1>Hola</h1>
-                <p className="text-body-secondary">Para seguir ingresa tu clave</p>
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridEmail">
-                    <FloatingLabel controlId="floatingEmail" label="E-mail">
-                      <Form.Control
-                        type="email"
-                        placeholder="E-mail"
-                        value={emailValidation.value}
-                        onChange={emailValidation.handleChange}
-                        isInvalid={!emailValidation.isValid}
-                        required
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {emailValidation.errorMessage != '' ? emailValidation.errorMessage : "Debe ingresar el e-mail"}
-                      </Form.Control.Feedback>
-                    </FloatingLabel>
-                  </Form.Group>
-                </Row>
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+  },[])
 
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridPassword">
-                    <FloatingLabel
-                      controlId="floatingPassword"
-                      label="Contraseña"
-                      className="mb-3"
-                    >
-                      <Form.Control
-                        type="password"
-                        placeholder='Contraseña'
-                        onChange={(e) => {
-                          setUserSelected({
-                            ...userSelected,
-                            password: e.target.value,
-                          });
-                        }}
-                        minLength={8}
-                        required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                        Debe ingresar una contraseña. Debe tener mínimo 8 caracteres.
-                      </Form.Control.Feedback>
-                    </FloatingLabel>
-                  </Form.Group>
-                </Row>
-                <div className="d-grid">
-                  <Button type='submit' color="success">Ingresar</Button>
-                </div>
-              </Form>
-            </CardBody>
-          </Card>
-            <Card className='mx-4 mt-4'>
-              <CardBody>
-                <Button color='success' onClick={goToRegister}>Registrate aquí</Button>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+  return (
+    <div className="form-content login">
+      {loading
+        ? <Spinner />
+        :<>
+          <Alert variant="danger" dismissible show={visibleError} onClose={() => setVisibleError(false)}>
+            {message}
+          </Alert>
+          <div className='block login-form'>
+            <div className='title-content'>
+              <div className='title'>Hola!</div>
+              <div className='subtitle'><span>Para seguir ingresa tu mail y clave.</span></div>
+            </div>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>E-mail</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Ingrese su email..."
+                    value={emailValidation.value}
+                    onChange={emailValidation.handleChange}
+                    isInvalid={!emailValidation.isValid}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {emailValidation.errorMessage != '' ? emailValidation.errorMessage : "Debe ingresar el e-mail"}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Row>
+
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridPassword">
+                  <Form.Label>Contraseña</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder='Ingrese su contraseña...'
+                    onChange={(e) => {
+                      setUserSelected({
+                        ...userSelected,
+                        password: e.target.value,
+                      });
+                    }}
+                    minLength={8}
+                    required
+                    />
+                    <Form.Control.Feedback type="invalid">
+                    Debe ingresar una contraseña. Debe tener mínimo 8 caracteres.
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Row>
+              <div className="btn-content">
+                <Button type='submit' color="success">Ingresar!</Button>
+              </div>
+            </Form>
+          </div>
+          <div className='block login-password'>
+            <div className='forgot-pass'>
+              <Link to={`/olvide`}>Olvidé mi clave</Link>
+            </div>
+            <div className='no-account'>
+              <span>Si aún no tenés clave:</span>
+              <div className="btn-content">
+                <Button color="success" onClick={goToRegister}>Registrate</Button>
+              </div>
+            </div>
+          </div>
+        </>
+      }
     </div>
   )
 }
-
-export default Login

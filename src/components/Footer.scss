@@ -1,22 +1,16 @@
 footer {
   .footer-wrapper {
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0f2e53+0,1870d9+100 */
-    background: #FFEBEE; /* Old browsers */
-   /* background: -moz-linear-gradient(45deg,  #0f2e53 0%, #1870d9 100%);  FF3.6-15 */
-    /*background: -webkit-linear-gradient(45deg,  #0f2e53 0%,#1870d9 100%);  Chrome10-25,Safari5.1-6 */
-    /*background: linear-gradient(45deg,  #0f2e53 0%,#1870d9 100%);  W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0f2e53', endColorstr='#1870d9',GradientType=1 );  IE6-9 fallback on horizontal gradient */
-    padding-top: 30px;
+    background: #1F2351;
     .footer-content{
-      color: #072476;
+      color: #D4D5D9;
       display: flex;
       align-items: start;
-      justify-content: start;
-      padding: 36px 0;
+      justify-content: space-between;
+      padding: 10px 0;
       .module {
         &.module-footer-logo {
-          width: 35%;
-          padding-right: 15%;
+          width: 40%;
+          padding-right: 5%;
           .logo {
             margin: 0 auto 22px;
             /* width: 239px;
@@ -49,7 +43,7 @@ footer {
             }
           }
           .icon {
-            color: #072476;
+            color: #D4D5D9;
             display: inline-block;
             position: relative;
             top: -2px;
@@ -93,6 +87,8 @@ footer {
         }
         &.module-footer {
           width: 25%;
+          display: flex;
+          flex-direction: column;
           @media (max-width: 767px) {
             text-align: center;
             width: 100%;
@@ -128,11 +124,11 @@ footer {
     }
   }
   .module-footer a {
-      color: #072476;
+      color: #D4D5D9;
       display: inline-block;
       margin-bottom: 5px;
       position: relative;
-      transition: 0.4s;
+      transition: 1s;
       left: 0;
       &::before {
         content: '';
@@ -151,7 +147,7 @@ footer {
       }
     }
   .module-footer p {
-    color: #072476; 
+    color: #D4D5D9; 
     line-height: 1.2rem; 
     font-size: 12px; 
     font-weight: 500
@@ -164,7 +160,7 @@ footer {
     justify-content: space-between;
     p {
       font-size: 12px;
-      color: #072476; 
+      color: #D4D5D9; 
       a{
         display: inline-block;
         font-weight: 800;
@@ -217,8 +213,8 @@ footer {
         margin-block-end: 0;
 
         input {
-          width: 80%;
-          padding-right: 40px;
+          width: calc(100% - 120px);
+          padding-right: 10px;
           font-size: 14px;
           background: transparent;
           color: #DB0021;

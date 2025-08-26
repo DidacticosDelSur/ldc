@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { Alert, Button, Card, CardBody, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import { Alert, Button, Card, CardBody, Col, Form, Row, Spinner } from 'react-bootstrap'
 
 import "./Register.scss"
 import { fetchCityListData, fetchProvinceListData } from '../../services/GeoServices';
 import useValidation from '../../services/useValidation';
 import { createUser } from '../../services/UserServices';
 
-const Register = () => {
+export default function Register() {
   const [ provinces, setProvinces ] = useState([]);
   const [ cities, setCities ] = useState([]);
-  const [ provinceId, setProvinceId ] = useState(0);
   const phoneValidation = useValidation('','phone');
   const emailValidation = useValidation('','email');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(true);
   const [validated, setValidated] = useState(false)
   const [userSelected, setUserSelected] = useState({
@@ -42,6 +39,7 @@ const Register = () => {
     f.append("ciudad_id", userSelected.city_id);
     f.append("susbcribe", userSelected.setVisible ? 1 : 0);
     f.append("terms", userSelected.terms ? 1 : 0);
+    setVisible(false);
     setLoading(true);
     createUser(f,'c')
       .then(data => {
@@ -49,9 +47,9 @@ const Register = () => {
       })
       .catch(err => {
         setVisible(true);
-        setMessage(err.response.data.message);
+        setMessage(err.response.data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoading(false)); 
   }
 
   const handleSubmit = (event) => {
@@ -60,19 +58,24 @@ const Register = () => {
     event.stopPropagation();
     if (form.checkValidity()) {
       create();
+    } else {
+      setMessage('Completa los campos obligatorios')
+      setVisible(true);
     }
-
     setValidated(true);
   };
 
   const handlePasswordConfirm = (e) => {
-    if (userSelected.password === e.target.value) {
-      setUserSelected({
-        ...userSelected,
-        passwordConfirm: e.target.value,
-      });
-    } else {
+    const value = e.target.value;
+    setUserSelected({
+      ...userSelected,
+      passwordConfirm: value,
+    });
+
+    if (userSelected.password && userSelected.password !== value) {
       setShowPasswordError(true);
+    } else {
+      setShowPasswordError(false);
     }
   }
 
@@ -88,6 +91,7 @@ const Register = () => {
   },[userSelected.province_id])
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchProvinceListData()
       .then((data) => {
         setProvinces(data);
@@ -97,237 +101,228 @@ const Register = () => {
   }, []);
 
   return (
-    <div className="contact-form bg-body-tertiary d-flex flex-row align-items-center">
-      <Container> 
-        <Alert variant="danger" dismissible show={visible} onClose={() => setVisible(false)}>
-          {message}
-        </Alert>
-        <Row className="justify-content-center">
-          <Col md={9} lg={7} xl={6}>
-            <Card className="mx-4">
-              <CardBody className="p-4">
-                <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                  <h1>Registrate</h1>
-                  <p className="text-body-secondary">Registrate para poder realizar las compras que quieras</p>
-                  <p className="text-body-secondary">Solo ventas mayoristas a comercios, empresas o instituciones.</p>
-                  <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridName">
-                      <FloatingLabel
-                        controlId="floatingName"
-                        label="Nombre"
-                        className="mb-3"
-                      >
-                        <Form.Control
-                          type="text"
-                          placeholder='Nombre'
-                          onChange={(e) => {
-                            setUserSelected({
-                              ...userSelected,
-                              name: e.target.value,
-                            });
-                          }}
-                          required/>
-                        <Form.Control.Feedback type="invalid">
-                          Ingresa un nombre.
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                      
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridLastname">
-                      <FloatingLabel controlId="floatingLastname" label="Apellido">
-                        <Form.Control
-                          type="text"
-                          placeholder="Apellido"
-                          onChange={(e) => {
-                            setUserSelected({
-                              ...userSelected,
-                              lastname: e.target.value,
-                            });
-                          }}
-                          required/>
-                        <Form.Control.Feedback type="invalid">
-                          Ingresa un apellido.
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridPhone">
-                      <FloatingLabel
-                        controlId="floatingPhone"
-                        label="Teléfono/WhatsApp"
-                        className="mb-3"
-                      >
-                        <Form.Control 
-                          type="number"
-                          placeholder='Teléfono/WhatsApp'
-                          value={phoneValidation.value}
-                          onChange={phoneValidation.handleChange}
-                          invalid={!phoneValidation.isValid}
-                          required/>
-                        <Form.Control.Feedback type="invalid">
-                         {phoneValidation.errorMessage != '' ? phoneValidation.errorMessage : "Debe ingresar el teléfono"}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridEmail">
-                      <FloatingLabel controlId="floatingEmail" label="E-mail">
-                        <Form.Control
-                          type="email"
-                          placeholder="E-mail"
-                          value={emailValidation.value}
-                          onChange={emailValidation.handleChange}
-                          invalid={!emailValidation.isValid}
-                          required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                         {emailValidation.errorMessage != '' ? emailValidation.errorMessage : "Debe ingresar el e-mail"}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridPassword">
-                      <FloatingLabel
-                        controlId="floatingPassword"
-                        label="Contraseña"
-                        className="mb-3"
-                      >
-                        <Form.Control
-                          type="password"
-                          placeholder='Contraseña'
-                          onChange={(e) => {
-                            setUserSelected({
-                              ...userSelected,
-                              password: e.target.value,
-                            });
-                          }}
-                          minLength={8}
-                          required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                          Debe ingresar una contraseña. Debe tener mínimo 8 caracteres.
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridConfirmPassword">
-                      <FloatingLabel controlId="floatingConfirmPassword" label="Confirmar Contraseña">
-                        <Form.Control
-                          type="password"
-                          placeholder="Contraseña"
-                          onChange={handlePasswordConfirm}
-                          minLength={8}
-                          required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                         {showPasswordError ? 'Las contraseñas no coinciden.' : "Debe ingresar una contraseña. Debe tener mínimo 8 caracteres."}
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridState">
-                      <FloatingLabel
-                        controlId="floatingState"
-                        label="Provincia"
-                        className="mb-3"
-                      >
-                        <Form.Select
-                          required
-                          onChange={(e) => {
-                            setUserSelected({
-                              ...userSelected, 
-                              province_id: Number(e.target.value),
-                              city_id: 0
-                            })
-                          }}>
-                          <option></option>
-                          {provinces.length > 0 && 
-                            provinces.map((item) => {
-                              return <option key={`prov_${item.id}`} value={item.id}>{item.nombre}</option>
-                            })
-                          }
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                          Debe elegir una provincia.
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridCity">
-                      <FloatingLabel controlId="floatingCity" label="Ciudad">
-                      <Form.Select
-                        required
-                        onChange={(e) => {
-                          setUserSelected({
-                            ...userSelected, 
-                            city_id: Number(e.target.value)
-                          })
-                        }}
-                        disabled={userSelected.province_id == 0}>
-                          <option></option>
-                          {cities.length > 0 && 
-                            cities.map((item) => {
-                              return <option key={`city_${item.id}`} value={item.id}>{item.nombre}</option>
-                            })
-                          }
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                          Debe elegir una ciudad.
-                        </Form.Control.Feedback>
-                      </FloatingLabel>
-                    </Form.Group>
-                  </Row>
-
-                  <Row>
-                    <Form.Check // prettier-ignore
-                      type="checkbox"
-                      id="formGridSubscribe"
-                      label="Deseo suscribirme a la newsletter"
-                      checked={userSelected.subscribe}
+    <div className="form-content register">
+      <Alert variant="danger" dismissible show={visible} onClose={() => setVisible(false)}>
+        {message}
+      </Alert>
+      {loading
+        ? <Spinner />
+        : <>
+            <div className='block register-form'>
+              <div className='title-content'>
+                <div className='title'>Registrate</div>
+                <div className='subtitle'>Registrate para poder realizar las compras que quieras.<br />
+                <span>Solo ventas mayoristas a comercios, empresas o instituciones.</span></div>
+              </div>
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formGridName">
+                    <Form.Label>Nombre</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder='Ingrese su nombre...'
+                      value={userSelected.name}
                       onChange={(e) => {
                         setUserSelected({
-                          ...userSelected, 
-                          subscribe: e.target.value
-                        })
+                          ...userSelected,
+                          name: e.target.value,
+                        });
                       }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Check // prettier-ignore
-                      type="checkbox"
-                      id="formGridTerminos"
-                      label="He leido y acepto los términos y condiciones"
-                      checked={userSelected.terms}
+                      required/>
+                    <Form.Control.Feedback type="invalid">
+                      Ingresa un nombre.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group as={Col} controlId="formGridLastname">
+                    <Form.Label>Apellido</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Ingrese su apellido..."
+                      value={userSelected.lastname}
                       onChange={(e) => {
                         setUserSelected({
-                          ...userSelected, 
-                          terms: e.target.value
-                        })
+                          ...userSelected,
+                          lastname: e.target.value,
+                        });
                       }}
+                      required/>
+                    <Form.Control.Feedback type="invalid">
+                      Ingresa un apellido.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formGridPhone">
+                    <Form.Label>Teléfono/WhatsApp</Form.Label>
+                    <Form.Control 
+                      type="number"
+                      placeholder='Ingrese su teléfono/whatsApp...'
+                      value={phoneValidation.value}
+                      onChange={phoneValidation.handleChange}
+                      invalid={!phoneValidation.isValid}
+                      required/>
+                    <Form.Control.Feedback type="invalid">
+                      {phoneValidation.errorMessage != '' ? phoneValidation.errorMessage : "Debe ingresar el teléfono"}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group as={Col} controlId="formGridEmail">
+                    <Form.Label>E-mail</Form.Label>
+                    <Form.Control
+                      type="email"
+                      placeholder="Ingrese su email..."
+                      value={emailValidation.value}
+                      onChange={emailValidation.handleChange}
+                      invalid={!emailValidation.isValid}
                       required
                     />
                     <Form.Control.Feedback type="invalid">
-                      Debe aceptar los terminos y condiciones.
+                      {emailValidation.errorMessage != '' ? emailValidation.errorMessage : "Debe ingresar el e-mail"}
                     </Form.Control.Feedback>
+                </Form.Group>
+                </Row>
+
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formGridPassword">
+                    <Form.Label>Contraseña</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder='Ingrese una contraseña...'
+                      value={userSelected.password}
+                      onChange={(e) => {
+                        setUserSelected({
+                          ...userSelected,
+                          password: e.target.value,
+                        });
+                      }}
+                      minLength={8}
+                      required
+                      />
+                      <Form.Control.Feedback type="invalid">
+                      Debe ingresar una contraseña. Debe tener mínimo 8 caracteres.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group as={Col} controlId="formGridConfirmPassword">
+                    <Form.Label>Confirmar Contraseña</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="Ingrese nuevamente la contraseña..."
+                      value={userSelected.passwordConfirm}
+                      onChange={handlePasswordConfirm}
+                      minLength={8}
+                      isInvalid={showPasswordError}
+                      required
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {showPasswordError ? 'Las contraseñas no coinciden.' : "Debe ingresar una contraseña. Debe tener mínimo 8 caracteres."}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formGridState">
+                    <Form.Label>Provincia</Form.Label>
+                    <Form.Select
+                      required
+                      placeholder="Elija su provincia..."
+                      value={userSelected.province_id}
+                      onChange={(e) => {
+                        setUserSelected({
+                          ...userSelected, 
+                          province_id: Number(e.target.value),
+                          city_id: 0
+                        })
+                      }}>
+                      <option></option>
+                      {provinces.length > 0 && 
+                        provinces.map((item) => {
+                          return <option key={`prov_${item.id}`} value={item.id}>{item.nombre}</option>
+                        })
+                      }
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      Debe elegir una provincia.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Label>Ciudad</Form.Label>
+                    <Form.Select
+                      required
+                      placeholder="Elija su ciudad..."
+                      value={userSelected.city_id}
+                      onChange={(e) => {
+                        setUserSelected({
+                          ...userSelected, 
+                          city_id: Number(e.target.value)
+                        })
+                      }}
+                      disabled={userSelected.province_id == 0}>
+                        <option></option>
+                        {cities.length > 0 && 
+                          cities.map((item) => {
+                            return <option key={`city_${item.id}`} value={item.id}>{item.nombre}</option>
+                          })
+                        }
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      Debe elegir una ciudad.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+                <div className='register-footer'>
+                  <Row>
+                    <div className='note'>
+                      Una vez completado el formulario recibirá un correo electrónico en su casilla de mail para confirmar su registración.
+                      Si el mismo no llega, como primer paso busque en Correo no deseado o SPAM.
+                      De no encontrarlo, comuníquese con nosotros a info@libreriadelcolegio.com y nos ocuparemos de activar la cuenta.
+                    </div>
                   </Row>
-                  <div className="d-grid">
+                  <div>
+                    <Row>
+                      <Form.Check // prettier-ignore
+                        type="checkbox"
+                        id="formGridSubscribe"
+                        label="Deseo suscribirme a la newsletter"
+                        checked={userSelected.subscribe}
+                        onChange={(e) => {
+                          setUserSelected({
+                            ...userSelected, 
+                            subscribe: e.target.value
+                          })
+                        }}
+                      />
+                    </Row>
+                    <Row>
+                      <Form.Check // prettier-ignore
+                        type="checkbox"
+                        id="formGridTerminos"
+                        label="He leido y acepto los términos y condiciones"
+                        checked={userSelected.terms}
+                        onChange={(e) => {
+                          setUserSelected({
+                            ...userSelected, 
+                            terms: e.target.value
+                          })
+                        }}
+                        required
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Debe aceptar los terminos y condiciones.
+                      </Form.Control.Feedback>
+                    </Row>
+                  </div>
+                  <div className="btn-content">
                     <Button type='submit' color="success">Crear Cuenta</Button>
                   </div>
-                </Form>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                </div>
+              </Form>
+            </div>
+          </>
+      }
     </div>
   )
 }
-
-export default Register

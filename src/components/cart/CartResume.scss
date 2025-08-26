@@ -1,0 +1,86 @@
+.resume-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: absolute;
+  top: 283px;
+  right: 2%;
+  .resumen {
+    width: 290px;
+    background-color: #FFFFFF;
+    border-radius: 30px;
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    .title {
+      display: flex;
+      gap: 10px;
+      color: #593BAC;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .container-shop{
+      .list-group {
+        .list-group-item {
+          background-color: #EBEBEB;
+          color: #1F2351;
+          border: none;
+          font-size: 13px;
+          padding: 0;
+          span {
+            font-weight: bold;
+            color: #1F2351;
+          }
+        }
+      }
+      &.total{
+        background-color: #1F2351;
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        color: #FFFFFF;
+        .title {
+          color: #FFFFFF;
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 95%;
+          span{
+            color: #FFFFFF;
+            font-weight: 400;
+            font-size: 21px;
+            line-height: 95%;
+          }
+        }
+      }
+    }
+    
+  }
+  .btn-content {
+    .btn{
+      padding: 25px;
+      &.btn-secondary {
+        background-color: #FFFFFF;
+        font-size: 18px;
+        justify-content: center;
+        width: 100%;
+        border: none;
+        &:hover {
+          color: #1F2351;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 1400px) {
+    right: 4%;
+  }
+  @media screen and (min-width: 1500px) {
+    right: 11%;
+  }
+  @media screen and (min-width: 1800px) {
+    right: 17%;
+  }
+  @media screen and (min-width: 2300px) {
+    right: 22%;
+  }
+}

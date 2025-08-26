@@ -6,15 +6,15 @@
   .left-box {
     display: flex;
     width: 509px;
-    padding-bottom: 459px;
     flex-direction: column;
     align-items: center;
-    margin-top: -20px;
+    position: relative;
   }
   .right-box{
     display: flex;
     flex-direction: column;
     gap: 53px;
+    width: 560px;
     .header {
       display: flex;
       padding-left: 5px;
@@ -259,38 +259,8 @@
           }
         }
       }
-      .variations-content {
-        width: 100%;
-        .title-header{
-          display: flex;
-          .title-text-content {
-            background-color: #ffffff;
-            .title-text{
-              width: 270px;
-              height: 53px;
-              flex-shrink: 0;
-              background-color: #F4F4F0;
-              color: #212124;
-              font-size: 24px;
-              font-style: normal;
-              font-weight: 700;
-              line-height: 95%; /* 22.8px */
-              letter-spacing: -0.72px;
-              border-bottom-right-radius: 1000px;
-            }
-          }
-          .title-border-rounded{
-            width: calc(100% - 267px);
-            background: url(../../assets/images/border-top.png) no-repeat;
-            margin-left: -2px;
-            background-repeat: no-repeat;
-            background-position-x: -1px;
-            background-position-y: -1px;
-            background-color: #ffffff;
-            border-top-right-radius: 32px;
-          }
-        }
-        .variations-table {
+      .catalog-product-content {
+        .catalog-table {
           display: flex;
           padding: 20px;
           flex-direction: column;
@@ -371,28 +341,6 @@
             }
           }
         }
-        .title-content {
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          .title-text{
-            width: 270.834px;
-            height: 71.429px;
-            flex-shrink: 0;
-            background-color: #F4F4F0;
-            color: #212124;
-            font-size: 24px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 95%; /* 22.8px */
-            letter-spacing: -0.72px;
-            border-bottom-right-radius: 1000px;
-          }
-          .title-border-rounded{
-            border-top-left-radius: 1000px;
-            background-color: #ffffff;
-          }
-        }
       }
       .input-container{
         display: flex;
@@ -466,7 +414,84 @@
     flex-direction: column;
   }
 }
+.catalog-product-content {
+  width: 100%;
+  .title-header{
+    display: flex;
+    .title-text-content {
+      background-color: #ffffff;
+      .title-text{
+        width: 270px;
+        height: 53px;
+        flex-shrink: 0;
+        background-color: #F4F4F0;
+        color: #212124;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 95%; /* 22.8px */
+        letter-spacing: -0.72px;
+        border-bottom-right-radius: 1000px;
+        &.large {
+        width: 415px;
+      }
+      }
+    }
+    .title-border-rounded{
+      width: calc(100% - 267px);
+      background: url(../../assets/images/border-top.png) no-repeat;
+      margin-left: -2px;
+      background-repeat: no-repeat;
+      background-position-x: -1px;
+      background-position-y: -1px;
+      background-color: #ffffff;
+      border-top-right-radius: 32px;
+    }
+  }
+  .title-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    .title-text{
+      width: 270.834px;
+      height: 71.429px;
+      flex-shrink: 0;
+      background-color: #F4F4F0;
+      color: #212124;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 95%; /* 22.8px */
+      letter-spacing: -0.72px;
+      border-bottom-right-radius: 1000px;
+    }
+    .title-border-rounded{
+      border-top-left-radius: 1000px;
+      background-color: #ffffff;
+    }
+  }
+  .catalog-product-list{
+    padding: 50px;
+    border-radius: 32px 0 32px 32px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+    .card {
+      width: 240px;
+    }
+  }
+}
+.sticky-image {
+  position: sticky;
+  top: 100px;
+  width: 300px;
+  transition: transform 0.5s ease;
+  z-index: 1;
+}
 
+.sticky-image.scrolling {
+  transform: translateY(50px); /* desplazamiento armonioso hacia abajo */
+}
 /* .input-container {
   display: flex;
   align-items: center;

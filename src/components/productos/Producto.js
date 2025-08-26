@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import './Producto.scss';
 import { Link } from "react-router-dom";
 import { Button, Table } from "react-bootstrap";
@@ -6,12 +6,16 @@ import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
 import SliderComponent from "../SliderComponent";
 import { ArrowLeft, Box, Boxes, Cart, Clock } from "react-bootstrap-icons";
 import { AuthContext } from "../../services/AuthContext";
+import '../../assets/scss/Table.scss';
 
 export default function Producto({prod, onVisible, onMessage, onAddItemToCart, onKeepShopping}) {
   const { user, isAuthenticated } = useContext(AuthContext);
   const { formatCurrency, convertStringToLink } = useContext(GlobalFunctionsContext);
   const [productData, setProductData] = useState({minimo_compra: 0, cantidad: 0, variaciones: []});
   const [fixed, setFixed] = useState(false);
+  const [height, setHeight] = useState(0);
+  const ref = useRef(null);
+  const [scrolledPast, setScrolledPast] = useState(false);
 
   useEffect(()=>{
     let variations = [];
@@ -66,14 +70,27 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
       inCart: prod.inCart ? prod.inCart : 0
     })
   },[prod]);
+  useEffect(()=>{
+    setHeight(ref.current.clientHeight)
+    const handleScroll = () => {
+      const triggerHeight = 500; // cambia este valor según el punto deseado
+      const scrollY = window.scrollY;
 
-  useEffect(() => {
+      setScrolledPast(scrollY > triggerHeight);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+
+  },[])
+
+  /* useEffect(() => {
     const onScroll = () => {
-      setFixed(window.scrollY > 100);
+      setFixed(window.scrollY < height/2);
     };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [height]); */
 
   const handleDecrement = (i=-1) => {
     onVisible(false);
@@ -151,14 +168,12 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
   }
 
   return (
-    <div className="content-product">
-      <div /* style={{
-        position: fixed ? 'fixed' : 'static',
-        top: 0,
-        zIndex: 1000
-      }} */
-      className="left-box">
-        <SliderComponent images={prod.media}></SliderComponent>
+    <div className="content-product" ref={ref}>
+      <div className="left-box"
+      >
+        <div className={`sticky-image ${scrolledPast ? 'scrolling' : ''}`}>
+          <SliderComponent images={prod.media}></SliderComponent>
+        </div>
       </div>
       <div className="right-box">
         <div className="header">
@@ -223,19 +238,19 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
               onChange={(e)=>this.setState({observaciones: e.target.value})}></textarea>
             </div>
           }
-          <div className="footer">
+          <div className="footer"  style={{height: '560px'}}>
             {isAuthenticated
               ? <>
                 {prod.variaciones.length > 0 &&
                   <>
-                    <div className="variations-content">
+                    <div className="catalog-product-content">
                       <div className="title-header">
                         <div className="title-text-content">
                           <div className="title-text">Arme su pedido</div>
                         </div>
                         <div className="title-border-rounded"></div>
                       </div>
-                      <div className="variations-table">
+                      <div className="catalog-table">
                         <Table>
                           <thead>
                             <tr>
@@ -344,88 +359,6 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
               Actualizado el {prod.actualizado}
             </div>
           </div>
-          {/* {isAuthenticated && prod.variaciones.length > 0 && (
-            <div className="inner-content">
-              <div key={`inline-radio`} className="mb-3">
-                <h6>Eliga una variacion</h6>
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Color/Diseño</th>
-                      <th>Precio</th>
-                      <th>Dto.</th>
-                      <th>Cant.</th>
-                      <th>Subtotal</th>
-                      <th>En Carrito</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {productData.variaciones.map((item,i) => {
-                      return (
-                        <tr key={`variacion_${i}`}>
-                          <td>{item.nombre}</td>
-                          <td>{formatCurrency(item.precio)}</td>
-                          <td>{item.descuento}%</td>
-                          <td>
-                            <div className="input-container">
-                              <button className="control-btn" disabled={item.cantidad === 0} onClick={() => {handleDecrement(i)}}>-</button>
-                              <input
-                                type="number"
-                                className="input-number"
-                                value={item.cantidad}
-                                readOnly
-                              />
-                              <button className="control-btn" onClick={()=>{handleIncrement(i)}}>+</button>
-                            </div>
-                          </td>
-                          <td>{formatCurrency(item.subtotal)}</td>
-                          <td>{item.inCart}</td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </Table>
-              </div>
-            </div>
-          )} 
-          {(isAuthenticated && prod.variaciones.length == 0)
-            ? <div className="footer">
-              
-              <div className="updated">
-                <Clock />
-                Actualizado el {prod.actualizado}
-              </div>
-            </div>
-          : null
-        }
-        */}
-        
-       {/*  <div className="buttons">
-          {(isAuthenticated && productData.canAddtoCart ) &&
-            <>
-              <Button className="button-rounded" onClick={handleAddProducto}>Agregar al carrito</Button>
-              <Button className="button-rounded outlined">Comprar Ahora</Button>
-            </>
-          }
-          {(isAuthenticated && productData.observaciones ) &&
-            <>
-              <Button className="button-rounded" onClick={handleAddProducto}>Guardar</Button>
-            </>
-          }
-          {!isAuthenticated && 
-            <div className="btn-content">
-              <Button  onClick={()=>{window.location.href = "#/login";}}>Iniciar Sesión</Button>
-              <Button variant="secondary" onClick={()=>{window.location.href = "#/registro";}}>Registrate</Button>
-            </div>
-          }
-        </div> 
-        {isAuthenticated && 
-          <Button variant="link" onClick={handleKeepShopping} className="follow">
-            <ArrowLeft />
-            <span>Seguir comprando</span>
-          </Button>
-        }*/}
-        
       </div>
     </div>
   );

@@ -71,9 +71,6 @@ export default function UserProfileData() {
           show={visibleMessage} 
           onClose={() => setVisibleMessage(false)} />
       }
-      <div className="header mb-5">
-        <h3>Mis Datos</h3>
-      </div>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row>
           <Form.Group as={Col} controlId="formName">

@@ -1,0 +1,105 @@
+.table-view {
+  width: 100%;
+}
+thead {
+  height: 79px;
+  border-bottom: 1px solid #EBEBEB;
+  tr {
+    vertical-align: middle;
+    th{
+      font-size: 20px;
+      font-weight: 700;
+      color: #1F2351;
+      border-right: 1px solid #D9D9D966;
+      &:first-child{
+        border-radius: 8px 0px 0px 0px;
+      }
+      &:last-child {
+        border-radius: 0px 8px 0px 0px;
+        border-right: 0;
+      }
+    }
+  }
+}
+tbody {
+  th {
+    border-right: 1px solid #D9D9D966;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #5C5C5E;
+    .inner-table {
+      font-size: 16px;
+      color: #1F2351;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      img {
+        max-width: 60px;
+      }
+      .btn-link{
+        color: inherit;
+        font-size: inherit;
+        font-weight: 700;
+        text-decoration: none;
+      }
+    }
+    .price {
+      color: #1F2351;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      span {
+        font-size: 8px;
+      }
+    }
+    .btn-content {
+      .btn {
+        padding: 10px;
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+//todo refactor estos estilos que estan repetidos
+.input-container {
+  /* border-radius: 1000px;
+  border: 1px solid #8E857C;
+  background: #EBEBEB; */
+  flex-direction: row;
+  width: 101px;
+  gap: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.input-number{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #8E857C;
+  /* background: #FAFAFA; */
+  font-size: 12px;
+  width: 39px;
+  /* padding: 10px 0; */
+  text-align: center;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 90%;
+}
+.control-btn {
+  display: flex;
+  padding: 11px 10px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  &:hover {
+    background-color: #EBEBEB;
+  }
+}

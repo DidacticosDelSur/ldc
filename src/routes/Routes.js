@@ -9,7 +9,7 @@ import Register from "../pages/register/Register";
 import RegisterConfirmPage from "../pages/register/RegisterConfirm";
 import LogUser from "../pages/login/Login";
 import SearchView from "../pages/SearchView";
-import Cart from "../pages/CartView";
+import Cart from "../pages/cart/CartView";
 import UserProfile from "../pages/profile/UserProfile";
 import Checkout from "../pages/order/Checkout";
 import OrderConfirmed from "../pages/order/OrderConfirmed";
@@ -20,6 +20,10 @@ import ShippingData from "../components/ShippingData";
 import UserProfileShipping from "../pages/profile/UserProfileShipping";
 import ProtectedRoute from "../services/ProtectedRoute";
 import UserProfileOrderDetais from "../pages/profile/UserProfileOrderDetails";
+import Forgot from "../pages/login/Forgot";
+import UserAdvertisement from "../pages/profile/UserAdvertisement";
+import UserPassword from "../pages/profile/UserPassword";
+import Contact from "../pages/Contact";
 
 const RouteObject = [
   {
@@ -33,11 +37,14 @@ const RouteObject = [
       { path: "/categoria/:categoryInfo/:brandInfo", element: <CatalogView /> },
       { path: "/marca/:brandInfo", element: <CatalogView /> },
       { path: "/marca/:brandInfo/:categoryInfo", element: <CatalogView /> },
+      { path: "/tags/:tagInfo", element: <CatalogView />},
       { path: "/producto/:productInfo", element: <ProductoAmpliado /> },
       { path: "/registro", element: <Register /> },
       { path: "/registro-confirmado", element: <RegisterConfirmPage /> },
       { path: "/login", element: <LogUser /> },
+      { path: "/olvide", element: <Forgot/> },
       { path: "/buscar/:searchTerm", element: <SearchView /> },
+      { path: "/contacto", element: <Contact /> },
       // 🔒 Protegidas
       {
         element: <ProtectedRoute />,
@@ -51,6 +58,8 @@ const RouteObject = [
               { path: "/perfil-usuario/pedidos", element: <UserProfileOrders /> },
               { path: "/perfil-usuario/detalle_pedido/:id", element: <UserProfileOrderDetais /> },
               { path: "/perfil-usuario/envios", element: <UserProfileShipping /> },
+              { path: "/perfil-usuario/anuncios", element: <UserAdvertisement /> },
+              { path: "/perfil-usuario/cambiar-password", element: <UserPassword /> },
             ],
           },
           { path: "/checkout", element: <Checkout /> },

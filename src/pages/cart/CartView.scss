@@ -1,11 +1,17 @@
 .cart-container{
   display: flex;
   justify-content: space-between;
-  padding: 40px 0 20px;
+  padding: 280px 0 305px;
+  background-color: #F4F4F0;
   align-items: flex-start;
   .cart-details {
-    padding: 0;
-    width: calc(100% - 330px);
+    border-radius: 30px;
+    background-color: #Ffffff;
+    padding: 50px 30px;
+    width: calc(100% - 310px);
+    &.table {
+      padding: 0;
+    }
     .number-items {
       border: none;
       padding: 20px 40px;
@@ -29,15 +35,17 @@
     }
   }
   .resumen {
-    width: 320px;
-    position: sticky;
-    top: 170px;
+    
     .container-shop {
-      width: auto;
+      background-color: #EBEBEB;
+      padding: 30px 15px;
+      border-radius: 31px;
+      margin: 0;
+      /* width: auto;
       margin-bottom: 15px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
       -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
-      -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+      -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05); */
       .minumum-msg {
         font-size: 12px;
         font-style: italic;
