@@ -102,6 +102,7 @@ export default function UserProfile() {
   }
 
   useEffect(()=>{
+    window.scrollTo(0,0)
     switch (current) {
       case '/perfil-usuario' : setTitle('Mis Datos');
                               setSubtitle('');

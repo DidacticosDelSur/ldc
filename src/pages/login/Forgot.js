@@ -56,7 +56,7 @@ export default function Forgot () {
   },[])
 
   return (
-    <div className="login">
+    <div className="form-content login">
       <Alert variant={typeMessege} dismissible show={visibleError} onClose={() => setVisibleError(false)}>
         {message}
       </Alert>
