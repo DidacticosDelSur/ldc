@@ -81,7 +81,7 @@ export default function Checkout() {
       .then((data) => {
         setVisible(false);
         updateOrder(data.data)
-        //updateCart([]);
+        updateCart([]);
         window.location.href = "#/pedido-confirmado"
       })
       .catch((err) => {

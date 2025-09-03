@@ -21,7 +21,7 @@ function App() {
     const currentState = location.pathname;
     let prevState = sessionStorage.getItem('currentState');
     const prev = sessionStorage.getItem('prevState');
-    if (currentState != '/registro') {
+    if ((currentState != '/registro') && (currentState != '/registro-confirmado') && (currentState != '/olvide')) {
       if (currentState != prevState) {
         //resetPages();
         if (prevState == '/login') {
@@ -36,6 +36,8 @@ function App() {
           updateOrder({});
         }
       }
+    } else {
+      sessionStorage.setItem('prevState', '/');
     }
     
   }, [location]);

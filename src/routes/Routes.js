@@ -44,6 +44,7 @@ const RouteObject = [
       { path: "/login", element: <LogUser /> },
       { path: "/olvide", element: <Forgot/> },
       { path: "/buscar/:searchTerm", element: <SearchView /> },
+      { path: "/buscaDesdeAdmin/:searchTerm", element: <SearchView save={false}/> },
       { path: "/contacto", element: <Contact /> },
       // 🔒 Protegidas
       {

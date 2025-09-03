@@ -171,31 +171,31 @@
       align-items: center;
       gap: 60px;
       align-self: stretch;
-      .grid-view{
-        display: flex;
-        align-items: flex-start;
-        align-content: flex-start;
-        gap: 40px 14px;
-        align-self: stretch;
-        flex-wrap: wrap;
-        .card {
-          margin: 0;
-          width: 240px;
-          border-radius: 30px;
-          min-height: 330px;
-          &.in-cart{
-            border-color: green;
-            border-style: solid;
-          }
-          @media (max-width: 720px){
-            max-width: calc(50% - 18px);
-          }
-          @media (max-width: 520px){
-            max-width: 100%;
-            width: 100%;
-          }
-        }
-      }
+    }
+  }
+}
+.grid-view{
+  display: flex;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 40px 14px;
+  align-self: stretch;
+  flex-wrap: wrap;
+  .card {
+    margin: 0;
+    width: 240px;
+    border-radius: 30px;
+    min-height: 330px;
+    &.in-cart{
+      border-color: green;
+      border-style: solid;
+    }
+    @media (max-width: 720px){
+      max-width: calc(50% - 18px);
+    }
+    @media (max-width: 520px){
+      max-width: 100%;
+      width: 100%;
     }
   }
 }

@@ -2,52 +2,44 @@ import { useContext, useEffect, useState } from "react";
 import { GridFill, ListTask, List } from "react-bootstrap-icons";
 import "./ProductosView.scss";
 import { fetchProductListData } from "../services/ProductServices";
-import { Link, useParams } from "react-router-dom";
-import MenuLateral from "../components/MenuLateral";
-import { fetchBrandData, fetchBrandListData } from "../services/BrandServices";
-import { fetchCategoryData, fetchCategoryListData } from "../services/CategoryServices";
+import { useParams } from "react-router-dom";
 import ProductosComponent from "../components/productos/ProductsComponent";
 import { Col, FloatingLabel, FormSelect, Row, Spinner } from "react-bootstrap";
 import CustomPagination from "../components/Pagination";
 import { AuthContext } from "../services/AuthContext";
 import { PageContext } from "../services/PageContext";
 
-export default function SearchView() {
+export default function SearchView({save = true}) {
   const { searchTerm } = useParams();
   const [viewType, setViewType] = useState("grid");
   const [productos, setProductos] = useState([]);
   const [cantProd, setCantProd] = useState(0);
   const [loading, setLoading] = useState(false);
-  //const [marcas, setMarcas ] = useState([]) ;
-  //const [categoria, setCategoria] = useState({nombre: ''});
-  //const [marcaD, setMarca] = useState({nombre: ''});
-  //const [subCategorias, setSubCategorias] = useState([]);
-  const { isAuthenticated } = useContext(AuthContext);
+  
+  const { isAuthenticated, user } = useContext(AuthContext);
   const { currentPage, totalPages, itemsPerPage, paginate, handleLimitChange, setTotalPages, pageGroup } = useContext(PageContext);
   
 
-  //Paginado
-  /* const [currentPage, setCurrentPage] = useState(1); // Página actual
-  const [totalPages, setTotalPages] = useState(1);  // Total de páginas
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Elementos por página (10)
- 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber); // Cambia la página
-  };
-
-  const handleLimitChange = (e) => {
-    setItemsPerPage(Number(e.target.value)); // Actualizar el límite
-    setCurrentPage(1); // Resetear a la primera página cuando se cambia el límite
-  }; */
-
   useEffect(()=>{
-    const params = {
+    let params = {
       page: currentPage,
       itemsPerPage: itemsPerPage,
-      search: searchTerm 
-      /*cat: id,
-      marca: marca ? marca : 0*/
+      search: searchTerm,
+      save: save
     };
+    if (user) {
+      params = {
+        ...params,
+        user: user.id,
+        isSeller: user.isSeller,
+      }
+      if (user.isSeller && (user.clientSelected && user.clientSelected != 0)) {
+        params = {
+          ...params,
+          clientId: user.clientSelected
+        }
+      }
+    }
     setLoading(true);
     fetchProductListData(params)
       .then(data => {
@@ -59,33 +51,6 @@ export default function SearchView() {
         console.log(err);
       })
       .finally(()=>{setLoading(false)})
-    /* fetchCategoryData(id)
-      .then(data => {
-        setCategoria(data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    fetchCategoryListData({type: 'subcat', cat: id})
-      .then(data => {
-        setSubCategorias(data);
-      })
-      .catch(err=>{
-        console.log(err);
-      })
-    fetchBrandListData({cat: id})
-      .then(data => {
-        setMarcas(data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    if (marca) {
-      fetchBrandData(marca)
-      .then(data => {
-        setMarca(data);
-      })
-    } */
   },[searchTerm, currentPage, itemsPerPage]);
 
   return (
@@ -96,14 +61,8 @@ export default function SearchView() {
         </div>
         :
         <div className="category-content">
-          {/* <MenuLateral cat_id={id} categorias={subCategorias} marcas={marcas} /> */}
           <div className="category-list">
             <div className="category-title">
-              {/* <div className="breadcrumb">
-                <Link to={`/categoria/${id}`}>{categoria.nombre}</Link>
-                <span>&nbsp;{' >' }&nbsp;</span>
-                <a>{marcaD.nombre}</a> 
-              </div> */}
               <h2 className="title">Resultado de la búsqueda</h2>
               <div className="resultados">
                 <div>{cantProd} productos encontrados</div>
@@ -113,12 +72,6 @@ export default function SearchView() {
                     onClick={() => setViewType("grid")}
                   >
                     <GridFill />
-                  </div>
-                  <div
-                    className={viewType === "listTask" ? "icon  active" : "icon"}
-                    onClick={() => setViewType("listTask")}
-                  >
-                    <ListTask />
                   </div>
                   <div
                     className={viewType === "list" ? "icon  active" : "icon"}
@@ -134,13 +87,13 @@ export default function SearchView() {
                 <FloatingLabel controlId="flotingSelect" label="Cant. por pag.">
                   <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
                     {pageGroup.map((item)=> {
-                      return <option value={item}>{item}</option>
+                      return <option value={item} key={`option_${item}`}>{item}</option>
                     })}
                   </FormSelect>
                 </FloatingLabel>
               </Col>
             </Row>
-            <ProductosComponent viewType={viewType} productos={productos} authenticated={isAuthenticated}/>
+            <ProductosComponent viewType={viewType} products={productos} authenticated={isAuthenticated}/>
             <CustomPagination currentPage={currentPage} goToPage={paginate} totalPages={totalPages} />
           </div>
         </div>
