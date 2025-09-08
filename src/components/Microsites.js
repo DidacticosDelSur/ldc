@@ -63,9 +63,9 @@ export default function Microsites({items, speed = 300000}) {
             </div>
             <>
             <div className="ms-wrapper">
-              <button className="ms-button left" onClick={prev}>‹</button>
+              {items.length > 3 && <button className="ms-button left" onClick={prev}>‹</button>}
               <div className="ms-container content" ref={containerRef}>
-                {[...items, ...items].map((item, i) => {
+                {items.map((item, i) => {
                 const brandName = convertStringToLink(item.nombre)
                 return (
                   <div className="ms-container-items">
@@ -90,7 +90,7 @@ export default function Microsites({items, speed = 300000}) {
                   </div>
                   )})}
                 </div>
-                <button className="ms-button right" onClick={next}>›</button>
+                {items.length > 3 && <button className="ms-button right" onClick={next}>›</button>}
               </div>
             </>
           </div>

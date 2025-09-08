@@ -7,6 +7,7 @@ import SliderComponent from "../SliderComponent";
 import { ArrowLeft, Box, Boxes, Cart, Clock } from "react-bootstrap-icons";
 import { AuthContext } from "../../services/AuthContext";
 import '../../assets/scss/Table.scss';
+import { Percent, Tv } from "lucide-react";
 
 export default function Producto({prod, onVisible, onMessage, onAddItemToCart, onKeepShopping}) {
   const { user, isAuthenticated } = useContext(AuthContext);
@@ -172,7 +173,19 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
       <div className="left-box"
       >
         <div className={`sticky-image ${scrolledPast ? 'scrolling' : ''}`}>
-          <SliderComponent images={prod.media}></SliderComponent>
+          {prod.en_tv ?
+            <div className="en_tv">
+              <Tv /> En Tv
+            </div>
+            :null
+          }
+          {isAuthenticated && prod.descuento > 0
+            ? <div className={`promo ${prod.en_tv ? 'down' : ''}`}>
+                <Percent />
+                Promo
+              </div>
+            : null}
+          <SliderComponent images={prod.media} video={prod.video}></SliderComponent>
         </div>
       </div>
       <div className="right-box">

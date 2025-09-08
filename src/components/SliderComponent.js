@@ -1,10 +1,9 @@
 import Slider from "react-slick";
 import "./SliderComponent.scss";
 import { useEffect, useState } from "react";
+import videoIcon from '../assets/images/video-icon.png'
 
-
-
-export default function SliderComponent ({images}) {
+export default function SliderComponent ({images, video = null}) {
   const [settings, setSettings] =useState({});
   useEffect(()=>{
     setSettings({
@@ -12,7 +11,10 @@ export default function SliderComponent ({images}) {
       customPaging: function(i) {
         return (
           <a>
-            <img src={`${images[i].preview}`}/>
+            {images[i] 
+              ? <img src={`${images[i].preview}`} />
+              : <img src={videoIcon} />
+            }
           </a>
         );
       },
@@ -33,10 +35,19 @@ export default function SliderComponent ({images}) {
       images.length > 0 ?
       <div className="slider-container">
         { images.length == 1 ?
-          <div className="slick-slider carousel-prod-amp">
-            <img src={images[0].preview} alt={images[0].alt} />
-          </div>
-          :
+          video 
+            ?  <Slider {...settings}>
+                  <div>
+                    <img src={images[0].preview} alt={images[0].alt} />
+                  </div>
+                  <div>
+                    <div  dangerouslySetInnerHTML={{ __html: video }}></div>
+                  </div>
+                </Slider>
+            :  <div className="slick-slider carousel-prod-amp">
+                <img src={images[0].preview} alt={images[0].alt} />
+              </div>
+          : 
           <Slider {...settings}>
             {images.map((item) => {
               return (
@@ -45,6 +56,12 @@ export default function SliderComponent ({images}) {
                 </div>
               )
             })}
+            {video
+              ? <div>
+                  <div  dangerouslySetInnerHTML={{ __html: video }}></div>
+                </div>
+              : null
+            }
           </Slider>
         }
       </div>

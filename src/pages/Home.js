@@ -16,18 +16,26 @@ import { fetchCarouselListData } from "../services/CarouselServices";
 import HashtagComponent from "../components/HashtagCmponent";
 import Carousel from "../components/Carousel";
 import { GlobalFunctionsContext } from "../services/GlobalFunctionsContext";
+import { fetchTagList } from "../services/TagServices";
 
 export default function Home() {
   const { convertStringToLink } = useContext(GlobalFunctionsContext);
   const [carousel, setCarousel] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [marcasLogos, setMarcasLogos] = useState([]);
+  const [tags, setTags] = useState([])
 
   useEffect(()=>{
     window.scrollTo(0, 0);
-    fetchBrandListData()
+    fetchBrandListData({'microsite':1})
       .then(data => {
         setMarcas(data.marcas);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    fetchBrandListData()
+      .then(data => {
         const marcasConUrls = data.marcas.map((item) => ({
           img: item.logoUrl,
           url: `marca/${item.id}-${convertStringToLink(item.nombre)}`,
@@ -37,6 +45,13 @@ export default function Home() {
       .catch(err => {
         console.log(err);
       })
+    fetchTagList({'home':1})
+    .then((data)=>{
+      setTags(data.tags);
+    })
+    .catch(err => {
+      console.log(err)
+    })
     fetchCarouselListData()
       .then(data => {
         setCarousel(data.carousel);
@@ -54,12 +69,23 @@ export default function Home() {
       </div>
       <div className="content">
         {/* <FilterCategories /> */}
-        <HashtagComponent hashtag={1} title={`Vuelta al cole`} size={`small`} color={`blue`} subtitle={`Promociones Vuelta al cole`}/>
-        <HashtagComponent hashtag={4} title={`Destacados del mes`} size={`big`} color={`purple`}/>
+        {tags.length > 0 &&
+          tags.map((item)=>{
+            return <HashtagComponent
+                    key={`tags_${item.id}`}
+                    hashtag={item.id}
+                    title={item.nombre}
+                    size={item.inside ? `small` : `big`}
+                    color={item.color}
+                    subtitle={item.descripcion}/>
+          })
+        }
       </div>
+      {marcas.length > 0 &&
         <div className="content-carousels background-grey">
           <Microsites items={marcas} />
         </div>
+      }
       <div className="content">
         <div className="follow-us">
           <a

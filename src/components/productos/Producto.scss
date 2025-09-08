@@ -484,9 +484,42 @@
 .sticky-image {
   position: sticky;
   top: 100px;
-  width: 300px;
+  //width: 300px;
   transition: transform 0.5s ease;
   z-index: 1;
+  .en_tv{
+    background-color: #593BAC;
+    color: #FCDFD8;
+    padding: 10px 20px 10px 10px;
+    border-radius: 0px 1000px 1000px 0px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    max-width: 95px;
+    position: absolute;
+    left: 0;
+    top: 29px;
+  }
+  .promo{
+    background-color: #FCDFD8;
+    color: #1F2351;
+    padding: 10px 20px 10px 10px;
+    border-radius: 0px 1000px 1000px 0px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    max-width: 95px;
+    position: absolute;
+    left: 0;
+    top: 29px;
+    &.down {
+      top: 77px
+    }
+  }
 }
 
 .sticky-image.scrolling {

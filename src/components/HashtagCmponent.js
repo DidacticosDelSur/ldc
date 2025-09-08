@@ -14,7 +14,7 @@ export default function HashtagComponent({hashtag, title, subtitle, color,  size
     setLoading(true);
     const params = {
       tag: hashtag,
-      max: 10
+      max: 11
     }
     fetchProductByTag(params)
     .then((data)=>{
@@ -28,7 +28,7 @@ export default function HashtagComponent({hashtag, title, subtitle, color,  size
     <div className={`hashtag-conent ${size}`}>
       <div className="hashtag-title">
         <div className={`title ${color}`}>{title}</div>
-        <div className="subtitle">{subtitle}</div>
+        {size!='big' &&  <div className="subtitle">{subtitle}</div>}
       </div>
       {size == 'big' && <div className="hashtag-products"></div>}
       {productos.length > 0 &&

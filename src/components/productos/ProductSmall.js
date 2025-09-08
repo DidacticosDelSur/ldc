@@ -6,6 +6,7 @@ import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
 import { AuthContext } from "../../services/AuthContext";
 import { Button } from "react-bootstrap";
 import { Cart } from "react-bootstrap-icons";
+import { Percent, Tv } from "lucide-react";
 
 export default function ProductSmall ({product}) {
   const { formatCurrency, convertStringToLink } = useContext(GlobalFunctionsContext);
@@ -20,6 +21,23 @@ export default function ProductSmall ({product}) {
     <>
       <div className={"card " +( product.inCart ? 'in-cart' : '')} >
       <Link to={`/producto/${product.id}-${nameLink}`} className="producto">
+          {product.en_tv
+            ? <div className="en_tv">
+              <Tv />
+                En Tv
+              </div> 
+            : null}
+          {product.fecha_dif < 60
+          ? <div className="new">
+              Novedad
+            </div> 
+          : null}
+          {isAuthenticated && product.descuento > 0
+          ? <div className={`promo ${product.en_tv ? 'down' : ''}`}>
+              <Percent />
+              Promo
+            </div> 
+          : null}
           <div className="image">
             <img
               loading="lazy"
