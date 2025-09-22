@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       const decodedToken = jwtDecode(token);
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
-       logout();
+      logout();
       } else {
         setIsAuthenticated(true); // Assume token is valid
         setUser(storedUser); // Si hay un usuario en sessionStorage, establecerlo en el estado
@@ -46,12 +46,15 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);  // Terminar la carga
   }, []);
 
+  useEffect(()=>{
+    sessionStorage.setItem('user', JSON.stringify(user))
+  },[user])
 
   const login = (data) => {
     sessionStorage.setItem('authToken', data.token);
-    sessionStorage.setItem('user', JSON.stringify({name: data.name, id: data.userId, isSeller: data.isSeller, clientSelected: null}))
+    sessionStorage.setItem('user', JSON.stringify({name: data.name, id: data.userId, isSeller: data.isSeller, clientSelected: null, discount: data.discount, disc_visib: data.discount_visible}))
     setIsAuthenticated(true);
-    setUser({name: data.name, id: data.userId, isSeller: data.isSeller, clientSelected: null})
+    setUser({name: data.name, id: data.userId, isSeller: data.isSeller, clientSelected: null, discount: data.discount, disc_visib: data.discount_visible})
     updateCart(data.cart);
   };
 
@@ -112,10 +115,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     setTotal((prev) => prev - descuento)
   },[descuento]);
-  
+
   useEffect(() => {
     if (cart) {
       setTotal(0);
+      const storedUser = JSON.parse(sessionStorage.getItem('user'));
+      const dto_iva = (storedUser && storedUser.disc_visib && storedUser.discount >0) ? storedUser.discount : 0;
       setSubtotal(
         cart.reduce((acumulado, producto) => 
           producto.variaciones.length == 0 ?
@@ -124,20 +129,25 @@ export const AuthProvider = ({ children }) => {
           ,
         0)
       );
-  
+      const iv = cart.reduce((acumulado, producto) => 
+          producto.variaciones.length == 0 ?
+          acumulado + (producto.subtotal * (1-dto_iva/100) * (1 - 1/producto.alicuota))
+          : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.subtotal * (1-dto_iva/100) * (1-1/producto.alicuota)), 0)
+          ,
+        0)
+        console.log(cart, iv)
       setIva(
         cart.reduce((acumulado, producto) => 
           producto.variaciones.length == 0 ?
-          acumulado + (producto.subtotal - (producto.subtotal/producto.alicuota))
-          : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.subtotal - (vari.subtotal/producto.alicuota)), 0)
+          acumulado + (producto.subtotal * (1-dto_iva/100) * (1 - 1/producto.alicuota))
+          : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.subtotal * (1-dto_iva/100) * (1-1/producto.alicuota)), 0)
           ,
         0)
       );
-  
       setDescuento(
         cart.reduce((acumulado, producto) => 
           producto.variaciones.length == 0 ?
-          acumulado + ((producto.cantidad * producto.precio) * (producto.descuento/100))
+          acumulado + ((producto.cantidad * producto.precio) * (producto.descuento_producto/100))
           : acumulado + producto.variaciones.reduce((acu,vari) => acu + (vari.cantidad * vari.precio) * (vari.descuento/100), 0)
           ,
         0)

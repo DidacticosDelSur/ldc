@@ -36,8 +36,20 @@ export default function UserProfileOrderDetais() {
           <div>Dirección de Envío: <b>{order.shippingAddress}</b></div>
           <div>Observaciones: <b>{order.observaciones}</b></div>
           {user.isSeller ?
-            order.seller != "" ? <div className="message-seller">Pedido creado por el vendedor en nombre del cliente</div> : null
-            : null
+            order.seller != ""
+              ? <>
+                  <div className="message-seller">Pedido creado por el vendedor en nombre del cliente</div>
+                  {order.client_discount > 0 
+                    ? order.discount_visible 
+                      ?<div className="message-seller">El cliente contaba con un descuento visible de {order.client_discount}% cuando se realizo el pedido</div>
+                      :<div className="message-seller">El cliente contaba con un descuento NO visible de {order.client_discount}% cuando se realizo el pedido</div>
+                    : null
+                  }
+                </>
+              : null
+            : order.discount_visible && order.client_discount > 0 
+                ? <div className="message-seller">Contabas con un descuento de {order.client_discount}% cuando se realizaste el pedido</div>
+                : null
           }
         </div>
         {order.items.length > 0 && 
@@ -48,6 +60,7 @@ export default function UserProfileOrderDetais() {
                 <th>Variación</th>
                 <th>Cantidad</th>
                 <th>Precio</th>
+                <th>Dto</th>
                 <th>Iva</th>
                 <th>Subtotal</th>
               </tr>
@@ -58,18 +71,36 @@ export default function UserProfileOrderDetais() {
                   <tr>
                     <td>{it.name}</td>
                     <td>{it.variation}</td>
-                    <td>{it.amount}</td>
-                    <td>{formatCurrency(it.price)}</td>
-                    <td>{formatCurrency(it.iva)}</td>
-                    <td>{formatCurrency(it.subtotal)}</td>
+                    <td><span className="float-end">{it.amount}</span></td>
+                    <td><span className="float-end">$ {formatCurrency(it.price)}</span></td>
+                    <td><span className="float-end">$ {formatCurrency(it.price*(it.discount/100))}</span></td>
+                    <td><span className="float-end"> {it.iva}%</span></td>
+                    <td><span className="float-end">$ {formatCurrency(it.subtotal)}</span></td>
                   </tr>
                 )
               })}
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan="5" className="text-end fw-bold">Total</td>
-                <td className="fw-bold">{formatCurrency(order.total)}</td>
+                <td colSpan="6" className="text-end fw-bold">Subtotal</td>
+                <td className="fw-bold"><span className="float-end">$ {formatCurrency(order.subtotal)}</span></td>
+              </tr>
+              <tr>
+                {order.discount_visible && order.client_discount > 0
+                  ? <>
+                      <td colSpan="6" className="text-end fw-bold">Descuento Cliente {order.client_discount}%</td>
+                      <td className="fw-bold"><span className="float-end">$ {formatCurrency(order.subtotal*(order.client_discount/100))}</span></td>
+                    </>
+                  : null
+                }
+              </tr>
+              <tr>
+                <td colSpan="6" className="text-end fw-bold">Iva Acumulado</td>
+                <td className="fw-bold"><span className="float-end">$ {formatCurrency(order.iva_acumulado)}</span></td>
+              </tr>
+              <tr>
+                <td colSpan="6" className="text-end fw-bold">Total</td>
+                <td className="fw-bold"><span className="float-end">$ {formatCurrency(order.total)}</span></td>
               </tr>
             </tfoot>
           </Table>

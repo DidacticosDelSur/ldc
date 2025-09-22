@@ -18,8 +18,10 @@ export default function ProductoAmpliado(){
   const [visibleError, setVisibleError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [ variant, setVariant ] = useState('danger');
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [category, setCategory] = useState('');
+  const [cartSelected, setCartSelected] = useState(true);
 
   // Función para actualizar el mensaje
   const handleMessage = (message) => {
@@ -28,6 +30,7 @@ export default function ProductoAmpliado(){
 
   const handleVisible = (value) => {
     setVisibleError(value);
+    setVariant('danger')
   }
 
   useEffect(()=>{
@@ -36,29 +39,31 @@ export default function ProductoAmpliado(){
       .then(data => {
         setProductoData(data);
         setCategory(data.categoria_id);
-        const index = cart.findIndex(prod => prod.producto_id == productId)
-        if (index > -1) {
-          setProductoData((prevData) => 
-            data.variaciones.length > 0 ?
-              {
-                ...prevData,
-                variaciones: cart[index].variaciones.reduce((newVariaciones, vari) => {
-                  const existingVari = prevData.variaciones.find(it => it.id === vari.id);
-    
-                  if (existingVari) {
-                    // Si la variación existe, actualizamos su valor
-                    return newVariaciones.map(varIt => 
-                      varIt.id === vari.id
-                        ? { ...varIt, 
-                          inCart: vari.cantidad
-                        }
-                        : varIt
-                    );
-                  }
-                }, [...prevData.variaciones])
-              }
-            : {...prevData, inCart: cart[index].cantidad}
-          )
+        if (cart) {
+          const index = cart.findIndex(prod => prod.producto_id == productId)
+          if (index > -1) {
+            setProductoData((prevData) => 
+              data.variaciones.length > 0 ?
+                {
+                  ...prevData,
+                  variaciones: cart[index].variaciones.reduce((newVariaciones, vari) => {
+                    const existingVari = prevData.variaciones.find(it => it.id === vari.id);
+      
+                    if (existingVari) {
+                      // Si la variación existe, actualizamos su valor
+                      return newVariaciones.map(varIt => 
+                        varIt.id === vari.id
+                          ? { ...varIt, 
+                            inCart: vari.cantidad
+                          }
+                          : varIt
+                      );
+                    }
+                  }, [...prevData.variaciones])
+                }
+              : {...prevData, inCart: cart[index].cantidad}
+            )
+          }
         }
       })
       .catch(err => {
@@ -78,6 +83,19 @@ export default function ProductoAmpliado(){
       })
   },[category])
 
+  useEffect(()=>{
+    if (!cartSelected) {
+      setMessage('No hay cliente seleccionado. No podra armar ningun carrito.')
+      setVariant('warning')
+      setVisibleError(true)
+    }
+  },[cartSelected])
+
+  useEffect(() => {
+    window.scrollTo(0,0)
+    setCartSelected(!user.isSeller || (user.clientSelected > 0))
+  },[])
+
   const addItemToCart = async (item) => {
     item.userId = user.id;
     item.producto_id = productoData.id;
@@ -85,13 +103,17 @@ export default function ProductoAmpliado(){
     f.append("producto_id", item.producto_id);
     f.append("variaciones", JSON.stringify(item.variaciones));
     f.append("cantidad", item.cantidad);
-    f.append("subtotal", item.subtotal);
+    //f.append("subtotal", item.subtotal);
     f.append("observaciones", item.observaciones);
     if (user.isSeller && user.clientSelected) {
       f.append("cliente_id", user.clientSelected);
     }
     setLoading(true);
-    addProductToCart(f, item.userId)
+    /* const params = {
+      discount: user.discount,
+      dvisible: user.disc_visib
+    } */
+    addProductToCart(f, item.userId)//, params
       .then((data) => {
         updateCart(data.data);
         localStorage.setItem('productoAgregado', JSON.stringify({nombre: productName, img: productoData.media[0].preview}))
@@ -114,7 +136,7 @@ export default function ProductoAmpliado(){
         </div>
         :
         <>
-          <Alert variant="danger" dismissible show={visibleError} onClose={() => setVisibleError(false)}>
+          <Alert variant={variant} dismissible show={visibleError} onClose={() => setVisibleError(false)}>
             {message}
           </Alert>
           {productoData.id ? 
@@ -125,6 +147,7 @@ export default function ProductoAmpliado(){
                 onVisible={handleVisible} 
                 onAddItemToCart={addItemToCart} 
                 onKeepShopping={keepShopping}
+                cartSelected={cartSelected}
               />
               <div className='catalog-content'>
                 <ProductList title={"Productos Relacionados"} itmes={relatedProducts} />

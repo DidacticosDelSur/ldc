@@ -79,6 +79,7 @@ export default function Checkout() {
     setLoading(true);
     createOrder(f, {user: user.id})
       .then((data) => {
+        /* console.log(data); */
         setVisible(false);
         updateOrder(data.data)
         updateCart([]);

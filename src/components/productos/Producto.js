@@ -9,7 +9,7 @@ import { AuthContext } from "../../services/AuthContext";
 import '../../assets/scss/Table.scss';
 import { Percent, Tv } from "lucide-react";
 
-export default function Producto({prod, onVisible, onMessage, onAddItemToCart, onKeepShopping}) {
+export default function Producto({prod, onVisible, onMessage, onAddItemToCart, onKeepShopping, cartSelected}) {
   const { user, isAuthenticated } = useContext(AuthContext);
   const { formatCurrency, convertStringToLink } = useContext(GlobalFunctionsContext);
   const [productData, setProductData] = useState({minimo_compra: 0, cantidad: 0, variaciones: []});
@@ -20,12 +20,12 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
 
   useEffect(()=>{
     let variations = [];
-
+    const dto = !user.disc_visib ? user.discount : 0;
     prod.variaciones.map((item => {
       variations.push({
         id: item.id,
         nombre: item.nombre,
-        precio: item.precio ? item.precio : prod.precio,
+        precio: (item.precio ? item.precio : prod.precio) * (1-dto/100),
         cantidad: 0,
         subtotal: 0,
         inCart: item.inCart ? item.inCart : 0,
@@ -38,7 +38,7 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
       nombre: prod.nombre,
       alicuota: prod.alicuota ? prod.alicuota : 1.21,
       stock: prod.stock,
-      precio: prod.precio,
+      precio: prod.precio * (1 - dto/100),
       descuento: prod.descuento ? prod.descuento : 0,
       cantidad: variations.length > 0
         ? 0
@@ -53,11 +53,11 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
         : prod.inCart
           ? 0
           : prod.minimo_compra
-            ? prod.minimo_compra * (prod.precio * (1 - prod.descuento/100))
-            : prod.precio * (1 - prod.descuento/100)
+            ? prod.minimo_compra * (prod.precio * (1-dto/100) * (1 - prod.descuento/100))
+            : prod.precio * (1-dto/100) * (1 - prod.descuento/100)
         ,
       canAddtoCart: user
-        ? ((user.isSeller && user.clientSelected > 0) || !user.isSeller)
+        ? cartSelected
           ? variations.length > 0
             ? !variations.every((variation) => variation.cantidad == 0)
             : prod.stock >= prod.minimo_compra
@@ -108,11 +108,11 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
     if (i != -1) {
       newAmount = newVariations[i].cantidad - productData.minimo_compra;
       newVariations[i].cantidad = newAmount;
-      newPrice = newVariations[i].precio*(1-newVariations[i].descuento/100)*productData.alicuota;
+      newPrice = newVariations[i].precio*(1-newVariations[i].descuento/100);
       newVariations[i].subtotal = newVariations[i].cantidad*newPrice;
     } else {
       newAmount -= productData.minimo_compra;
-      newPrice = productData.precio * (1 -productData.descuento / 100) * productData.alicuota;
+      newPrice = productData.precio * (1 -productData.descuento / 100);
     }
     subtotal -= productData.minimo_compra * newPrice;
     setProductData((prevData) => ({
@@ -120,7 +120,7 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
       variaciones: newVariations,
       cantidad: newAmount,
       subtotal: subtotal,
-      canAddtoCart: ((user.isSeller && user.clientSelected > 0) || !user.isSeller) ? addToCart : false
+      canAddtoCart: cartSelected ? addToCart : false
     }));
 
     if ((newStock != -1) && (newStock < newAmount)) {
@@ -151,7 +151,7 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
       variaciones: newVariations,
       cantidad: newAmount,
       subtotal: subtotal,
-      canAddtoCart: ((user.isSeller && user.clientSelected > 0) || !user.isSeller) ? true : false
+      canAddtoCart: cartSelected ? true : false
     }));
 
     if ((newStock != -1) && (newStock < newAmount)) {
@@ -179,7 +179,7 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
             </div>
             :null
           }
-          {isAuthenticated && prod.descuento > 0
+          {isAuthenticated && (prod.descuento > 0)
             ? <div className={`promo ${prod.en_tv ? 'down' : ''}`}>
                 <Percent />
                 Promo
@@ -220,12 +220,12 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
                 {
                   prod.descuento > 0 
                   ? <>{
-                      formatCurrency(prod.precio * (1-prod.descuento/100))}
-                      <div className="iva">+ iva</div>
-                      <div className="origin-price">$ {formatCurrency(prod.precio)}</div>
+                      formatCurrency(!user.disc_visib ? prod.precio * (1-user.discount/100) * (1-prod.descuento/100) : prod.precio * (1-prod.descuento/100))}
+                        <div className="iva">+ iva</div>
+                      <div className="origin-price">$ {formatCurrency(!user.disc_visib ? prod.precio * (1-user.discount/100) : prod.precio)}</div>
                     </> 
                   : <>{
-                      formatCurrency(prod.precio)}
+                      formatCurrency(!user.disc_visib ? prod.precio * (1-user.discount/100) : prod.precio)}
                       <div className="iva">+ iva</div>
                     </>
                 }
@@ -283,7 +283,8 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
                                   <td className="left">$ {formatCurrency(item.precio)}</td>
                                   <td className="left px-2">{item.descuento}%</td>
                                   <td>
-                                    <div className="input-container">
+                                    {cartSelected 
+                                    ? <div className="input-container">
                                       <button className="control-btn" disabled={item.cantidad === 0} onClick={() => {handleDecrement(i)}}>-</button>
                                         <input
                                           type="number"
@@ -293,6 +294,7 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
                                         />
                                       <button className="control-btn" onClick={()=>{handleIncrement(i)}}>+</button>
                                     </div>
+                                    : null}
                                   </td>
                                   <td className="left">$ {formatCurrency(item.subtotal)}</td>
                                   <td className="left">{item.inCart}</td>
@@ -305,61 +307,67 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
                     </div>
                   </>
                 }
-                <div className="subtotal"> 
-                  Subtotal:
-                  <div className="price-content">
-                    <span className="sign">$</span>
-                    {formatCurrency(productData.subtotal)}
-                    <div className="iva">+ iva</div>
-                  </div>
-                </div>
-                {prod.variaciones.length > 0
-                  ? <>
-                      <div className="action-content">
-                        <div className="action-container variations">
+                
+                {cartSelected
+                  ?<>
+                    <div className="subtotal"> 
+                      Subtotal:
+                      <div className="price-content">
+                        <span className="sign">$</span>
+                        {formatCurrency(productData.subtotal)}
+                        <div className="iva">+ iva</div>
+                      </div>
+                    </div>
+                    {prod.variaciones.length > 0
+                      ? <>
+                          <div className="action-content">
+                            <div className="action-container variations">
+                              <div className="btn-content">
+                                <Button onClick={handleAddProducto}>Agregar al carrito <Cart /></Button>
+                                <Button variant="secondary">Terminar compra</Button>
+                              </div>
+                            </div>
+                            <div className="btn-content">
+                              <Button  onClick={handleKeepShopping} className="follow">
+                                <ArrowLeft />
+                                <span>Volver y seguir comprando</span>
+                              </Button>
+                            </div>
+                          </div>
+                        </>
+                      :<>
+                        {productData.inCart > 0 && <div>Tiene {productData.inCart} en el carrito</div>}
+                        <div className="action-content">
+                          <div className="action-container">
+                            <div className="dropdown">
+                              <button className="control-btn" disabled={productData.cantidad === 0} onClick={()=>{handleDecrement()}}>-</button>
+                              <div className="input-container">
+                                <label>Cantidad</label>
+                                <input
+                                  type="number"
+                                  className="input-number"
+                                  value={productData.cantidad }
+                                  readOnly
+                                />
+                              </div>
+                              <button className="control-btn" onClick={()=>{handleIncrement()}}>+</button>
+                            </div>
+                            <div className="btn-content">
+                              <Button onClick={handleAddProducto}>Agregar al carrito <Cart /></Button>
+                            </div>
+                          </div>
                           <div className="btn-content">
-                            <Button onClick={handleAddProducto}>Agregar al carrito <Cart /></Button>
+                            <Button  onClick={handleKeepShopping} className="follow">
+                              <ArrowLeft />
+                              <span>Volver y seguir comprando</span>
+                            </Button>
                             <Button variant="secondary">Terminar compra</Button>
                           </div>
                         </div>
-                        <div className="btn-content">
-                          <Button  onClick={handleKeepShopping} className="follow">
-                            <ArrowLeft />
-                            <span>Volver y seguir comprando</span>
-                          </Button>
-                        </div>
-                      </div>
-                    </>
-                  :<>
-                    {productData.inCart > 0 && <div>Tiene {productData.inCart} en el carrito</div>}
-                    <div className="action-content">
-                      <div className="action-container">
-                        <div className="dropdown">
-                          <button className="control-btn" disabled={productData.cantidad === 0} onClick={()=>{handleDecrement()}}>-</button>
-                          <div className="input-container">
-                            <label>Cantidad</label>
-                            <input
-                              type="number"
-                              className="input-number"
-                              value={productData.cantidad }
-                              readOnly
-                            />
-                          </div>
-                          <button className="control-btn" onClick={()=>{handleIncrement()}}>+</button>
-                        </div>
-                        <div className="btn-content">
-                          <Button onClick={handleAddProducto}>Agregar al carrito <Cart /></Button>
-                        </div>
-                      </div>
-                      <div className="btn-content">
-                        <Button  onClick={handleKeepShopping} className="follow">
-                          <ArrowLeft />
-                          <span>Volver y seguir comprando</span>
-                        </Button>
-                        <Button variant="secondary">Terminar compra</Button>
-                      </div>
-                    </div>
+                      </>
+                    }
                   </>
+                : null
                 }
               </>
               : <div className="btn-content">

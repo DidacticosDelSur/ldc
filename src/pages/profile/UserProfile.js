@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../services/AuthContext";
 import { fetchSellerData, fetchUserData } from "../../services/UserServices";
 import { Alert, Col, Form, ListGroup, Row } from "react-bootstrap";
@@ -45,40 +45,36 @@ export default function UserProfile() {
       })
       .catch(err => console.log(err))
     }
-
   },[user]);
-
-  useEffect(() => {
-    sessionStorage.setItem('user', JSON.stringify(user));
-    let params = {
-      user: user.id,
-    }
-    if (user.clientSelected) {
-      params = {
-        ...params,
-        clientId: user.clientSelected
-      }
-    }
-    fetchCartData(params)
-    .then((data)=>{
-      updateCart(data);
-    })
-    .catch(err => console.log(err));
-  }, [user])
 
   const selectUser = (value) => {
     let cliente = '';
+    let index = 0;
     if (value == 0) {
       setMessage('Si no elige cliente no podra generar un carrito.');
       setVisibleError(true);
       setVariantMessage('warning');
+      updateCart([]);
     } else {
       setVisibleError(false);
-      const index = clientes.findIndex(item => item.id == value)
+      index = clientes.findIndex(item => item.id == value)
       cliente = clientes[index].apellido + ', ' + clientes[index].nombre;
+      if (user.clientSelected != clientes[index].id) {
+        let params = {
+          user: user.id,
+          clientId: clientes[index].id,
+        }
+        fetchCartData(params)
+        .then((data)=>{
+          updateCart(data);
+        })
+        .catch(err => console.log(err));
+      }
     }
     setUser((prevUser) => ({
       ...prevUser,
+      discount: value == 0 ? 0 : clientes[index].descuento,
+      disc_visib: value == 0 ? 0 : clientes[index].dto_visible,
       clientName: cliente,
       clientSelected: value
     }))

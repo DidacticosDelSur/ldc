@@ -1,17 +1,22 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../services/AuthContext";
 import { getOrders } from "../../services/OrderServices";
-import { Button, Table } from "react-bootstrap";
+import { Button, Col, FormSelect, Row, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
+import { PageContext } from "../../services/PageContext";
+import CustomPagination from "../../components/Pagination";
 
 export default function UserProfileOrders() {
+  const { currentPage, totalPages, itemsPerPage, paginate, handleLimitChange, setTotalPages, pageGroup } = useContext(PageContext);
   const { user } = useContext(AuthContext);
   const { formatCurrency, formatNumber } = useContext(GlobalFunctionsContext)
   const [orders, setOrders] = useState([]);
   
   useEffect(()=>{
     let params = {
+      page: currentPage,
+      itemsPerPage: itemsPerPage,
       user: user.id,
       isSeller: user.isSeller
     }
@@ -19,9 +24,10 @@ export default function UserProfileOrders() {
       .then((data) => {
         console.log(data);
         setOrders(data.pedidos);
+        setTotalPages(data.totalPages);
       })
       .catch(err => console.log(err))
-  },[user]);
+  },[user, currentPage]);
 
   const gotToOrder = (id) => {
     console.log(id);
@@ -29,8 +35,19 @@ export default function UserProfileOrders() {
 
   return (
     <>
-      {orders.length > 0 && 
+      {orders.length > 0 
+        ?
         <div className="order-conent">
+          <Row>
+            <Col xs lg="2">
+              <label>Cant. por Pag.</label>
+              <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
+                {pageGroup.map((item)=> {
+                  return <option value={item} key={`limit_${item}`}>{item}</option>
+                })}
+              </FormSelect>
+            </Col>
+          </Row>
           <Table>
             <thead>
               <tr>
@@ -59,7 +76,9 @@ export default function UserProfileOrders() {
               })}
             </tbody>
           </Table>
+          <CustomPagination currentPage={currentPage} goToPage={paginate} totalPages={totalPages} />
         </div>
+        :<div>Todavia no realizo ningun pedido</div>
       }
     </>
     

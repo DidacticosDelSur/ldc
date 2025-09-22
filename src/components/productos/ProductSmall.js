@@ -10,7 +10,7 @@ import { Percent, Tv } from "lucide-react";
 
 export default function ProductSmall ({product}) {
   const { formatCurrency, convertStringToLink } = useContext(GlobalFunctionsContext);
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext);
   const [nameLink, setNameLink] = useState('');
 
   useEffect(()=>{
@@ -55,13 +55,19 @@ export default function ProductSmall ({product}) {
               {isAuthenticated &&
                 <div className="price">
                   <span className="sign">$</span>
-                    {product.descuento > 0 
-                    ? formatCurrency(product.precio*(1-product.descuento/100))
-                    :<>{formatCurrency(product.precio)}<span>+ iva</span></>
+                    {user.discount > 0 && !user.disc_visib
+                      ? product.descuento > 0
+                        ? formatCurrency((product.precio*(1-product.descuento/100))*(1-user.discount/100))
+                        : <>{formatCurrency(product.precio*(1-user.discount/100))}<span>+ iva</span></>
+                      : product.descuento > 0
+                        ? formatCurrency(product.precio*(1-product.descuento/100))
+                        : <>{formatCurrency(product.precio)}<span>+ iva</span></>
+                    }
+                  {product.descuento > 0
+                    ? <span className="descuento">{formatCurrency(!user.disc_visib ? product.precio * (1-user.discount/100) : product.precio)}</span>
+                    : null
                   }
-                  {product.descuento > 0 &&
-                  <span className="descuento">{formatCurrency(product.precio)}</span>
-                }
+                  
                 </div>
               }
             </div>

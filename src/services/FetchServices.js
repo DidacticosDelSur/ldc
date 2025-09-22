@@ -42,10 +42,15 @@ export async function createData(endpoint, datos, params) {
   }
 }
 
-export async function editData(endpoint, id, datos) {
+export async function editData(endpoint, id, datos, params = null) {
   const baseUrl = process.env.REACT_APP_WEB_SERVICES;
+  let urlComplete = baseUrl + endpoint;
   try {
-    const response = await axios.post(baseUrl + endpoint, datos, { params: { id: id } })
+    if (params) {
+      const queryString = new URLSearchParams(params).toString();
+      urlComplete = urlComplete + `?${queryString}`;
+    } 
+    const response = await axios.post(urlComplete, datos, { params: { id: id } })
     const data = await response;
     return data;
   } catch (error) {

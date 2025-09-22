@@ -194,13 +194,13 @@ export default function CatalogView() {
                 </div>
                 <div className="category-list-header-data">
                   <div>
-                  <label>Cant. por Pag.</label>
+                    <label>Cant. por Pag.</label>
                     <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
                       {pageGroup.map((item)=> {
                         return <option value={item} key={`limit_${item}`}>{item}</option>
                       })}
                     </FormSelect>
-                    </div>
+                  </div>
                   <div className="view-type-content">
                     Vista:
                     <div

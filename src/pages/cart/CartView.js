@@ -19,13 +19,17 @@ export default function Cart() {
 
   const removeItemFromCart = async (itemId, idx, i = null) => {
     const variacionId = i ? cart[idx].variaciones[i].variacion_id : cart[idx].variacion_id;
-    const clientId = (user.isSeller && user.clientSelected) ? user.clientSelected : null;
 
-    const params = {
+    let params = {
       id: user.id,
       product: itemId,
-      variation: variacionId,
-      cliente_id: clientId
+      variation: variacionId
+    }
+    if (user.isSeller && user.clientSelected) {
+      params = {
+        ...params,
+        cliente_id:  user.clientSelected
+      }
     }
 
     removeItem(params)
@@ -41,13 +45,10 @@ export default function Cart() {
 
     var f = new FormData();
     f.append("producto_id", item.producto_id);
-    f.append("descuento", item.descuento);
-    f.append("alicuota", item.alicuota);
-    f.append("precio", item.precio);
 
     if (i==null) {
       updatedItems[idx].cantidad = cant;
-      updatedItems[idx].subtotal = updatedItems[idx].cantidad * updatedItems[idx].precio * (1-updatedItems[idx].descuento/100) * updatedItems[idx].alicuota;
+      updatedItems[idx].subtotal = updatedItems[idx].cantidad * updatedItems[idx].precio * (1-updatedItems[idx].descuento_producto/100) * updatedItems[idx].alicuota;
       if ((updatedItems[idx].stock != -1) && (updatedItems[idx].stock < updatedItems[idx].cantidad)) {
         noStock = true;
       }
@@ -60,7 +61,6 @@ export default function Cart() {
       f.append("variacion_id", updatedItems[idx].variaciones[i].variacion_id);
     }
     f.append("cantidad", cant);
-    f.append("subtotal", item.subtotal);
 
     if (noStock) {
       setMessage('¡No hay suficiente stock!');
