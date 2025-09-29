@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../services/AuthContext";
-import { getOrders } from "../../services/OrderServices";
+import { fetchOrderStates, getOrders } from "../../services/OrderServices";
 import { Button, Col, FormSelect, Row, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { GlobalFunctionsContext } from "../../services/GlobalFunctionsContext";
@@ -12,13 +12,16 @@ export default function UserProfileOrders() {
   const { user } = useContext(AuthContext);
   const { formatCurrency, formatNumber } = useContext(GlobalFunctionsContext)
   const [orders, setOrders] = useState([]);
+  const [ states, setStates ] = useState([])
+  const [stateId, setStateSelected ] = useState(1)
   
   useEffect(()=>{
     let params = {
       page: currentPage,
       itemsPerPage: itemsPerPage,
       user: user.id,
-      isSeller: user.isSeller
+      isSeller: user.isSeller,
+      state: stateId
     }
     getOrders(params)
       .then((data) => {
@@ -27,16 +30,19 @@ export default function UserProfileOrders() {
         setTotalPages(data.totalPages);
       })
       .catch(err => console.log(err))
-  },[user, currentPage]);
+  },[user, currentPage, stateId]);
 
-  const gotToOrder = (id) => {
-    console.log(id);
-  }
+  useEffect(()=>{
+    fetchOrderStates()
+    .then((data)=>{
+      setStates(data)
+    })
+    .catch()
+  },[])
 
   return (
     <>
-      {orders.length > 0 
-        ?
+      
         <div className="order-conent">
           <Row>
             <Col xs lg="2">
@@ -44,6 +50,14 @@ export default function UserProfileOrders() {
               <FormSelect id="limit" value={itemsPerPage} onChange={handleLimitChange}>
                 {pageGroup.map((item)=> {
                   return <option value={item} key={`limit_${item}`}>{item}</option>
+                })}
+              </FormSelect>
+            </Col>
+            <Col xs lg="2">
+              <label>Estado</label>
+              <FormSelect id="limit" value={stateId} onChange={(e)=>{setStateSelected(e.target.value)}}>
+                {states.map((item)=> {
+                  return <option value={item.id} key={`state_${item.id}`}>{item.nombre}</option>
                 })}
               </FormSelect>
             </Col>
@@ -60,26 +74,31 @@ export default function UserProfileOrders() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((ord)=>{
-                return (
-                  <tr>
-                    <td>{ord.date}</td>
-                    {user.isSeller && <td>{ord.client}</td>}
-                    <td>{formatNumber(ord.id)}</td>
-                    <td className="multiple-data">{ord.state} {ord.vendedor_id && <div className="dot"></div>}</td>
-                    <td>{formatCurrency(ord.total)}</td>
-                    <td>
-                      <Link to={`/perfil-usuario/detalle_pedido/${ord.id}`}>Ver Pedido</Link>
-                    </td>
-                  </tr>
-                )
-              })}
+              {orders.length > 0 
+                ?
+                orders.map((ord)=>{
+                  return (
+                    <tr>
+                      <td>{ord.date}</td>
+                      {user.isSeller && <td>{ord.client}</td>}
+                      <td>{formatNumber(ord.id)}</td>
+                      <td className="multiple-data">{ord.state} {ord.vendedor_id && <div className="dot"></div>}</td>
+                      <td>{formatCurrency(ord.total)}</td>
+                      <td>
+                        {stateId != 3
+                          ?<Link to={`/perfil-usuario/detalle_pedido/${ord.id}`}>Ver Pedido</Link>
+                          :<Link to={`/perfil-usuario/detalle_pedido_finalizado/${ord.id}`}>Ver Pedido</Link>
+                        }
+                      </td>
+                    </tr>
+                  )
+                })
+                :<tr><td colSpan={6}>Todavia no realizo ningun pedido</td></tr>
+              }
             </tbody>
           </Table>
           <CustomPagination currentPage={currentPage} goToPage={paginate} totalPages={totalPages} />
         </div>
-        :<div>Todavia no realizo ningun pedido</div>
-      }
     </>
     
 

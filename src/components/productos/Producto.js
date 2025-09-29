@@ -20,7 +20,7 @@ export default function Producto({prod, onVisible, onMessage, onAddItemToCart, o
 
   useEffect(()=>{
     let variations = [];
-    const dto = !user.disc_visib ? user.discount : 0;
+    const dto = user && !user.disc_visib ? user.discount : 0;
     prod.variaciones.map((item => {
       variations.push({
         id: item.id,

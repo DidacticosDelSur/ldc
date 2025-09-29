@@ -14,7 +14,7 @@ export default function ProductoAmpliado(){
   const navigate = useNavigate();
 
   const [productoData, setProductoData] = useState({variaciones: []})
-  const { user, cart, updateCart } = useContext(AuthContext);
+  const { user, cart, updateCart, isAuthenticated  } = useContext(AuthContext);
   const [visibleError, setVisibleError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -93,7 +93,9 @@ export default function ProductoAmpliado(){
 
   useEffect(() => {
     window.scrollTo(0,0)
-    setCartSelected(!user.isSeller || (user.clientSelected > 0))
+    if (isAuthenticated) {
+      setCartSelected(user && (!user.isSeller || (user.clientSelected > 0)))
+    }
   },[])
 
   const addItemToCart = async (item) => {

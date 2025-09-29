@@ -8,6 +8,10 @@ export async function getOrders(params = null) {
   return fetchData('order/getOrder.php', params);
 }
 
-export async function getOrder(id) {
-  return fetchData('order/getOrder.php?id='+id)
+export function fetchOrderStates() {
+  return fetchData('order/getOrderStates.php');
+}
+
+export async function getOrder(params = null) {
+  return fetchData('order/getOrder.php',params)
 }

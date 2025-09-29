@@ -58,6 +58,7 @@ const RouteObject = [
               { path: "/perfil-usuario", element: <UserProfileData /> },
               { path: "/perfil-usuario/pedidos", element: <UserProfileOrders /> },
               { path: "/perfil-usuario/detalle_pedido/:id", element: <UserProfileOrderDetais /> },
+              { path: "/perfil-usuario/detalle_pedido_finalizado/:id", element: <UserProfileOrderDetais /> },
               { path: "/perfil-usuario/envios", element: <UserProfileShipping /> },
               { path: "/perfil-usuario/anuncios", element: <UserAdvertisement /> },
               { path: "/perfil-usuario/cambiar-password", element: <UserPassword /> },

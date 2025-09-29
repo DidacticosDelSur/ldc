@@ -11,15 +11,26 @@ export default function UserProfileOrderDetais() {
   const { user } = useContext(AuthContext);
   const { formatCurrency, formatNumber } = useContext(GlobalFunctionsContext)
   const [order, setOrder] = useState(null);
-  
+  const { location } = window;
+
   useEffect(()=>{
-    getOrder(id)
+    let params = {
+      id: id,
+    }
+    if (location.hash.split('/')[2] == 'detalle_pedido_finalizado'){
+      params = {
+        ...params,
+        state: 3
+      }
+    }
+
+    getOrder(params)
       .then((data) => {
         console.log(data);
         setOrder(data);
       })
       .catch(err => console.log(err))
-  },[id]);
+  },[id, location.hash]);
 
   return (
     <>
@@ -36,17 +47,18 @@ export default function UserProfileOrderDetais() {
           <div>Dirección de Envío: <b>{order.shippingAddress}</b></div>
           <div>Observaciones: <b>{order.observaciones}</b></div>
           {user.isSeller ?
-            order.seller != ""
-              ? <>
-                  <div className="message-seller">Pedido creado por el vendedor en nombre del cliente</div>
-                  {order.client_discount > 0 
-                    ? order.discount_visible 
-                      ?<div className="message-seller">El cliente contaba con un descuento visible de {order.client_discount}% cuando se realizo el pedido</div>
-                      :<div className="message-seller">El cliente contaba con un descuento NO visible de {order.client_discount}% cuando se realizo el pedido</div>
-                    : null
-                  }
-                </>
-              : null
+            <>
+              {order.seller && order.seller != ""
+                ? <div className="message-seller">Pedido creado por el vendedor en nombre del cliente</div>
+                : null
+              }
+              {order.client_discount > 0 
+                ? order.discount_visible 
+                  ?<div className="message-seller">El cliente contaba con un descuento visible de {order.client_discount}% cuando se realizo el pedido</div>
+                  :<div className="message-seller">El cliente contaba con un descuento NO visible de {order.client_discount}% cuando se realizo el pedido</div>
+                : null
+              }
+            </>
             : order.discount_visible && order.client_discount > 0 
                 ? <div className="message-seller">Contabas con un descuento de {order.client_discount}% cuando se realizaste el pedido</div>
                 : null
