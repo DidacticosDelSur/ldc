@@ -9,6 +9,7 @@
   /* width: 508px;
   height: 464px;
   background-color: #ffffff; */
+  overflow: hidden;
 }
 
 .slick-slider {
@@ -50,6 +51,12 @@
   }
   img {
     max-width: 100%;
+    &.hover-zoom {
+      transition: transform 2s ease;
+      &:hover {
+        transform: scale(3);
+      }
+    }
   }
 }
 
