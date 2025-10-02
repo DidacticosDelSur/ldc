@@ -142,6 +142,15 @@ export default function CatalogView() {
 
   },[categoryId, brandId, tagId, currentPage, itemsPerPage]);
 
+  useEffect(() => {
+    const el = document.getElementById(sessionStorage.getItem('idProductos'));
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" }); // animación suave
+    } else {
+      window.scrollTo(0,0)
+    }
+  }, [productos]);
+
   return (
     <>
       {loading ?

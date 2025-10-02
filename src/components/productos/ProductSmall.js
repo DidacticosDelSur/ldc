@@ -17,10 +17,14 @@ export default function ProductSmall ({product}) {
     setNameLink(convertStringToLink(product.nombre));
   },[product])
 
+  const saveScrollProd = (name) => {
+    sessionStorage.setItem('idProductos', name);
+  }
+
   return (
     <>
       <div className={"card " +( product.inCart ? 'in-cart' : '')} >
-      <Link to={`/producto/${product.id}-${nameLink}`} className="producto">
+      <Link to={`/producto/${product.id}-${nameLink}`} onClick={()=>saveScrollProd(`product_${product.id}`)} id={`product_${product.id}`} className="producto">
           {product.en_tv
             ? <div className="en_tv">
               <Tv />
